@@ -1,0 +1,27 @@
+FROM node:20-alpine
+
+WORKDIR /app
+
+# Instalar dependencias del sistema necesarias para Prisma
+RUN apk add --no-cache openssl libc6-compat
+
+# Copiar archivos de dependencias
+COPY package*.json ./
+
+# Crear directorio prisma si no existe
+RUN mkdir -p prisma
+
+# Copiar schema de Prisma
+COPY prisma ./prisma/
+
+# Instalar dependencias (usando install para desarrollo)
+RUN npm install
+
+# Generar Prisma Client
+RUN npx prisma generate
+
+# Exponer puerto
+EXPOSE 8000
+
+# Comando para hot reload con tsx
+CMD ["npm", "run", "dev"]

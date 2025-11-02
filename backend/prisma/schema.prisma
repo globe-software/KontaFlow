@@ -1,0 +1,558 @@
+// KontaFlow - Schema de Base de Datos
+// Sistema de Contabilidad con Partida Doble - NIIF/IFRS Compliant
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ===================================
+// GRUPOS ECONÓMICOS (Multi-tenancy)
+// ===================================
+model GrupoEconomico {
+  id                   Int       @id @default(autoincrement())
+  nombre               String
+  rutControlador       String?   @map("rut_controlador")
+  paisPrincipal        String    @map("pais_principal") @db.VarChar(2)
+  monedaBase           String    @map("moneda_base") @db.VarChar(3) // Para TipoCambio
+  fechaCreacion        DateTime  @default(now()) @map("fecha_creacion")
+  activo               Boolean   @default(true)
+
+  // Relaciones útiles
+  empresas             Empresa[]
+  planDeCuentas        PlanDeCuentas?
+  configuracion        ConfiguracionContable?
+
+  // Relaciones inversas (requeridas por Prisma - evitar usar en queries)
+  asientos             Asiento[]
+  tiposCambio          TipoCambio[]
+  templatesAsiento     TemplateAsiento[]
+  obligaciones         Obligacion[]
+  usuariosGrupos       UsuarioGrupo[]
+  clientes             Cliente[]
+  proveedores          Proveedor[]
+  periodos             PeriodoContable[]
+
+  @@map("grupos_economicos")
+}
+
+// ===================================
+// EMPRESAS
+// ===================================
+model Empresa {
+  id                Int       @id @default(autoincrement())
+  grupoEconomicoId  Int       @map("grupo_economico_id")
+  nombre            String
+  nombreComercial   String?   @map("nombre_comercial")
+  rut               String
+  pais              String    @db.VarChar(2)
+  monedaFuncional   String    @map("moneda_funcional") @db.VarChar(3)
+  fechaInicio       DateTime? @map("fecha_inicio") @db.Date
+  activa            Boolean   @default(true)
+
+  // Relaciones
+  grupoEconomico    GrupoEconomico @relation(fields: [grupoEconomicoId], references: [id])
+
+  // Relaciones inversas (requeridas por Prisma - evitar usar en queries)
+  asientos          Asiento[]
+  usuariosEmpresas  UsuarioEmpresa[]
+
+  @@unique([grupoEconomicoId, rut])
+  @@index([grupoEconomicoId])
+  @@map("empresas")
+}
+
+// ===================================
+// PLAN DE CUENTAS (Cabezal)
+// Un grupo económico tiene un único plan de cuentas
+// ===================================
+model PlanDeCuentas {
+  id                Int       @id @default(autoincrement())
+  grupoEconomicoId  Int       @unique @map("grupo_economico_id")
+  nombre            String    // "Plan de cuentas empresas software UY"
+  descripcion       String?   @db.Text
+  activo            Boolean   @default(true)
+  creadoEn          DateTime  @default(now()) @map("creado_en")
+
+  // Relaciones
+  grupoEconomico    GrupoEconomico @relation(fields: [grupoEconomicoId], references: [id])
+  cuentas           Cuenta[]
+
+  @@map("planes_de_cuentas")
+}
+
+// ===================================
+// CUENTAS (antes PlanCuentas)
+// ===================================
+model Cuenta {
+  id                 Int              @id @default(autoincrement())
+  planDeCuentasId    Int              @map("plan_de_cuentas_id")
+  codigo             String
+  nombre             String
+  cuentaPadreId      Int?             @map("cuenta_padre_id")
+  tipo               TipoCuenta
+  nivel              Int
+  imputable          Boolean          @default(true)
+  requiereAuxiliar   Boolean          @default(false) @map("requiere_auxiliar")
+  tipoAuxiliar       TipoAuxiliar?    @map("tipo_auxiliar")
+  moneda             Moneda           @default(FUNCIONAL)
+  activa             Boolean          @default(true)
+
+  // Campos NIIF/IFRS
+  naturaleza         NaturalezaCuenta? // CORRIENTE / NO_CORRIENTE
+  categoriaNIIF      CategoriaNIIF?    @map("categoria_niif")
+  metodoValuacion    MetodoValuacion?  @map("metodo_valuacion") // Para activos/inventarios
+
+  // Relaciones
+  planDeCuentas      PlanDeCuentas   @relation(fields: [planDeCuentasId], references: [id])
+  cuentaPadre        Cuenta?         @relation("CuentasPadreHijo", fields: [cuentaPadreId], references: [id])
+  subcuentas         Cuenta[]        @relation("CuentasPadreHijo")
+
+  // Relaciones inversas (requeridas por Prisma - evitar usar en queries)
+  lineasAsiento      LineaAsiento[]
+
+  @@unique([planDeCuentasId, codigo])
+  @@index([planDeCuentasId])
+  @@index([tipo])
+  @@map("cuentas")
+}
+
+enum TipoCuenta {
+  ACTIVO
+  PASIVO
+  PATRIMONIO
+  INGRESO
+  EGRESO
+}
+
+enum Moneda {
+  MN          // Moneda Nacional
+  USD         // Dólar
+  AMBAS       // Permite ambas
+  FUNCIONAL   // Usa la moneda funcional de la empresa
+}
+
+enum TipoAuxiliar {
+  CLIENTE
+  PROVEEDOR
+  EMPLEADO
+  OTRO
+}
+
+// NIIF Enums
+enum NaturalezaCuenta {
+  CORRIENTE       // < 12 meses
+  NO_CORRIENTE    // > 12 meses
+}
+
+enum CategoriaNIIF {
+  // Activos
+  EFECTIVO_Y_EQUIVALENTES
+  CUENTAS_POR_COBRAR
+  INVENTARIOS
+  PROPIEDAD_PLANTA_EQUIPO
+  ACTIVOS_INTANGIBLES
+  ACTIVOS_FINANCIEROS
+  ACTIVOS_POR_IMPUESTOS_DIFERIDOS
+
+  // Pasivos
+  CUENTAS_POR_PAGAR
+  PRESTAMOS_Y_FINANCIAMIENTO
+  PROVISIONES
+  PASIVOS_POR_IMPUESTOS_DIFERIDOS
+
+  // Patrimonio
+  CAPITAL_SOCIAL
+  RESERVAS
+  RESULTADOS_ACUMULADOS
+
+  // Resultados
+  INGRESOS_OPERACIONALES
+  COSTOS_VENTAS
+  GASTOS_ADMINISTRACION
+  GASTOS_VENTAS
+  GASTOS_FINANCIEROS
+  INGRESOS_FINANCIEROS
+  OTROS_INGRESOS
+  OTROS_GASTOS
+}
+
+enum MetodoValuacion {
+  COSTO_HISTORICO
+  VALOR_RAZONABLE
+  COSTO_AMORTIZADO
+  VALOR_NETO_REALIZABLE
+}
+
+// ===================================
+// TIPO DE CAMBIO
+// ===================================
+model TipoCambio {
+  id                Int      @id @default(autoincrement())
+  grupoEconomicoId  Int      @map("grupo_economico_id")
+  fecha             DateTime @db.Date
+  monedaOrigen      String   @map("moneda_origen") @db.VarChar(3)
+  monedaDestino     String   @map("moneda_destino") @db.VarChar(3) // Siempre monedaBase del grupo
+  tipoCambio        Decimal  @map("tipo_cambio") @db.Decimal(10, 4)
+  fuente            String?  @db.VarChar(100) // "BCU", "Manual", etc.
+  creadoEn          DateTime @default(now()) @map("creado_en")
+
+  // Relaciones
+  grupoEconomico    GrupoEconomico @relation(fields: [grupoEconomicoId], references: [id])
+
+  @@unique([grupoEconomicoId, fecha, monedaOrigen, monedaDestino])
+  @@index([grupoEconomicoId, fecha])
+  @@map("tipos_cambio")
+}
+
+// ===================================
+// PERIODOS CONTABLES
+// ===================================
+model PeriodoContable {
+  id                Int           @id @default(autoincrement())
+  grupoEconomicoId  Int           @map("grupo_economico_id")
+  tipo              TipoPeriodo
+  ejercicio         Int           // Año: 2024, 2025
+  mes               Int?          // 1-12, solo si tipo = MES
+  fechaInicio       DateTime      @map("fecha_inicio") @db.Date
+  fechaFin          DateTime      @map("fecha_fin") @db.Date
+  cerrado           Boolean       @default(false)
+  fechaCierre       DateTime?     @map("fecha_cierre")
+  cerradoPor        Int?          @map("cerrado_por")
+
+  // Relaciones
+  grupoEconomico    GrupoEconomico @relation(fields: [grupoEconomicoId], references: [id])
+  cerradoPorUsuario Usuario?       @relation(fields: [cerradoPor], references: [id])
+
+  @@unique([grupoEconomicoId, tipo, ejercicio, mes])
+  @@index([grupoEconomicoId])
+  @@map("periodos_contables")
+}
+
+enum TipoPeriodo {
+  EJERCICIO  // Anual
+  MES        // Mensual
+}
+
+// ===================================
+// CONFIGURACIÓN CONTABLE
+// ===================================
+model ConfiguracionContable {
+  id                              Int      @id @default(autoincrement())
+  grupoEconomicoId                Int      @unique @map("grupo_economico_id")
+
+  // Control de períodos
+  permitirAsientosEnPeriodoCerrado  Boolean @default(false) @map("permitir_asientos_periodo_cerrado")
+
+  // Control de aprobaciones (global)
+  requiereAprobacionGlobal          Boolean @default(false) @map("requiere_aprobacion_global")
+  montoMinimoAprobacion             Decimal? @map("monto_minimo_aprobacion") @db.Decimal(18, 2)
+
+  // Otras configuraciones
+  permitirAsientosDescuadrados      Boolean @default(false) @map("permitir_asientos_descuadrados")
+  decimalesMonto                    Int     @default(2) @map("decimales_monto")
+  decimalesTipoCambio               Int     @default(4) @map("decimales_tipo_cambio")
+
+  // Relaciones
+  grupoEconomico    GrupoEconomico @relation(fields: [grupoEconomicoId], references: [id])
+
+  @@map("configuracion_contable")
+}
+
+// ===================================
+// TEMPLATES DE ASIENTOS
+// ===================================
+model TemplateAsiento {
+  id                    Int      @id @default(autoincrement())
+  grupoEconomicoId      Int      @map("grupo_economico_id")
+  nombre                String
+  descripcion           String?  @db.Text
+  tipo                  TipoAsiento
+  requiereAprobacion    Boolean  @default(false) @map("requiere_aprobacion")
+  activo                Boolean  @default(true)
+
+  // Relaciones
+  grupoEconomico        GrupoEconomico @relation(fields: [grupoEconomicoId], references: [id])
+
+  @@index([grupoEconomicoId])
+  @@map("templates_asiento")
+}
+
+// ===================================
+// ASIENTOS CONTABLES
+// ===================================
+model Asiento {
+  id                Int           @id @default(autoincrement())
+  grupoEconomicoId  Int           @map("grupo_economico_id")
+  empresaId         Int           @map("empresa_id")
+  numero            Int
+  fecha             DateTime      @db.Date       // Fecha contable
+  fechaSistema      DateTime      @default(now()) @map("fecha_sistema") // Fecha de creación
+  descripcion       String        @db.Text
+  tipo              TipoAsiento   @default(DIARIO)
+  estado            EstadoAsiento @default(BORRADOR)
+
+  // Auditoría
+  creadoPor         Int           @map("creado_por")
+  creadoEn          DateTime      @default(now()) @map("creado_en")
+  modificadoEn      DateTime?     @updatedAt @map("modificado_en")
+
+  // Aprobación
+  aprobadoPor       Int?          @map("aprobado_por")
+  aprobadoEn        DateTime?     @map("aprobado_en")
+  motivoRechazo     String?       @map("motivo_rechazo") @db.Text
+
+  // Relaciones
+  grupoEconomico    GrupoEconomico @relation(fields: [grupoEconomicoId], references: [id])
+  empresa           Empresa        @relation(fields: [empresaId], references: [id])
+  lineas            LineaAsiento[]
+  creadoPorUsuario  Usuario        @relation("AsientoCreadoPor", fields: [creadoPor], references: [id])
+  aprobadoPorUsuario Usuario?      @relation("AsientoAprobadoPor", fields: [aprobadoPor], references: [id])
+
+  @@unique([empresaId, numero])
+  @@index([fecha])
+  @@index([grupoEconomicoId])
+  @@index([empresaId])
+  @@index([estado])
+  @@map("asientos")
+}
+
+enum TipoAsiento {
+  DIARIO
+  APERTURA
+  AJUSTE
+  CIERRE
+  AJUSTE_CAMBIO  // Diferencias de cambio
+  DEPRECIACION   // Depreciaciones
+}
+
+enum EstadoAsiento {
+  BORRADOR
+  PENDIENTE_APROBACION
+  CONFIRMADO
+  RECHAZADO
+}
+
+// ===================================
+// LÍNEAS DE ASIENTO (Partida Doble)
+// ===================================
+model LineaAsiento {
+  id              Int      @id @default(autoincrement())
+  asientoId       Int      @map("asiento_id")
+  cuentaId        Int      @map("cuenta_id")
+
+  // Montos
+  debe            Decimal  @db.Decimal(18, 2)
+  haber           Decimal  @db.Decimal(18, 2)
+  moneda          String   @db.VarChar(3)
+  tipoCambio      Decimal? @map("tipo_cambio") @db.Decimal(10, 4)
+
+  // Auxiliares
+  auxiliarTipo    TipoAuxiliar?  @map("auxiliar_tipo")
+  auxiliarId      Int?           @map("auxiliar_id")
+  auxiliarNombre  String?        @map("auxiliar_nombre") @db.VarChar(255) // Redundancia para auditoría
+
+  // Otros
+  centroCosto     String?  @map("centro_costo") @db.VarChar(100)
+  glosa           String?  @db.Text
+
+  // Redundancia para auditoría (snapshot al momento del asiento)
+  codigoCuenta    String   @map("codigo_cuenta") @db.VarChar(50)
+  nombreCuenta    String   @map("nombre_cuenta") @db.VarChar(255)
+  tipoCuenta      TipoCuenta @map("tipo_cuenta")
+
+  // Relaciones
+  asiento         Asiento  @relation(fields: [asientoId], references: [id], onDelete: Cascade)
+  cuenta          Cuenta   @relation(fields: [cuentaId], references: [id])
+
+  @@index([asientoId])
+  @@index([cuentaId])
+  @@map("lineas_asiento")
+}
+
+// ===================================
+// OBLIGACIONES (Compras/Ventas a cuotas)
+// ===================================
+model Obligacion {
+  id                Int            @id @default(autoincrement())
+  grupoEconomicoId  Int            @map("grupo_economico_id")
+  tipo              TipoObligacion
+  descripcion       String         @db.Text
+  montoTotal        Decimal        @map("monto_total") @db.Decimal(18, 2)
+  moneda            String         @db.VarChar(3)
+  fechaEmision      DateTime       @map("fecha_emision") @db.Date
+  auxiliarTipo      TipoAuxiliar   @map("auxiliar_tipo")
+  auxiliarId        Int            @map("auxiliar_id")
+  estado            EstadoObligacion @default(ACTIVA)
+  asientoOrigenId   Int?           @map("asiento_origen_id") // Asiento que generó la obligación
+  creadoEn          DateTime       @default(now()) @map("creado_en")
+
+  // Relaciones
+  grupoEconomico    GrupoEconomico @relation(fields: [grupoEconomicoId], references: [id])
+  cuotas            CuotaObligacion[]
+  pagos             PagoObligacion[]
+
+  @@index([grupoEconomicoId])
+  @@index([auxiliarTipo, auxiliarId])
+  @@map("obligaciones")
+}
+
+enum TipoObligacion {
+  PAGAR      // Cuenta por pagar
+  COBRAR     // Cuenta por cobrar
+}
+
+enum EstadoObligacion {
+  ACTIVA
+  PAGADA
+  CANCELADA
+  VENCIDA
+}
+
+model CuotaObligacion {
+  id              Int      @id @default(autoincrement())
+  obligacionId    Int      @map("obligacion_id")
+  numeroCuota     Int      @map("numero_cuota")
+  fechaVencimiento DateTime @map("fecha_vencimiento") @db.Date
+  monto           Decimal  @db.Decimal(18, 2)
+  montoPagado     Decimal  @default(0) @map("monto_pagado") @db.Decimal(18, 2)
+  estado          EstadoCuota @default(PENDIENTE)
+
+  // Relaciones
+  obligacion      Obligacion @relation(fields: [obligacionId], references: [id], onDelete: Cascade)
+  pagos           PagoObligacion[]
+
+  @@index([obligacionId])
+  @@index([fechaVencimiento])
+  @@map("cuotas_obligacion")
+}
+
+enum EstadoCuota {
+  PENDIENTE
+  PAGADA_PARCIAL
+  PAGADA
+  VENCIDA
+}
+
+model PagoObligacion {
+  id              Int      @id @default(autoincrement())
+  obligacionId    Int      @map("obligacion_id")
+  cuotaId         Int?     @map("cuota_id") // Null si pago no está asignado a cuota específica
+  fechaPago       DateTime @map("fecha_pago") @db.Date
+  monto           Decimal  @db.Decimal(18, 2)
+  moneda          String   @db.VarChar(3)
+  tipoCambio      Decimal? @map("tipo_cambio") @db.Decimal(10, 4)
+  asientoId       Int?     @map("asiento_id") // Asiento contable del pago
+  observaciones   String?  @db.Text
+  creadoEn        DateTime @default(now()) @map("creado_en")
+
+  // Relaciones
+  obligacion      Obligacion @relation(fields: [obligacionId], references: [id])
+  cuota           CuotaObligacion? @relation(fields: [cuotaId], references: [id])
+
+  @@index([obligacionId])
+  @@index([cuotaId])
+  @@map("pagos_obligacion")
+}
+
+// ===================================
+// USUARIOS
+// ===================================
+model Usuario {
+  id              Int      @id @default(autoincrement())
+  email           String   @unique
+  nombre          String
+  authProviderId  String   @unique @map("auth_provider_id")
+  activo          Boolean  @default(true)
+  creadoEn        DateTime @default(now()) @map("creado_en")
+
+  // Relaciones
+  grupos                UsuarioGrupo[]
+  empresas              UsuarioEmpresa[]
+
+  // Relaciones inversas (requeridas por Prisma - evitar usar en queries)
+  asientosCreados       Asiento[] @relation("AsientoCreadoPor")
+  asientosAprobados     Asiento[] @relation("AsientoAprobadoPor")
+  periodosCerrados      PeriodoContable[]
+
+  @@map("usuarios")
+}
+
+model UsuarioGrupo {
+  usuarioId         Int    @map("usuario_id")
+  grupoEconomicoId  Int    @map("grupo_economico_id")
+  rol               Rol
+
+  // Relaciones
+  usuario           Usuario         @relation(fields: [usuarioId], references: [id])
+  grupoEconomico    GrupoEconomico  @relation(fields: [grupoEconomicoId], references: [id])
+
+  @@id([usuarioId, grupoEconomicoId])
+  @@map("usuarios_grupos")
+}
+
+model UsuarioEmpresa {
+  usuarioId      Int     @map("usuario_id")
+  empresaId      Int     @map("empresa_id")
+  puedeEscribir  Boolean @default(false) @map("puede_escribir")
+
+  // Relaciones
+  usuario        Usuario @relation(fields: [usuarioId], references: [id])
+  empresa        Empresa @relation(fields: [empresaId], references: [id])
+
+  @@id([usuarioId, empresaId])
+  @@map("usuarios_empresas")
+}
+
+enum Rol {
+  ADMIN      // Administrador del grupo
+  CONTADOR   // Puede aprobar asientos
+  OPERATIVO  // Puede crear asientos
+  LECTURA    // Solo lectura
+}
+
+// ===================================
+// CLIENTES
+// ===================================
+model Cliente {
+  id                Int      @id @default(autoincrement())
+  grupoEconomicoId  Int      @map("grupo_economico_id")
+  nombre            String
+  rut               String?
+  email             String?
+  telefono          String?
+  direccion         String?  @db.Text
+  activo            Boolean  @default(true)
+  creadoEn          DateTime @default(now()) @map("creado_en")
+
+  // Relaciones
+  grupoEconomico    GrupoEconomico @relation(fields: [grupoEconomicoId], references: [id])
+
+  @@index([grupoEconomicoId])
+  @@map("clientes")
+}
+
+// ===================================
+// PROVEEDORES
+// ===================================
+model Proveedor {
+  id                Int      @id @default(autoincrement())
+  grupoEconomicoId  Int      @map("grupo_economico_id")
+  nombre            String
+  rut               String?
+  email             String?
+  telefono          String?
+  direccion         String?  @db.Text
+  activo            Boolean  @default(true)
+  creadoEn          DateTime @default(now()) @map("creado_en")
+
+  // Relaciones
+  grupoEconomico    GrupoEconomico @relation(fields: [grupoEconomicoId], references: [id])
+
+  @@index([grupoEconomicoId])
+  @@map("proveedores")
+}

@@ -1,0 +1,150 @@
+version: '3.8'
+
+services:
+  # ===================================
+  # BASE DE DATOS - PostgreSQL 15
+  # ===================================
+  postgres:
+    image: postgres:15-alpine
+    container_name: kontaflow-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: dev_password
+      POSTGRES_DB: kontaflow_dev
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - kontaflow-network
+
+  # ===================================
+  # BACKEND - Node.js 20 + Fastify + Prisma
+  # ===================================
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.dev
+    container_name: kontaflow-backend
+    environment:
+      NODE_ENV: development
+      DATABASE_URL: postgresql://postgres:dev_password@postgres:5432/kontaflow_dev
+      PORT: 8000
+      CLERK_SECRET_KEY: ${CLERK_SECRET_KEY_DEV:-sk_test_placeholder}
+      RESEND_API_KEY: ${RESEND_API_KEY_DEV:-re_placeholder}
+      S3_ENDPOINT: http://minio:9000
+      S3_ACCESS_KEY: minioadmin
+      S3_SECRET_KEY: minioadmin
+      S3_BUCKET: kontaflow
+      REDIS_URL: redis://redis:6379
+      SMTP_HOST: mailhog
+      SMTP_PORT: 1025
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend/src:/app/src
+      - ./backend/prisma:/app/prisma
+      - backend_node_modules:/app/node_modules
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    networks:
+      - kontaflow-network
+    command: npm run dev
+
+  # ===================================
+  # FRONTEND - Next.js 14
+  # ===================================
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    container_name: kontaflow-frontend
+    environment:
+      NODE_ENV: development
+      NEXT_PUBLIC_API_URL: http://localhost:8000
+      NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ${CLERK_PUBLISHABLE_KEY_DEV:-pk_test_placeholder}
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend/src:/app/src
+      - ./frontend/public:/app/public
+      - ./frontend/app:/app/app
+      - ./frontend/next.config.js:/app/next.config.js
+      - ./frontend/tailwind.config.ts:/app/tailwind.config.ts
+      - ./frontend/tsconfig.json:/app/tsconfig.json
+      - frontend_node_modules:/app/node_modules
+      - frontend_nextjs_cache:/app/.next
+    depends_on:
+      - backend
+    networks:
+      - kontaflow-network
+    command: npm run dev
+
+  # ===================================
+  # REDIS - Cache y Queue
+  # ===================================
+  redis:
+    image: redis:7-alpine
+    container_name: kontaflow-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - kontaflow-network
+
+  # ===================================
+  # MINIO - S3 compatible storage local
+  # ===================================
+  minio:
+    image: minio/minio:latest
+    container_name: kontaflow-minio
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    volumes:
+      - minio_data:/data
+    command: server /data --console-address ":9001"
+    networks:
+      - kontaflow-network
+
+  # ===================================
+  # MAILHOG - Email testing local
+  # ===================================
+  mailhog:
+    image: mailhog/mailhog:latest
+    container_name: kontaflow-mailhog
+    ports:
+      - "1025:1025"  # SMTP server
+      - "8025:8025"  # Web UI
+    networks:
+      - kontaflow-network
+
+# ===================================
+# VOLUMES
+# ===================================
+volumes:
+  postgres_data:
+  redis_data:
+  minio_data:
+  backend_node_modules:
+  frontend_node_modules:
+  frontend_nextjs_cache:
+
+# ===================================
+# NETWORKS
+# ===================================
+networks:
+  kontaflow-network:
+    driver: bridge

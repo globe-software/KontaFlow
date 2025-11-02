@@ -1,0 +1,18 @@
+FROM node:20-alpine
+
+WORKDIR /app
+
+# Instalar libc6-compat para compatibilidad
+RUN apk add --no-cache libc6-compat
+
+# Copiar archivos de dependencias
+COPY package*.json ./
+
+# Instalar dependencias (usando install para desarrollo)
+RUN npm install
+
+# Exponer puerto
+EXPOSE 3000
+
+# Comando para desarrollo con hot reload
+CMD ["npm", "run", "dev"]
