@@ -146,6 +146,347 @@ Ventajas:
 ✓ Performance (índices por tenant)
 ```
 
+### 2.4 Arquitectura Interna del Backend
+
+#### Patrón: Arquitectura por Capas (Layered Architecture)
+
+El backend sigue una arquitectura en capas que separa responsabilidades y facilita el mantenimiento, testing y escalabilidad.
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    CLIENTE (Frontend)                        │
+└────────────────────────────┬────────────────────────────────┘
+                             │ HTTP Request
+                             ↓
+┌─────────────────────────────────────────────────────────────┐
+│                   CAPA DE RUTAS (Routes)                     │
+│  • Maneja requests HTTP (GET, POST, PUT, DELETE)            │
+│  • Validación de entrada (Zod schemas)                      │
+│  • Autenticación y autorización                             │
+│  • Transformación de respuestas                             │
+│  Archivos: routes/*.routes.ts                               │
+└────────────────────────────┬────────────────────────────────┘
+                             │
+                             ↓
+┌─────────────────────────────────────────────────────────────┐
+│                 CAPA DE SERVICIOS (Services)                 │
+│  • Lógica de negocio                                        │
+│  • Reglas de validación complejas                           │
+│  • Orquestación de múltiples repositorios                   │
+│  • Cálculos y transformaciones                              │
+│  Archivos: services/*.service.ts                            │
+└────────────────────────────┬────────────────────────────────┘
+                             │
+                             ↓
+┌─────────────────────────────────────────────────────────────┐
+│              CAPA DE REPOSITORIOS (Repositories)             │
+│  • Acceso a datos (Prisma queries)                          │
+│  • Abstracción de la base de datos                          │
+│  • Operaciones CRUD específicas                             │
+│  • Queries complejas                                        │
+│  Archivos: repositories/*.repository.ts                     │
+└────────────────────────────┬────────────────────────────────┘
+                             │
+                             ↓
+┌─────────────────────────────────────────────────────────────┐
+│                      PRISMA ORM                              │
+└────────────────────────────┬────────────────────────────────┘
+                             │
+                             ↓
+┌─────────────────────────────────────────────────────────────┐
+│                    BASE DE DATOS                             │
+│                    PostgreSQL 15                             │
+└─────────────────────────────────────────────────────────────┘
+```
+
+#### Estructura de Carpetas
+
+```
+backend/src/
+├── index.ts                      # Entry point - Configuración de Fastify
+│
+├── routes/                       # Capa HTTP (Controllers)
+│   ├── grupos.routes.ts          # Endpoints de grupos económicos
+│   ├── empresas.routes.ts        # Endpoints de empresas
+│   ├── cuentas.routes.ts         # Endpoints de plan de cuentas
+│   ├── asientos.routes.ts        # Endpoints de asientos contables
+│   ├── clientes.routes.ts        # Endpoints de clientes
+│   ├── proveedores.routes.ts     # Endpoints de proveedores
+│   └── reportes.routes.ts        # Endpoints de reportes
+│
+├── services/                     # Lógica de Negocio
+│   ├── grupos.service.ts         # Lógica de grupos
+│   ├── empresas.service.ts       # Lógica de empresas
+│   ├── cuentas.service.ts        # Lógica de cuentas
+│   ├── asientos.service.ts       # Lógica de asientos (validación partida doble)
+│   ├── obligaciones.service.ts   # Lógica de obligaciones y cuotas
+│   └── reportes.service.ts       # Generación de reportes
+│
+├── repositories/                 # Acceso a Datos
+│   ├── grupos.repository.ts      # Queries de grupos
+│   ├── asientos.repository.ts    # Queries de asientos
+│   ├── cuentas.repository.ts     # Queries de cuentas
+│   └── reportes.repository.ts    # Queries complejas para reportes
+│
+├── middleware/                   # Middleware de Fastify
+│   ├── auth.ts                   # Autenticación JWT (Clerk)
+│   ├── error-handler.ts          # Manejo centralizado de errores
+│   ├── validate.ts               # Validación con Zod
+│   └── tenant.ts                 # Multi-tenancy (verificar acceso)
+│
+├── validators/                   # Schemas de Validación (Zod)
+│   ├── grupos.schema.ts          # Validaciones de grupos
+│   ├── empresas.schema.ts        # Validaciones de empresas
+│   ├── cuentas.schema.ts         # Validaciones de cuentas
+│   └── asientos.schema.ts        # Validaciones de asientos
+│
+├── lib/                         # Utilidades y Configuración
+│   ├── prisma.ts                # Cliente Prisma singleton
+│   ├── errors.ts                # Clases de errores custom
+│   ├── logger.ts                # Logger (Pino)
+│   └── config.ts                # Configuración (env vars)
+│
+└── types/                       # TypeScript Types
+    ├── index.ts                 # Types exportados
+    └── fastify.d.ts             # Type augmentation para Fastify
+```
+
+#### Responsabilidades de Cada Capa
+
+**1. Routes (Controllers)**
+```typescript
+// Ejemplo: routes/asientos.routes.ts
+export async function asientosRoutes(fastify: FastifyInstance) {
+  // GET /api/asientos
+  fastify.get('/', {
+    preHandler: [authenticateUser, validateTenant],
+    schema: {
+      querystring: AsientosQuerySchema
+    }
+  }, async (request, reply) => {
+    const asientos = await asientosService.listar(
+      request.user.grupoEconomicoId,
+      request.query
+    );
+    return { data: asientos };
+  });
+
+  // POST /api/asientos
+  fastify.post('/', {
+    preHandler: [authenticateUser, validateTenant],
+    schema: {
+      body: CreateAsientoSchema
+    }
+  }, async (request, reply) => {
+    const asiento = await asientosService.crear(
+      request.user.grupoEconomicoId,
+      request.body
+    );
+    return reply.code(201).send({ data: asiento });
+  });
+}
+```
+
+**Responsabilidades:**
+- Recibir y validar requests HTTP
+- Llamar a servicios
+- Transformar respuestas
+- Manejo de códigos HTTP
+
+**2. Services (Lógica de Negocio)**
+```typescript
+// Ejemplo: services/asientos.service.ts
+export class AsientosService {
+  async crear(grupoEconomicoId: number, data: CreateAsientoDto) {
+    // 1. Validar reglas de negocio
+    this.validarPartidaDoble(data.lineas);
+    this.validarPeriodoAbierto(data.fecha, grupoEconomicoId);
+
+    // 2. Verificar permisos y existencia de cuentas
+    await this.verificarCuentasExisten(data.lineas);
+
+    // 3. Crear asiento con transacción
+    return await asientosRepository.crearConLineas(grupoEconomicoId, data);
+  }
+
+  private validarPartidaDoble(lineas: LineaAsiento[]) {
+    const totalDebe = lineas.reduce((sum, l) => sum + l.debe, 0);
+    const totalHaber = lineas.reduce((sum, l) => sum + l.haber, 0);
+
+    if (totalDebe !== totalHaber) {
+      throw new ValidationError('El asiento debe estar cuadrado (debe = haber)');
+    }
+  }
+}
+```
+
+**Responsabilidades:**
+- Implementar reglas de negocio
+- Validaciones complejas (partida doble, períodos, permisos)
+- Orquestar múltiples repositorios
+- Transacciones
+
+**3. Repositories (Acceso a Datos)**
+```typescript
+// Ejemplo: repositories/asientos.repository.ts
+export class AsientosRepository {
+  async listar(grupoEconomicoId: number, filters: AsientosFilters) {
+    return await prisma.asiento.findMany({
+      where: {
+        grupoEconomicoId,
+        empresaId: filters.empresaId,
+        fecha: {
+          gte: filters.fechaDesde,
+          lte: filters.fechaHasta
+        }
+      },
+      include: {
+        lineas: {
+          include: {
+            cuenta: true
+          }
+        }
+      },
+      orderBy: { fecha: 'desc' }
+    });
+  }
+
+  async crearConLineas(grupoEconomicoId: number, data: CreateAsientoDto) {
+    return await prisma.$transaction(async (tx) => {
+      const asiento = await tx.asiento.create({
+        data: {
+          grupoEconomicoId,
+          ...data,
+          lineas: {
+            create: data.lineas
+          }
+        },
+        include: { lineas: true }
+      });
+      return asiento;
+    });
+  }
+}
+```
+
+**Responsabilidades:**
+- Queries de Prisma
+- Transacciones de base de datos
+- Operaciones CRUD específicas
+- NO contiene lógica de negocio
+
+#### Flujo de Datos Completo
+
+**Ejemplo: Crear un Asiento Contable**
+
+```
+1. Request HTTP
+   POST /api/asientos
+   Body: { empresaId, fecha, lineas: [...] }
+   Headers: { Authorization: "Bearer JWT" }
+
+2. Middleware de Autenticación
+   → Verifica JWT con Clerk
+   → Extrae userId y grupoEconomicoId
+   → Adjunta a request.user
+
+3. Middleware de Validación
+   → Valida body con Zod schema
+   → Si falla: retorna 400 Bad Request
+
+4. Route Handler (Controller)
+   → Llama a asientosService.crear()
+
+5. Service (Lógica de Negocio)
+   → Validar partida doble (debe = haber)
+   → Validar período contable abierto
+   → Verificar que cuentas existen
+   → Validar permisos del usuario
+   → Si todo OK: llama a repository
+
+6. Repository (Acceso a Datos)
+   → Inicia transacción
+   → Crea asiento
+   → Crea líneas de asiento
+   → Commit transacción
+   → Retorna asiento creado
+
+7. Service
+   → Retorna asiento al controller
+
+8. Route Handler
+   → Transforma a JSON response
+   → Retorna 201 Created
+```
+
+#### Ventajas de esta Arquitectura
+
+✅ **Separación de responsabilidades**: Cada capa tiene un propósito claro
+
+✅ **Testeable**: Puedes testear servicios sin levantar servidor HTTP
+
+✅ **Mantenible**: Cambios en una capa no afectan otras
+
+✅ **Escalable**: Fácil agregar nuevas features
+
+✅ **Reutilizable**: Servicios pueden ser llamados desde diferentes rutas
+
+✅ **Segura**: Validación en múltiples niveles
+
+#### Manejo de Errores
+
+```typescript
+// lib/errors.ts
+export class AppError extends Error {
+  constructor(
+    public message: string,
+    public statusCode: number,
+    public code: string
+  ) {
+    super(message);
+  }
+}
+
+export class ValidationError extends AppError {
+  constructor(message: string) {
+    super(message, 400, 'VALIDATION_ERROR');
+  }
+}
+
+export class NotFoundError extends AppError {
+  constructor(resource: string) {
+    super(`${resource} not found`, 404, 'NOT_FOUND');
+  }
+}
+
+export class ForbiddenError extends AppError {
+  constructor(message: string) {
+    super(message, 403, 'FORBIDDEN');
+  }
+}
+
+// middleware/error-handler.ts
+export const errorHandler: FastifyErrorHandler = (error, request, reply) => {
+  if (error instanceof AppError) {
+    return reply.code(error.statusCode).send({
+      error: {
+        code: error.code,
+        message: error.message
+      }
+    });
+  }
+
+  // Error no esperado - loggear y retornar 500
+  logger.error(error);
+  return reply.code(500).send({
+    error: {
+      code: 'INTERNAL_ERROR',
+      message: 'An unexpected error occurred'
+    }
+  });
+};
+```
+
 ---
 
 ## 3. SERVICIOS CLOUD
