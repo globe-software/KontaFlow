@@ -1,0 +1,310 @@
+{
+  "info": {
+    "name": "KontaFlow - Grupos Económicos",
+    "description": "API endpoints para gestión de Grupos Económicos en KontaFlow",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "kontaflow"
+  },
+  "item": [
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/health",
+          "host": ["{{base_url}}"],
+          "path": ["health"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Listar Mis Grupos",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "x-user-id",
+            "value": "{{user_id}}",
+            "type": "text",
+            "description": "ID del usuario autenticado"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/grupos/mis-grupos",
+          "host": ["{{base_url}}"],
+          "path": ["api", "grupos", "mis-grupos"]
+        },
+        "description": "Obtiene los grupos económicos del usuario autenticado"
+      },
+      "response": []
+    },
+    {
+      "name": "Listar Grupos (con paginación)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "x-user-id",
+            "value": "{{user_id}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/grupos?page=1&limit=10&activo=true",
+          "host": ["{{base_url}}"],
+          "path": ["api", "grupos"],
+          "query": [
+            {
+              "key": "page",
+              "value": "1",
+              "description": "Número de página (default: 1)"
+            },
+            {
+              "key": "limit",
+              "value": "10",
+              "description": "Resultados por página (default: 10, max: 100)"
+            },
+            {
+              "key": "search",
+              "value": "",
+              "description": "Buscar por nombre o RUT",
+              "disabled": true
+            },
+            {
+              "key": "activo",
+              "value": "true",
+              "description": "Filtrar por activo/inactivo",
+              "disabled": true
+            },
+            {
+              "key": "paisPrincipal",
+              "value": "UY",
+              "description": "Filtrar por país (UY, AR, BR, etc.)",
+              "disabled": true
+            }
+          ]
+        },
+        "description": "Lista todos los grupos económicos con paginación y filtros"
+      },
+      "response": []
+    },
+    {
+      "name": "Obtener Grupo por ID",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "x-user-id",
+            "value": "{{user_id}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/grupos/{{grupo_id}}",
+          "host": ["{{base_url}}"],
+          "path": ["api", "grupos", "{{grupo_id}}"]
+        },
+        "description": "Obtiene un grupo económico específico con toda su información (empresas, plan de cuentas, configuración)"
+      },
+      "response": []
+    },
+    {
+      "name": "Crear Grupo Económico",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "x-user-id",
+            "value": "{{user_id}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nombre\": \"Grupo Empresarial XYZ\",\n  \"rutControlador\": \"217890120018\",\n  \"paisPrincipal\": \"UY\",\n  \"monedaBase\": \"UYU\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/grupos",
+          "host": ["{{base_url}}"],
+          "path": ["api", "grupos"]
+        },
+        "description": "Crea un nuevo grupo económico. Automáticamente crea:\n- Plan de cuentas vacío\n- Configuración contable por defecto\n- Asigna al usuario como ADMIN del grupo"
+      },
+      "response": []
+    },
+    {
+      "name": "Actualizar Grupo Económico",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "x-user-id",
+            "value": "{{user_id}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nombre\": \"Grupo Empresarial ABC - Actualizado\",\n  \"monedaBase\": \"USD\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/grupos/{{grupo_id}}",
+          "host": ["{{base_url}}"],
+          "path": ["api", "grupos", "{{grupo_id}}"]
+        },
+        "description": "Actualiza un grupo económico existente. Todos los campos son opcionales."
+      },
+      "response": []
+    },
+    {
+      "name": "Eliminar Grupo Económico",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "x-user-id",
+            "value": "{{user_id}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/grupos/{{grupo_id}}",
+          "host": ["{{base_url}}"],
+          "path": ["api", "grupos", "{{grupo_id}}"]
+        },
+        "description": "Elimina (soft delete) un grupo económico. No se puede eliminar si tiene empresas activas."
+      },
+      "response": []
+    },
+    {
+      "name": "Crear Grupo - Solo campos requeridos",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "x-user-id",
+            "value": "{{user_id}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nombre\": \"Mi Empresa Personal\",\n  \"paisPrincipal\": \"UY\",\n  \"monedaBase\": \"UYU\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/grupos",
+          "host": ["{{base_url}}"],
+          "path": ["api", "grupos"]
+        },
+        "description": "Ejemplo con solo los campos requeridos (sin RUT controlador)"
+      },
+      "response": []
+    },
+    {
+      "name": "Crear Grupo - USD para exportación",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "x-user-id",
+            "value": "{{user_id}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nombre\": \"Tech Export Group\",\n  \"paisPrincipal\": \"UY\",\n  \"monedaBase\": \"USD\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/grupos",
+          "host": ["{{base_url}}"],
+          "path": ["api", "grupos"]
+        },
+        "description": "Ejemplo para empresa con moneda base USD (común en exportadores)"
+      },
+      "response": []
+    },
+    {
+      "name": "Error - Validación (nombre muy corto)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "x-user-id",
+            "value": "{{user_id}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nombre\": \"AB\",\n  \"paisPrincipal\": \"UY\",\n  \"monedaBase\": \"UYU\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/grupos",
+          "host": ["{{base_url}}"],
+          "path": ["api", "grupos"]
+        },
+        "description": "Ejemplo de error de validación - nombre debe tener al menos 3 caracteres"
+      },
+      "response": []
+    },
+    {
+      "name": "Error - Sin autenticación",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/grupos/mis-grupos",
+          "host": ["{{base_url}}"],
+          "path": ["api", "grupos", "mis-grupos"]
+        },
+        "description": "Ejemplo de error 401 - sin header x-user-id"
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8000",
+      "type": "string"
+    },
+    {
+      "key": "user_id",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "grupo_id",
+      "value": "1",
+      "type": "string"
+    }
+  ]
+}
