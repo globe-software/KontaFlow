@@ -6,15 +6,15 @@ import { prisma } from '../../src/lib/prisma';
  */
 export async function cleanDatabase() {
   const tables = [
-    'lineas_asiento',
-    'asientos',
-    'cuentas',
-    'planes_de_cuentas',
-    'configuracion_contable',
-    'empresas',
-    'usuarios_grupos',
-    'grupos_economicos',
-    'usuarios',
+    'entry_lines',
+    'entries',
+    'accounts',
+    'charts_of_accounts',
+    'accounting_configuration',
+    'companies',
+    'user_groups',
+    'economic_groups',
+    'users',
   ];
 
   // Ejecutar TRUNCATE en todas las tablas en orden inverso (por foreign keys)
@@ -38,143 +38,143 @@ export async function cleanDatabase() {
  */
 export async function seedTestData() {
   // Crear usuarios de prueba
-  const usuario1 = await prisma.usuario.create({
+  const user1 = await prisma.user.create({
     data: {
       id: 1,
       authProviderId: 'test_auth_id_1',
       email: 'admin@test.com',
-      nombre: 'Admin Test',
+      name: 'Admin Test',
     },
   });
 
-  const usuario2 = await prisma.usuario.create({
+  const user2 = await prisma.user.create({
     data: {
       id: 2,
       authProviderId: 'test_auth_id_2',
       email: 'contador@test.com',
-      nombre: 'Contador Test',
+      name: 'Contador Test',
     },
   });
 
-  const usuario3 = await prisma.usuario.create({
+  const user3 = await prisma.user.create({
     data: {
       id: 3,
       authProviderId: 'test_auth_id_3',
       email: 'operativo@test.com',
-      nombre: 'Operativo Test',
+      name: 'Operativo Test',
     },
   });
 
   // Crear grupo económico de prueba
-  const grupo1 = await prisma.grupoEconomico.create({
+  const group1 = await prisma.economicGroup.create({
     data: {
       id: 1,
-      nombre: 'Grupo Test 1',
-      paisPrincipal: 'UY',
-      monedaBase: 'UYU',
-      activo: true,
+      name: 'Pragmatic Software Group',
+      mainCountry: 'UY',
+      baseCurrency: 'UYU',
+      active: true,
     },
   });
 
   // Crear plan de cuentas para el grupo
-  const planCuentas = await prisma.planDeCuentas.create({
+  const chartOfAccounts = await prisma.chartOfAccounts.create({
     data: {
       id: 1,
-      grupoEconomicoId: grupo1.id,
-      nombre: 'Plan de cuentas - Grupo Test 1',
-      descripcion: 'Plan de cuentas de prueba',
-      activo: true,
+      economicGroupId: group1.id,
+      name: 'Chart of Accounts - Test Group 1',
+      description: 'Test chart of accounts',
+      active: true,
     },
   });
 
   // Crear configuración contable para el grupo
-  const configuracion = await prisma.configuracionContable.create({
+  const configuration = await prisma.accountingConfiguration.create({
     data: {
       id: 1,
-      grupoEconomicoId: grupo1.id,
-      permitirAsientosEnPeriodoCerrado: false,
-      requiereAprobacionGlobal: false,
-      montoMinimoAprobacion: 50000,
-      permitirAsientosDescuadrados: false,
-      decimalesMonto: 2,
-      decimalesTipoCambio: 4,
+      economicGroupId: group1.id,
+      allowEntriesInClosedPeriod: false,
+      requireGlobalApproval: false,
+      minimumApprovalAmount: 50000,
+      allowUnbalancedEntries: false,
+      amountDecimals: 2,
+      exchangeRateDecimals: 4,
     },
   });
 
   // Asignar usuarios al grupo
-  await prisma.usuarioGrupo.create({
+  await prisma.userGroup.create({
     data: {
-      usuarioId: usuario1.id,
-      grupoEconomicoId: grupo1.id,
-      rol: 'ADMIN',
+      userId: user1.id,
+      economicGroupId: group1.id,
+      role: 'ADMIN',
     },
   });
 
-  await prisma.usuarioGrupo.create({
+  await prisma.userGroup.create({
     data: {
-      usuarioId: usuario2.id,
-      grupoEconomicoId: grupo1.id,
-      rol: 'CONTADOR',
+      userId: user2.id,
+      economicGroupId: group1.id,
+      role: 'ACCOUNTANT',
     },
   });
 
-  await prisma.usuarioGrupo.create({
+  await prisma.userGroup.create({
     data: {
-      usuarioId: usuario3.id,
-      grupoEconomicoId: grupo1.id,
-      rol: 'OPERATIVO',
+      userId: user3.id,
+      economicGroupId: group1.id,
+      role: 'OPERATOR',
     },
   });
 
   // Crear empresas de prueba
-  await prisma.empresa.create({
+  await prisma.company.create({
     data: {
       id: 1,
-      grupoEconomicoId: grupo1.id,
-      nombre: 'Empresa Test UY S.A.',
-      nombreComercial: 'Empresa Test UY',
+      economicGroupId: group1.id,
+      name: 'Test Company UY S.A.',
+      tradeName: 'Test Company UY',
       rut: '217890120018',
-      pais: 'UY',
-      monedaFuncional: 'UYU',
-      activa: true,
+      country: 'UY',
+      functionalCurrency: 'UYU',
+      active: true,
     },
   });
 
-  await prisma.empresa.create({
+  await prisma.company.create({
     data: {
       id: 2,
-      grupoEconomicoId: grupo1.id,
-      nombre: 'Test Company LLC',
-      nombreComercial: 'Empresa Test US',
+      economicGroupId: group1.id,
+      name: 'Test Company LLC',
+      tradeName: 'Test Company US',
       rut: '123456789012',
-      pais: 'US',
-      monedaFuncional: 'USD',
-      activa: true,
+      country: 'US',
+      functionalCurrency: 'USD',
+      active: true,
     },
   });
 
   // Resetear las secuencias de IDs para que los tests puedan crear nuevos registros
   await prisma.$executeRawUnsafe(`
-    SELECT setval(pg_get_serial_sequence('"usuarios"', 'id'), COALESCE(MAX(id), 1)) FROM "usuarios";
+    SELECT setval(pg_get_serial_sequence('"users"', 'id'), COALESCE(MAX(id), 1)) FROM "users";
   `);
   await prisma.$executeRawUnsafe(`
-    SELECT setval(pg_get_serial_sequence('"grupos_economicos"', 'id'), COALESCE(MAX(id), 1)) FROM "grupos_economicos";
+    SELECT setval(pg_get_serial_sequence('"economic_groups"', 'id'), COALESCE(MAX(id), 1)) FROM "economic_groups";
   `);
   await prisma.$executeRawUnsafe(`
-    SELECT setval(pg_get_serial_sequence('"empresas"', 'id'), COALESCE(MAX(id), 1)) FROM "empresas";
+    SELECT setval(pg_get_serial_sequence('"companies"', 'id'), COALESCE(MAX(id), 1)) FROM "companies";
   `);
   await prisma.$executeRawUnsafe(`
-    SELECT setval(pg_get_serial_sequence('"planes_de_cuentas"', 'id'), COALESCE(MAX(id), 1)) FROM "planes_de_cuentas";
+    SELECT setval(pg_get_serial_sequence('"charts_of_accounts"', 'id'), COALESCE(MAX(id), 1)) FROM "charts_of_accounts";
   `);
   await prisma.$executeRawUnsafe(`
-    SELECT setval(pg_get_serial_sequence('"configuracion_contable"', 'id'), COALESCE(MAX(id), 1)) FROM "configuracion_contable";
+    SELECT setval(pg_get_serial_sequence('"accounting_configuration"', 'id'), COALESCE(MAX(id), 1)) FROM "accounting_configuration";
   `);
 
   return {
-    usuarios: [usuario1, usuario2, usuario3],
-    grupos: [grupo1],
-    planCuentas,
-    configuracion,
+    users: [user1, user2, user3],
+    groups: [group1],
+    chartOfAccounts,
+    configuration,
   };
 }
 
@@ -183,20 +183,20 @@ export async function seedTestData() {
  * Útil para debugging
  */
 export async function getDatabaseStats() {
-  const [usuarios, grupos, empresas, planes, configuraciones] =
+  const [users, groups, companies, charts, configurations] =
     await Promise.all([
-      prisma.usuario.count(),
-      prisma.grupoEconomico.count(),
-      prisma.empresa.count(),
-      prisma.planDeCuentas.count(),
-      prisma.configuracionContable.count(),
+      prisma.user.count(),
+      prisma.economicGroup.count(),
+      prisma.company.count(),
+      prisma.chartOfAccounts.count(),
+      prisma.accountingConfiguration.count(),
     ]);
 
   return {
-    usuarios,
-    grupos,
-    empresas,
-    planes,
-    configuraciones,
+    users,
+    groups,
+    companies,
+    charts,
+    configurations,
   };
 }
