@@ -28,6 +28,14 @@
   ],
   "author": "Pragmatic Team",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/globe-software/KontaFlow.git"
+  },
+  "bugs": {
+    "url": "https://github.com/globe-software/KontaFlow/issues"
+  },
+  "homepage": "https://github.com/globe-software/KontaFlow#readme",
   "dependencies": {
     "@clerk/backend": "^0.38.0",
     "@fastify/cors": "^8.5.0",

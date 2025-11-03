@@ -27,6 +27,7 @@
     "inactive": "Inactivo",
     "yes": "Sí",
     "no": "No",
+    "none": "Ninguno",
     "all": "Todos",
     "select": "Seleccionar",
     "date": "Fecha",
@@ -36,9 +37,14 @@
   "navigation": {
     "home": "Inicio",
     "grupos": "Grupos Económicos",
-    "empresas": "Empresas",
+    "companies": "Empresas",
+    "customers": "Clientes",
+    "suppliers": "Proveedores",
+    "accounts": "Cuentas",
+    "periods": "Períodos Contables",
+    "exchangeRates": "Tipos de Cambio",
+    "userCompanies": "Empresas de Usuario",
     "comprobantes": "Comprobantes",
-    "cuentas": "Cuentas",
     "reportes": "Reportes",
     "dashboard": "Panel de Control",
     "settings": "Configuración",
@@ -129,8 +135,9 @@
       "totalCompanies": "Total Empresas"
     }
   },
-  "empresas": {
+  "companies": {
     "title": "Empresas",
+    "subtitle": "Gestiona las empresas de tus grupos económicos",
     "createButton": "Crear Empresa",
     "editButton": "Editar Empresa",
     "deleteButton": "Eliminar Empresa",
@@ -138,29 +145,63 @@
     "searchPlaceholder": "Buscar empresas...",
     "emptyState": "No hay empresas creadas",
     "emptyStateDescription": "Comienza creando tu primera empresa",
+    "notFound": "Empresa no encontrada",
     "table": {
       "name": "Nombre",
+      "tradeName": "Nombre Comercial",
       "rut": "RUT",
-      "grupo": "Grupo Económico",
+      "economicGroup": "Grupo Económico",
       "currency": "Moneda",
       "country": "País",
       "status": "Estado"
     },
     "form": {
       "title": "Información de la Empresa",
+      "createDescription": "Completa los datos para crear una nueva empresa",
+      "editDescription": "Modifica los datos de la empresa",
       "nameLabel": "Nombre de la Empresa",
       "namePlaceholder": "Ej: Acme Corp",
       "nameRequired": "El nombre es requerido",
+      "tradeNameLabel": "Nombre Comercial",
+      "tradeNamePlaceholder": "Ej: Acme",
       "rutLabel": "RUT",
       "rutPlaceholder": "Ej: 211234560019",
       "rutRequired": "El RUT es requerido",
       "rutInvalid": "El RUT no es válido",
-      "grupoLabel": "Grupo Económico",
-      "grupoPlaceholder": "Selecciona un grupo",
-      "grupoRequired": "El grupo es requerido",
-      "currencyLabel": "Moneda Funcional",
-      "currencyPlaceholder": "Selecciona una moneda",
-      "currencyRequired": "La moneda es requerida"
+      "economicGroupLabel": "Grupo Económico",
+      "economicGroupPlaceholder": "Selecciona un grupo",
+      "economicGroupRequired": "El grupo es requerido",
+      "countryLabel": "País",
+      "countryPlaceholder": "Selecciona un país",
+      "functionalCurrencyLabel": "Moneda Funcional",
+      "functionalCurrencyPlaceholder": "Selecciona una moneda",
+      "functionalCurrencyRequired": "La moneda es requerida",
+      "startDateLabel": "Fecha de Inicio",
+      "startDatePlaceholder": "Selecciona una fecha"
+    },
+    "filters": {
+      "all": "Todas",
+      "active": "Activas",
+      "inactive": "Inactivas",
+      "byCountry": "Por país",
+      "byGroup": "Por grupo"
+    },
+    "stats": {
+      "totalCompanies": "Total Empresas",
+      "activeCompanies": "Empresas Activas",
+      "inactiveCompanies": "Empresas Inactivas",
+      "topCountry": "País Principal"
+    },
+    "details": {
+      "information": "Información",
+      "generalInformation": "Información General",
+      "journalEntries": "Asientos Contables",
+      "noJournalEntries": "No hay asientos contables",
+      "journalEntriesDescription": "Los asientos contables aparecerán aquí"
+    },
+    "deleteConfirm": {
+      "title": "¿Eliminar empresa?",
+      "description": "Esta acción no se puede deshacer. La empresa será marcada como inactiva."
     },
     "messages": {
       "created": "Empresa creada exitosamente",
@@ -170,6 +211,460 @@
       "createError": "Error al crear empresa",
       "updateError": "Error al actualizar empresa",
       "deleteError": "Error al eliminar empresa"
+    }
+  },
+  "accounts": {
+    "title": "Plan de Cuentas",
+    "subtitle": "Gestiona tu plan de cuentas contable",
+    "createButton": "Crear Cuenta",
+    "editButton": "Editar Cuenta",
+    "addChildButton": "Agregar Subcuenta",
+    "searchPlaceholder": "Buscar cuentas...",
+    "emptyState": "No hay cuentas creadas",
+    "emptyStateDescription": "Comienza creando tu primera cuenta",
+    "notFound": "Cuenta no encontrada",
+    "postable": "Imputable",
+    "level": "Nivel",
+    "table": {
+      "code": "Código",
+      "name": "Nombre",
+      "type": "Tipo",
+      "level": "Nivel",
+      "postable": "Imputable",
+      "currency": "Moneda",
+      "status": "Estado"
+    },
+    "form": {
+      "createDescription": "Completa los datos para crear una nueva cuenta",
+      "editDescription": "Modifica los datos de la cuenta",
+      "addChildDescription": "Agregar subcuenta a: {parent}",
+      "parentAccountLabel": "Cuenta Padre",
+      "parentAccountPlaceholder": "Selecciona una cuenta padre",
+      "noParent": "Sin padre (cuenta raíz)",
+      "codeLabel": "Código",
+      "codePlaceholder": "Ej: 1.1.01",
+      "nameLabel": "Nombre",
+      "namePlaceholder": "Ej: Caja",
+      "typeLabel": "Tipo de Cuenta",
+      "levelLabel": "Nivel",
+      "currencyLabel": "Moneda",
+      "natureLabel": "Naturaleza",
+      "postableLabel": "Cuenta imputable (permite movimientos)",
+      "requiresAuxiliaryLabel": "Requiere auxiliar",
+      "auxiliaryTypeLabel": "Tipo de Auxiliar"
+    },
+    "types": {
+      "ASSET": "Activo",
+      "LIABILITY": "Pasivo",
+      "EQUITY": "Patrimonio",
+      "INCOME": "Ingreso",
+      "EXPENSE": "Egreso"
+    },
+    "currencies": {
+      "MN": "Moneda Nacional",
+      "USD": "Dólar",
+      "BOTH": "Ambas",
+      "FUNCTIONAL": "Funcional"
+    },
+    "natures": {
+      "CURRENT": "Corriente",
+      "NON_CURRENT": "No Corriente"
+    },
+    "auxiliaryTypes": {
+      "CUSTOMER": "Cliente",
+      "SUPPLIER": "Proveedor",
+      "EMPLOYEE": "Empleado",
+      "OTHER": "Otro"
+    },
+    "viewModes": {
+      "tree": "Vista Árbol",
+      "table": "Vista Tabla"
+    },
+    "actions": {
+      "addChild": "Agregar Subcuenta"
+    },
+    "filters": {
+      "all": "Todas",
+      "byType": "Por tipo",
+      "postable": "Imputabilidad",
+      "postableOnly": "Solo imputables",
+      "nonPostable": "No imputables"
+    },
+    "stats": {
+      "total": "Total Cuentas"
+    },
+    "details": {
+      "information": "Información",
+      "generalInformation": "Información General",
+      "hierarchy": "Jerarquía",
+      "parentAccount": "Cuenta Padre",
+      "subaccounts": "Subcuentas",
+      "noSubaccounts": "No hay subcuentas"
+    },
+    "deleteConfirm": {
+      "title": "¿Eliminar cuenta?",
+      "description": "Esta acción no se puede deshacer. La cuenta será marcada como inactiva."
+    },
+    "messages": {
+      "created": "Cuenta creada exitosamente",
+      "updated": "Cuenta actualizada exitosamente",
+      "deleted": "Cuenta eliminada exitosamente",
+      "loadError": "Error al cargar cuentas",
+      "createError": "Error al crear cuenta",
+      "updateError": "Error al actualizar cuenta",
+      "deleteError": "Error al eliminar cuenta"
+    }
+  },
+  "customers": {
+    "title": "Clientes",
+    "subtitle": "Gestiona tu base de datos de clientes",
+    "createButton": "Crear Cliente",
+    "editButton": "Editar Cliente",
+    "searchPlaceholder": "Buscar clientes...",
+    "emptyState": "No hay clientes creados",
+    "emptyStateDescription": "Comienza creando tu primer cliente",
+    "notFound": "Cliente no encontrado",
+    "table": {
+      "name": "Nombre",
+      "rut": "RUT",
+      "email": "Correo",
+      "phone": "Teléfono",
+      "status": "Estado",
+      "createdAt": "Creado"
+    },
+    "form": {
+      "createDescription": "Completa los datos para crear un nuevo cliente",
+      "editDescription": "Modifica los datos del cliente",
+      "nameLabel": "Nombre del Cliente",
+      "namePlaceholder": "Ej.: Juan Pérez",
+      "rutLabel": "RUT",
+      "rutPlaceholder": "Ej.: 211234560019",
+      "emailLabel": "Correo Electrónico",
+      "emailPlaceholder": "Ej.: cliente@ejemplo.com",
+      "phoneLabel": "Teléfono",
+      "phonePlaceholder": "Ej.: +598 99 123 456",
+      "addressLabel": "Dirección",
+      "addressPlaceholder": "Ej.: Av. Principal 123",
+      "errors": {
+        "nameRequired": "El nombre es requerido",
+        "rutRequired": "El RUT es requerido",
+        "emailInvalid": "Formato de correo inválido"
+      }
+    },
+    "filters": {
+      "all": "Todos",
+      "active": "Activos",
+      "inactive": "Inactivos"
+    },
+    "stats": {
+      "total": "Total de Clientes",
+      "active": "Activos",
+      "inactive": "Inactivos",
+      "withEmail": "Con Correo"
+    },
+    "deleteConfirm": {
+      "title": "¿Eliminar cliente?",
+      "description": "Esta acción no se puede deshacer. El cliente será marcado como inactivo."
+    },
+    "details": {
+      "information": "Información del Cliente",
+      "transactionsTitle": "Historial de Transacciones",
+      "transactionsComingSoon": "El historial de transacciones y saldo de cuenta próximamente"
+    },
+    "messages": {
+      "created": "Cliente creado exitosamente",
+      "updated": "Cliente actualizado exitosamente",
+      "deleted": "Cliente eliminado exitosamente",
+      "loadError": "Error al cargar clientes",
+      "notFound": "Cliente no encontrado",
+      "createError": "Error al crear cliente",
+      "updateError": "Error al actualizar cliente",
+      "deleteError": "Error al eliminar cliente"
+    }
+  },
+  "suppliers": {
+    "title": "Proveedores",
+    "subtitle": "Gestiona tu base de datos de proveedores",
+    "createButton": "Crear Proveedor",
+    "editButton": "Editar Proveedor",
+    "searchPlaceholder": "Buscar proveedores...",
+    "emptyState": "No hay proveedores creados",
+    "emptyStateDescription": "Comienza creando tu primer proveedor",
+    "notFound": "Proveedor no encontrado",
+    "table": {
+      "name": "Nombre",
+      "rut": "RUT",
+      "email": "Correo",
+      "phone": "Teléfono",
+      "status": "Estado",
+      "createdAt": "Creado"
+    },
+    "form": {
+      "createDescription": "Completa los datos para crear un nuevo proveedor",
+      "editDescription": "Modifica los datos del proveedor",
+      "nameLabel": "Nombre del Proveedor",
+      "namePlaceholder": "Ej.: ABC Suministros S.A.",
+      "rutLabel": "RUT",
+      "rutPlaceholder": "Ej.: 211234560019",
+      "emailLabel": "Correo Electrónico",
+      "emailPlaceholder": "Ej.: proveedor@ejemplo.com",
+      "phoneLabel": "Teléfono",
+      "phonePlaceholder": "Ej.: +598 99 123 456",
+      "addressLabel": "Dirección",
+      "addressPlaceholder": "Ej.: Av. Industrial 123",
+      "errors": {
+        "nameRequired": "El nombre es requerido",
+        "rutRequired": "El RUT es requerido",
+        "emailInvalid": "Formato de correo inválido"
+      }
+    },
+    "filters": {
+      "all": "Todos",
+      "active": "Activos",
+      "inactive": "Inactivos"
+    },
+    "stats": {
+      "total": "Total de Proveedores",
+      "active": "Activos",
+      "inactive": "Inactivos",
+      "withEmail": "Con Correo"
+    },
+    "deleteConfirm": {
+      "title": "¿Eliminar proveedor?",
+      "description": "Esta acción no se puede deshacer. El proveedor será marcado como inactivo."
+    },
+    "details": {
+      "information": "Información del Proveedor",
+      "transactionsTitle": "Historial de Transacciones",
+      "transactionsComingSoon": "El historial de transacciones y saldo de cuenta próximamente"
+    },
+    "messages": {
+      "created": "Proveedor creado exitosamente",
+      "updated": "Proveedor actualizado exitosamente",
+      "deleted": "Proveedor eliminado exitosamente",
+      "loadError": "Error al cargar proveedores",
+      "notFound": "Proveedor no encontrado",
+      "createError": "Error al crear proveedor",
+      "updateError": "Error al actualizar proveedor",
+      "deleteError": "Error al eliminar proveedor"
+    }
+  },
+  "userCompanies": {
+    "title": "Empresas de Usuario",
+    "description": "Gestiona los permisos de usuarios en las empresas",
+    "createButton": "Otorgar Acceso",
+    "editButton": "Editar Permisos",
+    "searchPlaceholder": "Buscar por usuario o empresa...",
+    "emptyState": "No hay permisos de usuario",
+    "emptyStateDescription": "Comienza otorgando acceso a los usuarios",
+    "table": {
+      "user": "Usuario",
+      "company": "Empresa",
+      "permissions": "Permisos"
+    },
+    "permissions": {
+      "write": "Escritura",
+      "read": "Solo Lectura",
+      "writeDescription": "Puede crear y modificar registros",
+      "readDescription": "Solo puede ver registros"
+    },
+    "actions": {
+      "togglePermission": "Cambiar Permiso"
+    },
+    "form": {
+      "createDescription": "Otorga acceso de un usuario a una empresa",
+      "editDescription": "Modifica los permisos del usuario",
+      "userLabel": "Usuario",
+      "userPlaceholder": "Selecciona un usuario",
+      "companyLabel": "Empresa",
+      "companyPlaceholder": "Selecciona una empresa",
+      "permissionLabel": "Nivel de Permiso",
+      "errors": {
+        "userRequired": "El usuario es requerido",
+        "companyRequired": "La empresa es requerida"
+      }
+    },
+    "stats": {
+      "totalPermissions": "Total de Accesos",
+      "usersWithAccess": "Usuarios con Acceso",
+      "companiesShared": "Empresas Compartidas",
+      "writeAccess": "Con Acceso de Escritura"
+    },
+    "deleteConfirm": {
+      "title": "¿Revocar acceso?",
+      "description": "Esta acción eliminará el acceso del usuario a esta empresa."
+    },
+    "messages": {
+      "created": "Acceso otorgado exitosamente",
+      "updated": "Permisos actualizados exitosamente",
+      "deleted": "Acceso revocado exitosamente",
+      "loadError": "Error al cargar permisos",
+      "createError": "Error al otorgar acceso",
+      "updateError": "Error al actualizar permisos",
+      "deleteError": "Error al revocar acceso"
+    }
+  },
+  "periods": {
+    "title": "Períodos Contables",
+    "subtitle": "Gestiona los períodos fiscales y mensuales",
+    "createButton": "Crear Período",
+    "editButton": "Editar Período",
+    "searchPlaceholder": "Buscar períodos...",
+    "emptyState": "No hay períodos creados",
+    "emptyStateDescription": "Comienza creando tu primer período",
+    "notFound": "Período no encontrado",
+    "to": "hasta",
+    "table": {
+      "fiscalYear": "Año Fiscal",
+      "type": "Tipo",
+      "period": "Período",
+      "dateRange": "Rango de Fechas",
+      "status": "Estado",
+      "closedBy": "Cerrado Por",
+      "economicGroup": "Grupo Económico"
+    },
+    "form": {
+      "createDescription": "Completa los datos para crear un nuevo período",
+      "editDescription": "Modifica los datos del período",
+      "economicGroupLabel": "Grupo Económico",
+      "economicGroupPlaceholder": "Selecciona un grupo",
+      "typeLabel": "Tipo de Período",
+      "fiscalYearLabel": "Año Fiscal",
+      "monthLabel": "Mes",
+      "monthPlaceholder": "Selecciona un mes",
+      "startDateLabel": "Fecha de Inicio",
+      "endDateLabel": "Fecha de Fin",
+      "selectDate": "Seleccionar fecha"
+    },
+    "types": {
+      "FISCAL_YEAR": "Año Fiscal",
+      "MONTH": "Mes"
+    },
+    "months": {
+      "January": "Enero",
+      "February": "Febrero",
+      "March": "Marzo",
+      "April": "Abril",
+      "May": "Mayo",
+      "June": "Junio",
+      "July": "Julio",
+      "August": "Agosto",
+      "September": "Septiembre",
+      "October": "Octubre",
+      "November": "Noviembre",
+      "December": "Diciembre"
+    },
+    "status": {
+      "open": "Abierto",
+      "closed": "Cerrado"
+    },
+    "actions": {
+      "close": "Cerrar Período",
+      "reopen": "Reabrir Período"
+    },
+    "filters": {
+      "all": "Todos",
+      "byType": "Por tipo",
+      "status": "Estado"
+    },
+    "stats": {
+      "totalPeriods": "Total Períodos",
+      "openPeriods": "Períodos Abiertos",
+      "closedPeriods": "Períodos Cerrados",
+      "currentYear": "Año Actual"
+    },
+    "details": {
+      "information": "Información",
+      "generalInformation": "Información General",
+      "journalEntries": "Asientos Contables",
+      "noJournalEntries": "No hay asientos contables",
+      "journalEntriesDescription": "Los asientos contables aparecerán aquí",
+      "journalEntriesHint": "Ver todos los asientos desde el menú principal con filtros",
+      "closedAt": "Fecha de Cierre"
+    },
+    "closeConfirm": {
+      "title": "¿Cerrar período?",
+      "description": "Esta acción cerrará el período y no se podrán hacer más movimientos. ¿Deseas continuar?"
+    },
+    "reopenConfirm": {
+      "title": "¿Reabrir período?",
+      "description": "Esta acción reabrirá el período y se podrán hacer movimientos nuevamente. ¿Deseas continuar?"
+    },
+    "deleteConfirm": {
+      "title": "¿Eliminar período?",
+      "description": "Esta acción no se puede deshacer."
+    },
+    "messages": {
+      "created": "Período creado exitosamente",
+      "updated": "Período actualizado exitosamente",
+      "deleted": "Período eliminado exitosamente",
+      "closed": "Período cerrado exitosamente",
+      "reopened": "Período reabierto exitosamente",
+      "loadError": "Error al cargar períodos",
+      "createError": "Error al crear período",
+      "updateError": "Error al actualizar período",
+      "deleteError": "Error al eliminar período",
+      "closeError": "Error al cerrar período",
+      "reopenError": "Error al reabrir período"
+    }
+  },
+  "exchangeRates": {
+    "title": "Tipos de Cambio",
+    "subtitle": "Gestiona las tasas de cambio de divisas",
+    "createButton": "Agregar Tasa",
+    "editButton": "Editar Tasa",
+    "searchPlaceholder": "Buscar tasas...",
+    "emptyState": "No hay tipos de cambio",
+    "emptyStateDescription": "Comienza agregando tu primer tipo de cambio",
+    "table": {
+      "date": "Fecha",
+      "sourceCurrency": "De",
+      "targetCurrency": "A",
+      "rate": "Tasa",
+      "source": "Fuente",
+      "createdAt": "Creado"
+    },
+    "form": {
+      "createDescription": "Agregar un nuevo tipo de cambio",
+      "editDescription": "Modificar el tipo de cambio",
+      "dateLabel": "Fecha",
+      "datePlaceholder": "Seleccionar fecha",
+      "sourceCurrencyLabel": "Moneda Origen",
+      "sourceCurrencyPlaceholder": "Seleccionar moneda",
+      "targetCurrencyLabel": "Moneda Destino",
+      "targetCurrencyPlaceholder": "Seleccionar moneda",
+      "rateLabel": "Tipo de Cambio",
+      "ratePlaceholder": "Ej.: 38.5000",
+      "sourceLabel": "Fuente (Opcional)",
+      "sourcePlaceholder": "Ej.: Banco Central",
+      "errors": {
+        "dateRequired": "La fecha es requerida",
+        "sourceCurrencyRequired": "La moneda origen es requerida",
+        "targetCurrencyRequired": "La moneda destino es requerida",
+        "rateRequired": "La tasa es requerida",
+        "ratePositive": "La tasa debe ser positiva"
+      }
+    },
+    "filters": {
+      "all": "Todos",
+      "bySourceCurrency": "Moneda origen",
+      "byTargetCurrency": "Moneda destino",
+      "dateRange": "Rango de fechas"
+    },
+    "stats": {
+      "totalRates": "Total de Tasas",
+      "currencyPairs": "Pares de Monedas",
+      "lastUpdate": "Última Actualización"
+    },
+    "deleteConfirm": {
+      "title": "¿Eliminar tipo de cambio?",
+      "description": "Esta acción no se puede deshacer."
+    },
+    "messages": {
+      "created": "Tipo de cambio creado exitosamente",
+      "updated": "Tipo de cambio actualizado exitosamente",
+      "deleted": "Tipo de cambio eliminado exitosamente",
+      "loadError": "Error al cargar tipos de cambio"
     }
   },
   "validation": {

@@ -36,9 +36,14 @@
   "navigation": {
     "home": "首页",
     "grupos": "经济集团",
-    "empresas": "企业",
+    "companies": "公司",
+    "customers": "客户",
+    "suppliers": "供应商",
+    "accounts": "账户",
+    "periods": "会计期间",
+    "exchangeRates": "汇率",
+    "userCompanies": "用户公司",
     "comprobantes": "凭证",
-    "cuentas": "账户",
     "reportes": "报表",
     "dashboard": "仪表板",
     "settings": "设置",
@@ -170,6 +175,538 @@
       "createError": "创建企业时出错",
       "updateError": "更新企业时出错",
       "deleteError": "删除企业时出错"
+    }
+  },
+  "companies": {
+    "title": "企业",
+    "subtitle": "管理您经济集团中的企业",
+    "createButton": "创建企业",
+    "editButton": "编辑企业",
+    "deleteButton": "删除企业",
+    "viewButton": "查看详情",
+    "searchPlaceholder": "搜索企业...",
+    "emptyState": "未创建企业",
+    "emptyStateDescription": "开始创建您的第一个企业",
+    "notFound": "企业未找到",
+    "table": {
+      "name": "名称",
+      "tradeName": "贸易名称",
+      "rut": "RUT",
+      "economicGroup": "经济集团",
+      "currency": "货币",
+      "country": "国家",
+      "status": "状态"
+    },
+    "form": {
+      "title": "企业信息",
+      "createDescription": "填写数据以创建新企业",
+      "editDescription": "修改企业数据",
+      "nameLabel": "企业名称",
+      "namePlaceholder": "例如：Acme Corp",
+      "nameRequired": "名称为必填项",
+      "tradeNameLabel": "贸易名称",
+      "tradeNamePlaceholder": "例如：Acme",
+      "rutLabel": "RUT",
+      "rutPlaceholder": "例如：211234560019",
+      "rutRequired": "RUT为必填项",
+      "rutInvalid": "RUT无效",
+      "economicGroupLabel": "经济集团",
+      "economicGroupPlaceholder": "选择一个集团",
+      "economicGroupRequired": "集团为必填项",
+      "countryLabel": "国家",
+      "countryPlaceholder": "选择一个国家",
+      "functionalCurrencyLabel": "功能货币",
+      "functionalCurrencyPlaceholder": "选择一种货币",
+      "functionalCurrencyRequired": "货币为必填项",
+      "startDateLabel": "开始日期",
+      "startDatePlaceholder": "选择日期"
+    },
+    "filters": {
+      "all": "全部",
+      "active": "活跃",
+      "inactive": "停用",
+      "byCountry": "按国家",
+      "byGroup": "按集团"
+    },
+    "stats": {
+      "totalCompanies": "总企业数",
+      "activeCompanies": "活跃企业",
+      "inactiveCompanies": "停用企业",
+      "topCountry": "主要国家"
+    },
+    "details": {
+      "information": "信息",
+      "generalInformation": "基本信息",
+      "journalEntries": "记账凭证",
+      "noJournalEntries": "无记账凭证",
+      "journalEntriesDescription": "记账凭证将显示在这里"
+    },
+    "deleteConfirm": {
+      "title": "删除企业？",
+      "description": "此操作无法撤消。企业将被标记为停用。"
+    },
+    "messages": {
+      "created": "企业创建成功",
+      "updated": "企业更新成功",
+      "deleted": "企业删除成功",
+      "loadError": "加载企业时出错",
+      "createError": "创建企业时出错",
+      "updateError": "更新企业时出错",
+      "deleteError": "删除企业时出错"
+    }
+  },
+  "accounts": {
+    "title": "会计科目表",
+    "subtitle": "管理您的会计科目表",
+    "createButton": "创建账户",
+    "editButton": "编辑账户",
+    "addChildButton": "添加子账户",
+    "searchPlaceholder": "搜索账户...",
+    "emptyState": "未创建账户",
+    "emptyStateDescription": "开始创建您的第一个账户",
+    "notFound": "账户未找到",
+    "postable": "可记账",
+    "level": "级别",
+    "table": {
+      "code": "代码",
+      "name": "名称",
+      "type": "类型",
+      "level": "级别",
+      "postable": "可记账",
+      "currency": "货币",
+      "status": "状态"
+    },
+    "form": {
+      "createDescription": "填写数据以创建新账户",
+      "editDescription": "修改账户数据",
+      "addChildDescription": "向以下账户添加子账户：{parent}",
+      "parentAccountLabel": "父账户",
+      "parentAccountPlaceholder": "选择父账户",
+      "noParent": "无父账户（根账户）",
+      "codeLabel": "代码",
+      "codePlaceholder": "例如：1.1.01",
+      "nameLabel": "名称",
+      "namePlaceholder": "例如：现金",
+      "typeLabel": "账户类型",
+      "levelLabel": "级别",
+      "currencyLabel": "货币",
+      "natureLabel": "性质",
+      "postableLabel": "可记账账户（允许交易）",
+      "requiresAuxiliaryLabel": "需要辅助账户",
+      "auxiliaryTypeLabel": "辅助账户类型"
+    },
+    "types": {
+      "ASSET": "资产",
+      "LIABILITY": "负债",
+      "EQUITY": "股权",
+      "INCOME": "收入",
+      "EXPENSE": "支出"
+    },
+    "currencies": {
+      "MN": "本地货币",
+      "USD": "美元",
+      "BOTH": "两者",
+      "FUNCTIONAL": "功能性"
+    },
+    "natures": {
+      "CURRENT": "流动",
+      "NON_CURRENT": "非流动"
+    },
+    "auxiliaryTypes": {
+      "CUSTOMER": "客户",
+      "SUPPLIER": "供应商",
+      "EMPLOYEE": "员工",
+      "OTHER": "其他"
+    },
+    "viewModes": {
+      "tree": "树形视图",
+      "table": "表格视图"
+    },
+    "actions": {
+      "addChild": "添加子账户"
+    },
+    "filters": {
+      "all": "全部",
+      "byType": "按类型",
+      "postable": "可记账性",
+      "postableOnly": "仅可记账",
+      "nonPostable": "不可记账"
+    },
+    "stats": {
+      "total": "账户总数"
+    },
+    "details": {
+      "information": "信息",
+      "generalInformation": "基本信息",
+      "hierarchy": "层级",
+      "parentAccount": "父账户",
+      "subaccounts": "子账户",
+      "noSubaccounts": "无子账户"
+    },
+    "deleteConfirm": {
+      "title": "删除账户？",
+      "description": "此操作无法撤消。账户将被标记为停用。"
+    },
+    "messages": {
+      "created": "账户创建成功",
+      "updated": "账户更新成功",
+      "deleted": "账户删除成功",
+      "loadError": "加载账户时出错",
+      "createError": "创建账户时出错",
+      "updateError": "更新账户时出错",
+      "deleteError": "删除账户时出错"
+    }
+  },
+  "customers": {
+    "title": "客户",
+    "subtitle": "管理您的客户数据库",
+    "createButton": "创建客户",
+    "editButton": "编辑客户",
+    "searchPlaceholder": "搜索客户...",
+    "emptyState": "没有创建的客户",
+    "emptyStateDescription": "从创建您的第一个客户开始",
+    "notFound": "找不到客户",
+    "table": {
+      "name": "姓名",
+      "rut": "RUT",
+      "email": "电子邮件",
+      "phone": "电话",
+      "status": "状态",
+      "createdAt": "创建日期"
+    },
+    "form": {
+      "createDescription": "填写数据以创建新客户",
+      "editDescription": "修改客户数据",
+      "nameLabel": "客户姓名",
+      "namePlaceholder": "例如：张三",
+      "rutLabel": "RUT",
+      "rutPlaceholder": "例如：211234560019",
+      "emailLabel": "电子邮件",
+      "emailPlaceholder": "例如：客户@example.com",
+      "phoneLabel": "电话",
+      "phonePlaceholder": "例如：+86 138 0000 0000",
+      "addressLabel": "地址",
+      "addressPlaceholder": "例如：主街123号",
+      "errors": {
+        "nameRequired": "姓名为必填项",
+        "rutRequired": "RUT为必填项",
+        "emailInvalid": "电子邮件格式无效"
+      }
+    },
+    "filters": {
+      "all": "全部",
+      "active": "活跃",
+      "inactive": "停用"
+    },
+    "stats": {
+      "total": "客户总数",
+      "active": "活跃",
+      "inactive": "停用",
+      "withEmail": "有电子邮件"
+    },
+    "deleteConfirm": {
+      "title": "删除客户？",
+      "description": "此操作无法撤消。客户将被标记为停用。"
+    },
+    "details": {
+      "information": "客户信息",
+      "transactionsTitle": "交易历史",
+      "transactionsComingSoon": "交易历史和账户余额即将推出"
+    },
+    "messages": {
+      "created": "客户创建成功",
+      "updated": "客户更新成功",
+      "deleted": "客户删除成功",
+      "loadError": "加载客户时出错",
+      "notFound": "找不到客户",
+      "createError": "创建客户时出错",
+      "updateError": "更新客户时出错",
+      "deleteError": "删除客户时出错"
+    }
+  },
+  "suppliers": {
+    "title": "供应商",
+    "subtitle": "管理您的供应商数据库",
+    "createButton": "创建供应商",
+    "editButton": "编辑供应商",
+    "searchPlaceholder": "搜索供应商...",
+    "emptyState": "没有创建的供应商",
+    "emptyStateDescription": "从创建您的第一个供应商开始",
+    "notFound": "找不到供应商",
+    "table": {
+      "name": "名称",
+      "rut": "RUT",
+      "email": "电子邮件",
+      "phone": "电话",
+      "status": "状态",
+      "createdAt": "创建日期"
+    },
+    "form": {
+      "createDescription": "填写数据以创建新供应商",
+      "editDescription": "修改供应商数据",
+      "nameLabel": "供应商名称",
+      "namePlaceholder": "例如：ABC供应有限公司",
+      "rutLabel": "RUT",
+      "rutPlaceholder": "例如：211234560019",
+      "emailLabel": "电子邮件",
+      "emailPlaceholder": "例如：供应商@example.com",
+      "phoneLabel": "电话",
+      "phonePlaceholder": "例如：+86 138 0000 0000",
+      "addressLabel": "地址",
+      "addressPlaceholder": "例如：工业大道123号",
+      "errors": {
+        "nameRequired": "名称为必填项",
+        "rutRequired": "RUT为必填项",
+        "emailInvalid": "电子邮件格式无效"
+      }
+    },
+    "filters": {
+      "all": "全部",
+      "active": "活跃",
+      "inactive": "停用"
+    },
+    "stats": {
+      "total": "供应商总数",
+      "active": "活跃",
+      "inactive": "停用",
+      "withEmail": "有电子邮件"
+    },
+    "deleteConfirm": {
+      "title": "删除供应商？",
+      "description": "此操作无法撤消。供应商将被标记为停用。"
+    },
+    "details": {
+      "information": "供应商信息",
+      "transactionsTitle": "交易历史",
+      "transactionsComingSoon": "交易历史和账户余额即将推出"
+    },
+    "messages": {
+      "created": "供应商创建成功",
+      "updated": "供应商更新成功",
+      "deleted": "供应商删除成功",
+      "loadError": "加载供应商时出错",
+      "notFound": "找不到供应商",
+      "createError": "创建供应商时出错",
+      "updateError": "更新供应商时出错",
+      "deleteError": "删除供应商时出错"
+    }
+  },
+  "userCompanies": {
+    "title": "用户公司",
+    "description": "管理用户对公司的权限",
+    "createButton": "授予访问权限",
+    "editButton": "编辑权限",
+    "searchPlaceholder": "按用户或公司搜索...",
+    "emptyState": "没有用户权限",
+    "emptyStateDescription": "从授予用户访问权限开始",
+    "table": {
+      "user": "用户",
+      "company": "公司",
+      "permissions": "权限"
+    },
+    "permissions": {
+      "write": "写入",
+      "read": "只读",
+      "writeDescription": "可以创建和修改记录",
+      "readDescription": "只能查看记录"
+    },
+    "actions": {
+      "togglePermission": "切换权限"
+    },
+    "form": {
+      "createDescription": "授予用户对公司的访问权限",
+      "editDescription": "修改用户权限",
+      "userLabel": "用户",
+      "userPlaceholder": "选择用户",
+      "companyLabel": "公司",
+      "companyPlaceholder": "选择公司",
+      "permissionLabel": "权限级别",
+      "errors": {
+        "userRequired": "用户为必填项",
+        "companyRequired": "公司为必填项"
+      }
+    },
+    "stats": {
+      "totalPermissions": "访问权限总数",
+      "usersWithAccess": "有访问权限的用户",
+      "companiesShared": "共享的公司",
+      "writeAccess": "具有写入权限"
+    },
+    "deleteConfirm": {
+      "title": "撤销访问权限？",
+      "description": "此操作将删除用户对此公司的访问权限。"
+    },
+    "messages": {
+      "created": "访问权限授予成功",
+      "updated": "权限更新成功",
+      "deleted": "访问权限撤销成功",
+      "loadError": "加载权限时出错",
+      "createError": "授予访问权限时出错",
+      "updateError": "更新权限时出错",
+      "deleteError": "撤销访问权限时出错"
+    }
+  },
+  "periods": {
+    "title": "会计期间",
+    "subtitle": "管理财政和月度期间",
+    "createButton": "创建期间",
+    "editButton": "编辑期间",
+    "searchPlaceholder": "搜索期间...",
+    "emptyState": "未创建期间",
+    "emptyStateDescription": "开始创建您的第一个期间",
+    "notFound": "期间未找到",
+    "to": "至",
+    "table": {
+      "fiscalYear": "财政年度",
+      "type": "类型",
+      "period": "期间",
+      "dateRange": "日期范围",
+      "status": "状态",
+      "closedBy": "关闭者",
+      "economicGroup": "经济集团"
+    },
+    "form": {
+      "createDescription": "填写数据以创建新期间",
+      "editDescription": "修改期间数据",
+      "economicGroupLabel": "经济集团",
+      "economicGroupPlaceholder": "选择一个集团",
+      "typeLabel": "期间类型",
+      "fiscalYearLabel": "财政年度",
+      "monthLabel": "月份",
+      "monthPlaceholder": "选择一个月份",
+      "startDateLabel": "开始日期",
+      "endDateLabel": "结束日期",
+      "selectDate": "选择日期"
+    },
+    "types": {
+      "FISCAL_YEAR": "财政年度",
+      "MONTH": "月份"
+    },
+    "months": {
+      "January": "一月",
+      "February": "二月",
+      "March": "三月",
+      "April": "四月",
+      "May": "五月",
+      "June": "六月",
+      "July": "七月",
+      "August": "八月",
+      "September": "九月",
+      "October": "十月",
+      "November": "十一月",
+      "December": "十二月"
+    },
+    "status": {
+      "open": "开放",
+      "closed": "关闭"
+    },
+    "actions": {
+      "close": "关闭期间",
+      "reopen": "重新开放期间"
+    },
+    "filters": {
+      "all": "全部",
+      "byType": "按类型",
+      "status": "状态"
+    },
+    "stats": {
+      "totalPeriods": "期间总数",
+      "openPeriods": "开放期间",
+      "closedPeriods": "关闭期间",
+      "currentYear": "当前年份"
+    },
+    "details": {
+      "information": "信息",
+      "generalInformation": "基本信息",
+      "journalEntries": "记账凭证",
+      "noJournalEntries": "无记账凭证",
+      "journalEntriesDescription": "记账凭证将显示在这里",
+      "journalEntriesHint": "从主菜单查看所有带筛选的凭证",
+      "closedAt": "关闭日期"
+    },
+    "closeConfirm": {
+      "title": "关闭期间？",
+      "description": "此操作将关闭期间，无法进行更多交易。您想继续吗？"
+    },
+    "reopenConfirm": {
+      "title": "重新开放期间？",
+      "description": "此操作将重新开放期间，可以再次进行交易。您想继续吗？"
+    },
+    "deleteConfirm": {
+      "title": "删除期间？",
+      "description": "此操作无法撤消。"
+    },
+    "messages": {
+      "created": "期间创建成功",
+      "updated": "期间更新成功",
+      "deleted": "期间删除成功",
+      "closed": "期间关闭成功",
+      "reopened": "期间重新开放成功",
+      "loadError": "加载期间时出错",
+      "createError": "创建期间时出错",
+      "updateError": "更新期间时出错",
+      "deleteError": "删除期间时出错",
+      "closeError": "关闭期间时出错",
+      "reopenError": "重新开放期间时出错"
+    }
+  },
+  "exchangeRates": {
+    "title": "汇率",
+    "subtitle": "管理货币汇率",
+    "createButton": "添加汇率",
+    "editButton": "编辑汇率",
+    "searchPlaceholder": "搜索汇率...",
+    "emptyState": "暂无汇率",
+    "emptyStateDescription": "从添加您的第一个汇率开始",
+    "table": {
+      "date": "日期",
+      "sourceCurrency": "源货币",
+      "targetCurrency": "目标货币",
+      "rate": "汇率",
+      "source": "来源",
+      "createdAt": "创建时间"
+    },
+    "form": {
+      "createDescription": "添加新汇率",
+      "editDescription": "修改汇率",
+      "dateLabel": "日期",
+      "datePlaceholder": "选择日期",
+      "sourceCurrencyLabel": "源货币",
+      "sourceCurrencyPlaceholder": "选择货币",
+      "targetCurrencyLabel": "目标货币",
+      "targetCurrencyPlaceholder": "选择货币",
+      "rateLabel": "汇率",
+      "ratePlaceholder": "例如：38.5000",
+      "sourceLabel": "来源（可选）",
+      "sourcePlaceholder": "例如：中央银行",
+      "errors": {
+        "dateRequired": "日期为必填项",
+        "sourceCurrencyRequired": "源货币为必填项",
+        "targetCurrencyRequired": "目标货币为必填项",
+        "rateRequired": "汇率为必填项",
+        "ratePositive": "汇率必须为正数"
+      }
+    },
+    "filters": {
+      "all": "全部",
+      "bySourceCurrency": "源货币",
+      "byTargetCurrency": "目标货币",
+      "dateRange": "日期范围"
+    },
+    "stats": {
+      "totalRates": "汇率总数",
+      "currencyPairs": "货币对",
+      "lastUpdate": "最后更新"
+    },
+    "deleteConfirm": {
+      "title": "删除汇率？",
+      "description": "此操作无法撤消。"
+    },
+    "messages": {
+      "created": "汇率创建成功",
+      "updated": "汇率更新成功",
+      "deleted": "汇率删除成功",
+      "loadError": "加载汇率时出错"
     }
   },
   "validation": {

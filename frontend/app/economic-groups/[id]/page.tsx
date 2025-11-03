@@ -199,7 +199,7 @@ export default function EconomicGroupDetailPage() {
             </TabsTrigger>
             <TabsTrigger value="empresas">
               <Users className="h-4 w-4 mr-2" />
-              Companies ({group._count?.companies || 0})
+              Companies ({group.companies?.length || 0})
             </TabsTrigger>
             <TabsTrigger value="config">
               <Settings className="h-4 w-4 mr-2" />
@@ -251,18 +251,56 @@ export default function EconomicGroupDetailPage() {
                 <h3 className="text-lg font-semibold text-gray-900">
                   Associated Companies
                 </h3>
-                <Button size="sm">
+                <Button size="sm" onClick={() => router.push('/companies?create=true')}>
                   <Building2 className="h-4 w-4 mr-2" />
                   Add Company
                 </Button>
               </div>
-              <div className="text-center py-12 text-gray-500">
-                <Users className="h-12 w-12 mx-auto mb-3 text-gray-300" />
-                <p>No companies associated with this group</p>
-                <p className="text-sm mt-1">
-                  Companies you add will appear here
-                </p>
-              </div>
+
+              {group.companies && group.companies.length > 0 ? (
+                <div className="space-y-3">
+                  {group.companies.map((company) => (
+                    <div
+                      key={company.id}
+                      onClick={() => router.push(`/companies/${company.id}`)}
+                      className="flex items-center justify-between p-4 rounded-lg border border-gray-200 hover:border-primary hover:bg-primary/5 transition-colors cursor-pointer"
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                          <Building2 className="h-5 w-5" />
+                        </div>
+                        <div>
+                          <p className="font-medium text-gray-900">{company.name}</p>
+                          <p className="text-sm text-gray-600">
+                            RUT: {company.rut} • {company.functionalCurrency}
+                          </p>
+                        </div>
+                      </div>
+                      <div>
+                        {company.active ? (
+                          <Badge variant="success" className="flex items-center gap-1">
+                            <CheckCircle2 className="h-3 w-3" />
+                            Active
+                          </Badge>
+                        ) : (
+                          <Badge className="flex items-center gap-1 bg-gray-100 text-gray-700">
+                            <XCircle className="h-3 w-3" />
+                            Inactive
+                          </Badge>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-12 text-gray-500">
+                  <Users className="h-12 w-12 mx-auto mb-3 text-gray-300" />
+                  <p>No companies associated with this group</p>
+                  <p className="text-sm mt-1">
+                    Companies you add will appear here
+                  </p>
+                </div>
+              )}
             </div>
           </TabsContent>
 

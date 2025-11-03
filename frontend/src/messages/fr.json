@@ -36,9 +36,14 @@
   "navigation": {
     "home": "Accueil",
     "grupos": "Groupes Économiques",
-    "empresas": "Entreprises",
+    "companies": "Entreprises",
+    "customers": "Clients",
+    "suppliers": "Fournisseurs",
+    "accounts": "Comptes",
+    "periods": "Périodes Comptables",
+    "exchangeRates": "Taux de Change",
+    "userCompanies": "Entreprises de l'Utilisateur",
     "comprobantes": "Pièces Justificatives",
-    "cuentas": "Comptes",
     "reportes": "Rapports",
     "dashboard": "Tableau de Bord",
     "settings": "Paramètres",
@@ -170,6 +175,538 @@
       "createError": "Erreur lors de la création de l'entreprise",
       "updateError": "Erreur lors de la mise à jour de l'entreprise",
       "deleteError": "Erreur lors de la suppression de l'entreprise"
+    }
+  },
+  "companies": {
+    "title": "Entreprises",
+    "subtitle": "Gérez les entreprises de vos groupes économiques",
+    "createButton": "Créer une Entreprise",
+    "editButton": "Modifier l'Entreprise",
+    "deleteButton": "Supprimer l'Entreprise",
+    "viewButton": "Voir les Détails",
+    "searchPlaceholder": "Rechercher des entreprises...",
+    "emptyState": "Aucune entreprise créée",
+    "emptyStateDescription": "Commencez par créer votre première entreprise",
+    "notFound": "Entreprise introuvable",
+    "table": {
+      "name": "Nom",
+      "tradeName": "Nom Commercial",
+      "rut": "RUT",
+      "economicGroup": "Groupe Économique",
+      "currency": "Devise",
+      "country": "Pays",
+      "status": "Statut"
+    },
+    "form": {
+      "title": "Informations de l'Entreprise",
+      "createDescription": "Remplissez les données pour créer une nouvelle entreprise",
+      "editDescription": "Modifiez les données de l'entreprise",
+      "nameLabel": "Nom de l'Entreprise",
+      "namePlaceholder": "Ex: Acme Corp",
+      "nameRequired": "Le nom est obligatoire",
+      "tradeNameLabel": "Nom Commercial",
+      "tradeNamePlaceholder": "Ex: Acme",
+      "rutLabel": "RUT",
+      "rutPlaceholder": "Ex: 211234560019",
+      "rutRequired": "Le RUT est obligatoire",
+      "rutInvalid": "Le RUT n'est pas valide",
+      "economicGroupLabel": "Groupe Économique",
+      "economicGroupPlaceholder": "Sélectionnez un groupe",
+      "economicGroupRequired": "Le groupe est obligatoire",
+      "countryLabel": "Pays",
+      "countryPlaceholder": "Sélectionnez un pays",
+      "functionalCurrencyLabel": "Devise Fonctionnelle",
+      "functionalCurrencyPlaceholder": "Sélectionnez une devise",
+      "functionalCurrencyRequired": "La devise est obligatoire",
+      "startDateLabel": "Date de Début",
+      "startDatePlaceholder": "Sélectionnez une date"
+    },
+    "filters": {
+      "all": "Tous",
+      "active": "Actifs",
+      "inactive": "Inactifs",
+      "byCountry": "Par pays",
+      "byGroup": "Par groupe"
+    },
+    "stats": {
+      "totalCompanies": "Total d'Entreprises",
+      "activeCompanies": "Entreprises Actives",
+      "inactiveCompanies": "Entreprises Inactives",
+      "topCountry": "Pays Principal"
+    },
+    "details": {
+      "information": "Informations",
+      "generalInformation": "Informations Générales",
+      "journalEntries": "Écritures Comptables",
+      "noJournalEntries": "Aucune écriture comptable",
+      "journalEntriesDescription": "Les écritures comptables s'afficheront ici"
+    },
+    "deleteConfirm": {
+      "title": "Supprimer l'entreprise?",
+      "description": "Cette action ne peut pas être annulée. L'entreprise sera marquée comme inactif."
+    },
+    "messages": {
+      "created": "Entreprise créée avec succès",
+      "updated": "Entreprise mise à jour avec succès",
+      "deleted": "Entreprise supprimée avec succès",
+      "loadError": "Erreur lors du chargement des entreprises",
+      "createError": "Erreur lors de la création de l'entreprise",
+      "updateError": "Erreur lors de la mise à jour de l'entreprise",
+      "deleteError": "Erreur lors de la suppression de l'entreprise"
+    }
+  },
+  "accounts": {
+    "title": "Plan Comptable",
+    "subtitle": "Gérez votre plan comptable",
+    "createButton": "Créer un Compte",
+    "editButton": "Modifier le Compte",
+    "addChildButton": "Ajouter un Sous-Compte",
+    "searchPlaceholder": "Rechercher des comptes...",
+    "emptyState": "Aucun compte créé",
+    "emptyStateDescription": "Commencez par créer votre premier compte",
+    "notFound": "Compte introuvable",
+    "postable": "Imputable",
+    "level": "Niveau",
+    "table": {
+      "code": "Code",
+      "name": "Nom",
+      "type": "Type",
+      "level": "Niveau",
+      "postable": "Imputable",
+      "currency": "Devise",
+      "status": "Statut"
+    },
+    "form": {
+      "createDescription": "Remplissez les données pour créer un nouveau compte",
+      "editDescription": "Modifiez les données du compte",
+      "addChildDescription": "Ajouter un sous-compte à: {parent}",
+      "parentAccountLabel": "Compte Parent",
+      "parentAccountPlaceholder": "Sélectionnez un compte parent",
+      "noParent": "Pas de parent (compte racine)",
+      "codeLabel": "Code",
+      "codePlaceholder": "Ex: 1.1.01",
+      "nameLabel": "Nom",
+      "namePlaceholder": "Ex: Caisse",
+      "typeLabel": "Type de Compte",
+      "levelLabel": "Niveau",
+      "currencyLabel": "Devise",
+      "natureLabel": "Caractère",
+      "postableLabel": "Compte imputable (permet les mouvements)",
+      "requiresAuxiliaryLabel": "Nécessite un auxiliaire",
+      "auxiliaryTypeLabel": "Type d'Auxiliaire"
+    },
+    "types": {
+      "ASSET": "Actif",
+      "LIABILITY": "Passif",
+      "EQUITY": "Capitaux Propres",
+      "INCOME": "Produit",
+      "EXPENSE": "Charge"
+    },
+    "currencies": {
+      "MN": "Devise Locale",
+      "USD": "Dollar",
+      "BOTH": "Tous Deux",
+      "FUNCTIONAL": "Fonctionnelle"
+    },
+    "natures": {
+      "CURRENT": "Courant",
+      "NON_CURRENT": "Non Courant"
+    },
+    "auxiliaryTypes": {
+      "CUSTOMER": "Client",
+      "SUPPLIER": "Fournisseur",
+      "EMPLOYEE": "Employé",
+      "OTHER": "Autre"
+    },
+    "viewModes": {
+      "tree": "Vue en Arborescence",
+      "table": "Vue en Tableau"
+    },
+    "actions": {
+      "addChild": "Ajouter un Sous-Compte"
+    },
+    "filters": {
+      "all": "Tous",
+      "byType": "Par type",
+      "postable": "Imputabilité",
+      "postableOnly": "Imputables uniquement",
+      "nonPostable": "Non Imputables"
+    },
+    "stats": {
+      "total": "Total de Comptes"
+    },
+    "details": {
+      "information": "Informations",
+      "generalInformation": "Informations Générales",
+      "hierarchy": "Hiérarchie",
+      "parentAccount": "Compte Parent",
+      "subaccounts": "Sous-Comptes",
+      "noSubaccounts": "Aucun sous-compte"
+    },
+    "deleteConfirm": {
+      "title": "Supprimer le compte?",
+      "description": "Cette action ne peut pas être annulée. Le compte sera marqué comme inactif."
+    },
+    "messages": {
+      "created": "Compte créé avec succès",
+      "updated": "Compte mis à jour avec succès",
+      "deleted": "Compte supprimé avec succès",
+      "loadError": "Erreur lors du chargement des comptes",
+      "createError": "Erreur lors de la création du compte",
+      "updateError": "Erreur lors de la mise à jour du compte",
+      "deleteError": "Erreur lors de la suppression du compte"
+    }
+  },
+  "customers": {
+    "title": "Clients",
+    "subtitle": "Gérez votre base de données clients",
+    "createButton": "Créer un Client",
+    "editButton": "Modifier le Client",
+    "searchPlaceholder": "Rechercher des clients...",
+    "emptyState": "Aucun client créé",
+    "emptyStateDescription": "Commencez par créer votre premier client",
+    "notFound": "Client non trouvé",
+    "table": {
+      "name": "Nom",
+      "rut": "RUT",
+      "email": "E-mail",
+      "phone": "Téléphone",
+      "status": "Statut",
+      "createdAt": "Créé le"
+    },
+    "form": {
+      "createDescription": "Remplissez les données pour créer un nouveau client",
+      "editDescription": "Modifiez les données du client",
+      "nameLabel": "Nom du Client",
+      "namePlaceholder": "Ex.: Jean Dupont",
+      "rutLabel": "RUT",
+      "rutPlaceholder": "Ex.: 211234560019",
+      "emailLabel": "E-mail",
+      "emailPlaceholder": "Ex.: client@exemple.com",
+      "phoneLabel": "Téléphone",
+      "phonePlaceholder": "Ex.: +33 1 23 45 67 89",
+      "addressLabel": "Adresse",
+      "addressPlaceholder": "Ex.: 123 Rue Principale",
+      "errors": {
+        "nameRequired": "Le nom est obligatoire",
+        "rutRequired": "Le RUT est obligatoire",
+        "emailInvalid": "Format d'e-mail invalide"
+      }
+    },
+    "filters": {
+      "all": "Tous",
+      "active": "Actifs",
+      "inactive": "Inactifs"
+    },
+    "stats": {
+      "total": "Total de Clients",
+      "active": "Actifs",
+      "inactive": "Inactifs",
+      "withEmail": "Avec E-mail"
+    },
+    "deleteConfirm": {
+      "title": "Supprimer le client?",
+      "description": "Cette action ne peut pas être annulée. Le client sera marqué comme inactif."
+    },
+    "details": {
+      "information": "Informations du Client",
+      "transactionsTitle": "Historique des Transactions",
+      "transactionsComingSoon": "L'historique des transactions et le solde du compte bientôt disponibles"
+    },
+    "messages": {
+      "created": "Client créé avec succès",
+      "updated": "Client mis à jour avec succès",
+      "deleted": "Client supprimé avec succès",
+      "loadError": "Erreur lors du chargement des clients",
+      "notFound": "Client introuvable",
+      "createError": "Erreur lors de la création du client",
+      "updateError": "Erreur lors de la mise à jour du client",
+      "deleteError": "Erreur lors de la suppression du client"
+    }
+  },
+  "suppliers": {
+    "title": "Fournisseurs",
+    "subtitle": "Gérez votre base de données fournisseurs",
+    "createButton": "Créer un Fournisseur",
+    "editButton": "Modifier le Fournisseur",
+    "searchPlaceholder": "Rechercher des fournisseurs...",
+    "emptyState": "Aucun fournisseur créé",
+    "emptyStateDescription": "Commencez par créer votre premier fournisseur",
+    "notFound": "Fournisseur non trouvé",
+    "table": {
+      "name": "Nom",
+      "rut": "RUT",
+      "email": "E-mail",
+      "phone": "Téléphone",
+      "status": "Statut",
+      "createdAt": "Créé le"
+    },
+    "form": {
+      "createDescription": "Remplissez les données pour créer un nouveau fournisseur",
+      "editDescription": "Modifiez les données du fournisseur",
+      "nameLabel": "Nom du Fournisseur",
+      "namePlaceholder": "Ex.: ABC Fournitures SA",
+      "rutLabel": "RUT",
+      "rutPlaceholder": "Ex.: 211234560019",
+      "emailLabel": "E-mail",
+      "emailPlaceholder": "Ex.: fournisseur@exemple.com",
+      "phoneLabel": "Téléphone",
+      "phonePlaceholder": "Ex.: +33 1 23 45 67 89",
+      "addressLabel": "Adresse",
+      "addressPlaceholder": "Ex.: 123 Avenue Industrielle",
+      "errors": {
+        "nameRequired": "Le nom est obligatoire",
+        "rutRequired": "Le RUT est obligatoire",
+        "emailInvalid": "Format d'e-mail invalide"
+      }
+    },
+    "filters": {
+      "all": "Tous",
+      "active": "Actifs",
+      "inactive": "Inactifs"
+    },
+    "stats": {
+      "total": "Total de Fournisseurs",
+      "active": "Actifs",
+      "inactive": "Inactifs",
+      "withEmail": "Avec E-mail"
+    },
+    "deleteConfirm": {
+      "title": "Supprimer le fournisseur?",
+      "description": "Cette action ne peut pas être annulée. Le fournisseur sera marqué comme inactif."
+    },
+    "details": {
+      "information": "Informations du Fournisseur",
+      "transactionsTitle": "Historique des Transactions",
+      "transactionsComingSoon": "L'historique des transactions et le solde du compte bientôt disponibles"
+    },
+    "messages": {
+      "created": "Fournisseur créé avec succès",
+      "updated": "Fournisseur mis à jour avec succès",
+      "deleted": "Fournisseur supprimé avec succès",
+      "loadError": "Erreur lors du chargement des fournisseurs",
+      "notFound": "Fournisseur introuvable",
+      "createError": "Erreur lors de la création du fournisseur",
+      "updateError": "Erreur lors de la mise à jour du fournisseur",
+      "deleteError": "Erreur lors de la suppression du fournisseur"
+    }
+  },
+  "userCompanies": {
+    "title": "Entreprises d'Utilisateur",
+    "description": "Gérez les permissions des utilisateurs pour les entreprises",
+    "createButton": "Accorder l'Accès",
+    "editButton": "Modifier les Permissions",
+    "searchPlaceholder": "Rechercher par utilisateur ou entreprise...",
+    "emptyState": "Aucune permission d'utilisateur",
+    "emptyStateDescription": "Commencez par accorder l'accès aux utilisateurs",
+    "table": {
+      "user": "Utilisateur",
+      "company": "Entreprise",
+      "permissions": "Permissions"
+    },
+    "permissions": {
+      "write": "Écriture",
+      "read": "Lecture seule",
+      "writeDescription": "Peut créer et modifier des enregistrements",
+      "readDescription": "Peut uniquement visualiser les enregistrements"
+    },
+    "actions": {
+      "togglePermission": "Basculer la Permission"
+    },
+    "form": {
+      "createDescription": "Accordez l'accès d'un utilisateur à une entreprise",
+      "editDescription": "Modifiez les permissions de l'utilisateur",
+      "userLabel": "Utilisateur",
+      "userPlaceholder": "Sélectionnez un utilisateur",
+      "companyLabel": "Entreprise",
+      "companyPlaceholder": "Sélectionnez une entreprise",
+      "permissionLabel": "Niveau de Permission",
+      "errors": {
+        "userRequired": "L'utilisateur est obligatoire",
+        "companyRequired": "L'entreprise est obligatoire"
+      }
+    },
+    "stats": {
+      "totalPermissions": "Total d'Accès",
+      "usersWithAccess": "Utilisateurs avec Accès",
+      "companiesShared": "Entreprises Partagées",
+      "writeAccess": "Avec Accès en Écriture"
+    },
+    "deleteConfirm": {
+      "title": "Révoquer l'accès?",
+      "description": "Cette action supprimera l'accès de l'utilisateur à cette entreprise."
+    },
+    "messages": {
+      "created": "Accès accordé avec succès",
+      "updated": "Permissions mises à jour avec succès",
+      "deleted": "Accès révoqué avec succès",
+      "loadError": "Erreur lors du chargement des permissions",
+      "createError": "Erreur lors de l'octroi de l'accès",
+      "updateError": "Erreur lors de la mise à jour des permissions",
+      "deleteError": "Erreur lors de la révocation de l'accès"
+    }
+  },
+  "periods": {
+    "title": "Périodes Comptables",
+    "subtitle": "Gérez les périodes fiscales et mensuelles",
+    "createButton": "Créer une Période",
+    "editButton": "Modifier la Période",
+    "searchPlaceholder": "Rechercher des périodes...",
+    "emptyState": "Aucune période créée",
+    "emptyStateDescription": "Commencez par créer votre première période",
+    "notFound": "Période introuvable",
+    "to": "au",
+    "table": {
+      "fiscalYear": "Année Fiscale",
+      "type": "Type",
+      "period": "Période",
+      "dateRange": "Plage de Dates",
+      "status": "Statut",
+      "closedBy": "Fermé Par",
+      "economicGroup": "Groupe Économique"
+    },
+    "form": {
+      "createDescription": "Remplissez les données pour créer une nouvelle période",
+      "editDescription": "Modifiez les données de la période",
+      "economicGroupLabel": "Groupe Économique",
+      "economicGroupPlaceholder": "Sélectionnez un groupe",
+      "typeLabel": "Type de Période",
+      "fiscalYearLabel": "Année Fiscale",
+      "monthLabel": "Mois",
+      "monthPlaceholder": "Sélectionnez un mois",
+      "startDateLabel": "Date de Début",
+      "endDateLabel": "Date de Fin",
+      "selectDate": "Sélectionnez une date"
+    },
+    "types": {
+      "FISCAL_YEAR": "Année Fiscale",
+      "MONTH": "Mois"
+    },
+    "months": {
+      "January": "Janvier",
+      "February": "Février",
+      "March": "Mars",
+      "April": "Avril",
+      "May": "Mai",
+      "June": "Juin",
+      "July": "Juillet",
+      "August": "Août",
+      "September": "Septembre",
+      "October": "Octobre",
+      "November": "Novembre",
+      "December": "Décembre"
+    },
+    "status": {
+      "open": "Ouvert",
+      "closed": "Fermé"
+    },
+    "actions": {
+      "close": "Fermer la Période",
+      "reopen": "Rouvrir la Période"
+    },
+    "filters": {
+      "all": "Tous",
+      "byType": "Par type",
+      "status": "Statut"
+    },
+    "stats": {
+      "totalPeriods": "Total de Périodes",
+      "openPeriods": "Périodes Ouvertes",
+      "closedPeriods": "Périodes Fermées",
+      "currentYear": "Année Actuelle"
+    },
+    "details": {
+      "information": "Informations",
+      "generalInformation": "Informations Générales",
+      "journalEntries": "Écritures Comptables",
+      "noJournalEntries": "Aucune écriture comptable",
+      "journalEntriesDescription": "Les écritures comptables s'afficheront ici",
+      "journalEntriesHint": "Voir toutes les écritures depuis le menu principal avec filtres",
+      "closedAt": "Date de Fermeture"
+    },
+    "closeConfirm": {
+      "title": "Fermer la période?",
+      "description": "Cette action fermera la période et aucun mouvement supplémentaire ne pourra être effectué. Voulez-vous continuer?"
+    },
+    "reopenConfirm": {
+      "title": "Rouvrir la période?",
+      "description": "Cette action rouvrira la période et les mouvements pourront être effectués à nouveau. Voulez-vous continuer?"
+    },
+    "deleteConfirm": {
+      "title": "Supprimer la période?",
+      "description": "Cette action ne peut pas être annulée."
+    },
+    "messages": {
+      "created": "Période créée avec succès",
+      "updated": "Période mise à jour avec succès",
+      "deleted": "Période supprimée avec succès",
+      "closed": "Période fermée avec succès",
+      "reopened": "Période rouverte avec succès",
+      "loadError": "Erreur lors du chargement des périodes",
+      "createError": "Erreur lors de la création de la période",
+      "updateError": "Erreur lors de la mise à jour de la période",
+      "deleteError": "Erreur lors de la suppression de la période",
+      "closeError": "Erreur lors de la fermeture de la période",
+      "reopenError": "Erreur lors de la réouverture de la période"
+    }
+  },
+  "exchangeRates": {
+    "title": "Taux de Change",
+    "subtitle": "Gérer les taux de change des devises",
+    "createButton": "Ajouter un Taux",
+    "editButton": "Modifier le Taux",
+    "searchPlaceholder": "Rechercher des taux...",
+    "emptyState": "Aucun taux de change",
+    "emptyStateDescription": "Commencez par ajouter votre premier taux de change",
+    "table": {
+      "date": "Date",
+      "sourceCurrency": "De",
+      "targetCurrency": "À",
+      "rate": "Taux",
+      "source": "Source",
+      "createdAt": "Créé le"
+    },
+    "form": {
+      "createDescription": "Ajouter un nouveau taux de change",
+      "editDescription": "Modifier le taux de change",
+      "dateLabel": "Date",
+      "datePlaceholder": "Sélectionner une date",
+      "sourceCurrencyLabel": "Devise Source",
+      "sourceCurrencyPlaceholder": "Sélectionner une devise",
+      "targetCurrencyLabel": "Devise Cible",
+      "targetCurrencyPlaceholder": "Sélectionner une devise",
+      "rateLabel": "Taux de Change",
+      "ratePlaceholder": "Ex.: 38.5000",
+      "sourceLabel": "Source (Optionnel)",
+      "sourcePlaceholder": "Ex.: Banque Centrale",
+      "errors": {
+        "dateRequired": "La date est obligatoire",
+        "sourceCurrencyRequired": "La devise source est obligatoire",
+        "targetCurrencyRequired": "La devise cible est obligatoire",
+        "rateRequired": "Le taux est obligatoire",
+        "ratePositive": "Le taux doit être positif"
+      }
+    },
+    "filters": {
+      "all": "Tous",
+      "bySourceCurrency": "Devise source",
+      "byTargetCurrency": "Devise cible",
+      "dateRange": "Plage de dates"
+    },
+    "stats": {
+      "totalRates": "Total de Taux",
+      "currencyPairs": "Paires de Devises",
+      "lastUpdate": "Dernière Mise à Jour"
+    },
+    "deleteConfirm": {
+      "title": "Supprimer le taux de change?",
+      "description": "Cette action ne peut pas être annulée."
+    },
+    "messages": {
+      "created": "Taux de change créé avec succès",
+      "updated": "Taux de change mis à jour avec succès",
+      "deleted": "Taux de change supprimé avec succès",
+      "loadError": "Erreur lors du chargement des taux de change"
     }
   },
   "validation": {

@@ -59,8 +59,8 @@ Todo el entorno de desarrollo corre en Docker. Solo necesitas tener instalado **
 ### 2. Clonar Repositorio
 
 ```bash
-git clone https://github.com/tu-org/kontaflow.git
-cd kontaflow
+git clone https://github.com/globe-software/KontaFlow.git
+cd KontaFlow
 ```
 
 ### 3. Configurar Variables de Entorno

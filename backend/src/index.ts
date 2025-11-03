@@ -7,6 +7,14 @@ import { logger } from './lib/logger';
 import { config, corsOptions, rateLimitOptions } from './lib/config';
 import { errorHandler, notFoundHandler } from './middleware/error-handler';
 import { economicGroupsRoutes } from './routes/economic-groups.routes';
+import { companiesRoutes } from './routes/companies.routes';
+import { accountsRoutes } from './routes/accounts.routes';
+import { accountingPeriodsRoutes } from './routes/accounting-periods.routes';
+import { customersRoutes } from './routes/customers.routes';
+import { suppliersRoutes } from './routes/suppliers.routes';
+import { exchangeRatesRoutes } from './routes/exchange-rates.routes';
+import { userCompaniesRoutes } from './routes/user-companies.routes';
+import { chartsOfAccountsRoutes } from './routes/charts-of-accounts.routes';
 
 /**
  * KontaFlow API Server
@@ -98,9 +106,31 @@ async function registerRoutes() {
       // Economic Groups
       await instance.register(economicGroupsRoutes, { prefix: '/economic-groups' });
 
+      // Companies
+      await instance.register(companiesRoutes, { prefix: '/companies' });
+
+      // Charts of Accounts
+      await instance.register(chartsOfAccountsRoutes, { prefix: '/charts-of-accounts' });
+
+      // Accounts
+      await instance.register(accountsRoutes, { prefix: '/accounts' });
+
+      // Accounting Periods
+      await instance.register(accountingPeriodsRoutes, { prefix: '/accounting-periods' });
+
+      // Customers
+      await instance.register(customersRoutes, { prefix: '/customers' });
+
+      // Suppliers
+      await instance.register(suppliersRoutes, { prefix: '/suppliers' });
+
+      // Exchange Rates
+      await instance.register(exchangeRatesRoutes, { prefix: '/exchange-rates' });
+
+      // User Companies
+      await instance.register(userCompaniesRoutes, { prefix: '/user-companies' });
+
       // TODO: More features
-      // await instance.register(companiesRoutes, { prefix: '/companies' });
-      // await instance.register(accountsRoutes, { prefix: '/accounts' });
       // await instance.register(entriesRoutes, { prefix: '/entries' });
     },
     { prefix: '/api' }
@@ -133,12 +163,40 @@ async function start() {
     logger.info('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
     logger.info('');
     logger.info('📋 Available Endpoints:');
+    logger.info('   Economic Groups:');
     logger.info('   GET    /api/economic-groups           - List groups');
     logger.info('   GET    /api/economic-groups/my-groups - My groups');
     logger.info('   GET    /api/economic-groups/:id       - Get group');
     logger.info('   POST   /api/economic-groups           - Create group');
     logger.info('   PUT    /api/economic-groups/:id       - Update group');
     logger.info('   DELETE /api/economic-groups/:id       - Delete group');
+    logger.info('');
+    logger.info('   Companies:');
+    logger.info('   GET    /api/companies                       - List companies');
+    logger.info('   GET    /api/companies/by-group/:groupId     - Companies by group');
+    logger.info('   GET    /api/companies/:id                   - Get company');
+    logger.info('   POST   /api/companies                       - Create company');
+    logger.info('   PUT    /api/companies/:id                   - Update company');
+    logger.info('   DELETE /api/companies/:id                   - Delete company');
+    logger.info('');
+    logger.info('   Accounts:');
+    logger.info('   GET    /api/accounts                        - List accounts');
+    logger.info('   GET    /api/accounts/tree/:chartId          - Get account tree');
+    logger.info('   GET    /api/accounts/by-chart/:chartId      - Accounts by chart');
+    logger.info('   GET    /api/accounts/:id                    - Get account');
+    logger.info('   POST   /api/accounts                        - Create account');
+    logger.info('   PUT    /api/accounts/:id                    - Update account');
+    logger.info('   DELETE /api/accounts/:id                    - Delete account');
+    logger.info('');
+    logger.info('   Accounting Periods:');
+    logger.info('   GET    /api/accounting-periods                       - List periods');
+    logger.info('   GET    /api/accounting-periods/by-group/:groupId     - Periods by group');
+    logger.info('   GET    /api/accounting-periods/:id                   - Get period');
+    logger.info('   POST   /api/accounting-periods                       - Create period');
+    logger.info('   PUT    /api/accounting-periods/:id                   - Update period');
+    logger.info('   POST   /api/accounting-periods/:id/close             - Close period');
+    logger.info('   POST   /api/accounting-periods/:id/reopen            - Reopen period');
+    logger.info('   DELETE /api/accounting-periods/:id                   - Delete period');
     logger.info('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
     logger.info('');
     logger.info('💡 Tip: Use header "x-user-id: 1" for authentication in development');

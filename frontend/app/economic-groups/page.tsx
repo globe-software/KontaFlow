@@ -63,8 +63,8 @@ export default function EconomicGroupsPage() {
     page: 1,
     limit: 10,
     search: '',
-    paisPrincipal: undefined,
-    activo: undefined,
+    mainCountry: undefined,
+    active: undefined,
   });
 
   // Cargar grupos
@@ -161,7 +161,7 @@ export default function EconomicGroupsPage() {
   const handlePaisFilter = (value: string) => {
     setFilters({
       ...filters,
-      paisPrincipal: value === 'all' ? undefined : (value as any),
+      mainCountry: value === 'all' ? undefined : (value as any),
       page: 1,
     });
   };
@@ -169,7 +169,7 @@ export default function EconomicGroupsPage() {
   const handleActivoFilter = (value: string) => {
     setFilters({
       ...filters,
-      activo: value === 'all' ? undefined : value === 'true',
+      active: value === 'all' ? undefined : value === 'true',
       page: 1,
     });
   };
@@ -220,7 +220,7 @@ export default function EconomicGroupsPage() {
               <div className="flex items-center gap-2">
                 <Filter className="h-4 w-4 text-gray-500" />
                 <Select
-                  value={filters.paisPrincipal || 'all'}
+                  value={filters.mainCountry || 'all'}
                   onValueChange={handlePaisFilter}
                 >
                   <SelectTrigger className="w-[180px]">
@@ -240,9 +240,9 @@ export default function EconomicGroupsPage() {
               {/* Filtro por estado */}
               <Select
                 value={
-                  filters.activo === undefined
+                  filters.active === undefined
                     ? 'all'
-                    : filters.activo
+                    : filters.active
                     ? 'true'
                     : 'false'
                 }

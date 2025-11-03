@@ -6,6 +6,191 @@ Este documento describe el proceso completo y repetible para desarrollar nuevas 
 
 ---
 
+## Convenciones de Idioma en el Proyecto
+
+### ✅ Qué DEBE estar en INGLÉS
+
+**1. Código Fuente (Backend y Frontend)**
+- Variables, funciones, clases, interfaces, tipos
+- Nombres de archivos (`.ts`, `.tsx`, `.prisma`)
+- Comentarios en código
+- Logs de aplicación
+- Nombres de branches en Git
+
+**Ejemplos**:
+```typescript
+// ✅ CORRECTO (Inglés)
+const economicGroup = await prisma.economicGroup.findMany();
+const handleCreate = () => { /* ... */ };
+interface CreateEconomicGroupDto { /* ... */ }
+
+// ❌ INCORRECTO (Español)
+const grupoEconomico = await prisma.grupoEconomico.findMany();
+const manejarCrear = () => { /* ... */ };
+interface CrearGrupoDto { /* ... */ }
+```
+
+**2. Base de Datos (Prisma Schema)**
+- Nombres de modelos: `EconomicGroup`, `Company`, `Account`
+- Nombres de campos: `name`, `mainCountry`, `baseCurrency`, `createdAt`
+- Nombres de tablas (via `@@map`): `economic_groups`, `companies`, `accounts`
+- Nombres de relaciones: `companies`, `chartOfAccounts`, `users`
+
+**Ejemplo Prisma**:
+```prisma
+// ✅ CORRECTO
+model EconomicGroup {
+  id              Int       @id @default(autoincrement())
+  name            String
+  mainCountry     String    @map("main_country")
+  baseCurrency    String    @map("base_currency")
+  active          Boolean   @default(true)
+  createdAt       DateTime  @default(now()) @map("created_at")
+
+  companies       Company[]
+  chartOfAccounts ChartOfAccounts?
+
+  @@map("economic_groups")
+}
+
+// ❌ INCORRECTO
+model GrupoEconomico {
+  id              Int       @id @default(autoincrement())
+  nombre          String
+  paisPrincipal   String
+  monedaBase      String
+  activo          Boolean
+  fechaCreacion   DateTime
+
+  empresas        Empresa[]
+  planDeCuentas   PlanDeCuentas?
+
+  @@map("grupos_economicos")
+}
+```
+
+**3. API Endpoints**
+- Rutas: `/api/economic-groups`, `/api/companies`, `/api/accounts`
+- Query parameters: `?search=...&page=1&limit=10`
+- Nombres de campos en JSON responses
+
+**4. Tests**
+- Nombres de archivos de test: `create.test.ts`, `list.test.ts`
+- Nombres de funciones de test: `it('should create a new economic group', ...)`
+- Nombres de factories: `economic-group.factory.ts`
+- Mensajes de assertions
+
+**5. Configuración**
+- Archivos de configuración: `.env`, `tsconfig.json`, `vitest.config.ts`
+- Variables de entorno: `DATABASE_URL`, `NODE_ENV`, `PORT`
+
+---
+
+### ✅ Qué DEBE estar en ESPAÑOL
+
+**1. Documentación del Proyecto**
+- `PROCESO-DESARROLLO.md` (este archivo)
+- `TESTING.md`
+- `01-DISEÑO-FUNCIONAL.md`
+- `02-DOCUMENTACIÓN-TÉCNICA.md`
+- `README.md` (puede ser bilingüe)
+
+**2. Mensajes de la Interfaz de Usuario (i18n)**
+- Archivos JSON de traducciones: `messages/es.json`, `messages/pt.json`
+- Títulos de página, labels, botones, mensajes de error
+- Contenido mostrado a usuarios finales
+
+**Ejemplo**:
+```json
+{
+  "grupos": {
+    "title": "Grupos Económicos",
+    "createButton": "Crear Grupo",
+    "deleteConfirm": {
+      "title": "¿Estás seguro?",
+      "description": "Esta acción no se puede deshacer"
+    }
+  }
+}
+```
+
+**3. Datos de Seed**
+- Nombres de entidades: "Pragmatic Software Group", "Empresa Test UY S.A."
+- Descripciones de datos de prueba
+- Contenido de ejemplo
+
+**4. Commits de Git**
+- Mensajes de commit (pueden ser en español)
+- Descripciones de Pull Requests
+
+---
+
+### 🔄 Proceso de Migración
+
+Si encuentras código en español que debería estar en inglés:
+
+1. **NO reemplazar directamente** sin migración de datos
+2. **Crear nueva migración de Prisma** si es cambio de schema
+3. **Actualizar seed data** para que use nuevos nombres
+4. **Actualizar tests** para que usen nuevas referencias
+5. **Resetear base de datos de test**: `DATABASE_URL="..." npx prisma migrate reset --force`
+
+---
+
+### ❓ Casos Especiales
+
+**Enums**: En inglés en código, traducidos en UI
+```typescript
+// Backend/Prisma (Inglés)
+enum Role {
+  ADMIN
+  ACCOUNTANT
+  OPERATOR
+}
+
+// Frontend i18n (Español)
+"roles": {
+  "ADMIN": "Administrador",
+  "ACCOUNTANT": "Contador",
+  "OPERATOR": "Operativo"
+}
+```
+
+**Países y Monedas**: Códigos ISO en código, nombres en UI
+```typescript
+// Backend (Códigos ISO)
+mainCountry: 'UY'
+baseCurrency: 'UYU'
+
+// Frontend config (Español)
+export const PAISES = {
+  'UY': 'Uruguay',
+  'AR': 'Argentina',
+  'BR': 'Brasil'
+};
+```
+
+---
+
+### 📝 Resumen Rápido
+
+| Componente | Idioma | Ejemplo |
+|------------|--------|---------|
+| Modelos Prisma | 🇬🇧 Inglés | `EconomicGroup`, `Company` |
+| Campos de BD | 🇬🇧 Inglés | `name`, `mainCountry`, `createdAt` |
+| Tablas de BD | 🇬🇧 Inglés | `economic_groups`, `companies` |
+| Variables/Funciones | 🇬🇧 Inglés | `handleCreate`, `loadData` |
+| API Routes | 🇬🇧 Inglés | `/api/economic-groups` |
+| Archivos de código | 🇬🇧 Inglés | `economic-groups.service.ts` |
+| Tests | 🇬🇧 Inglés | `create.test.ts` |
+| Documentación | 🇪🇸 Español | `PROCESO-DESARROLLO.md` |
+| UI (traducciones) | 🌐 Multi-idioma | `messages/es.json`, `messages/en.json` |
+| Seed data (nombres) | 🇪🇸 Español | "Pragmatic Software Group" |
+| Comentarios | 🇬🇧 Inglés | `// Load economic groups` |
+| Git commits | 🇪🇸 Español (opcional) | "feat: Agregar CRUD de grupos económicos" |
+
+---
+
 ## Fase 1: Diseño y Documentación
 
 ### 1.1. Diseño Funcional

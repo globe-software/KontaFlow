@@ -1,0 +1,441 @@
+{
+  "_locale": {
+    "name": "Español"
+  },
+  "common": {
+    "create": "Crear",
+    "edit": "Editar",
+    "delete": "Eliminar",
+    "save": "Guardar",
+    "saving": "Guardando...",
+    "cancel": "Cancelar",
+    "confirm": "Confirmar",
+    "search": "Buscar",
+    "filter": "Filtrar",
+    "loading": "Cargando...",
+    "noResults": "No se encontraron resultados",
+    "error": "Error",
+    "success": "Éxito",
+    "actions": "Acciones",
+    "back": "Volver",
+    "next": "Siguiente",
+    "previous": "Anterior",
+    "close": "Cerrar",
+    "view": "Ver",
+    "details": "Detalles",
+    "active": "Activo",
+    "inactive": "Inactivo",
+    "yes": "Sí",
+    "no": "No",
+    "none": "Ninguno",
+    "all": "Todos",
+    "select": "Seleccionar",
+    "date": "Fecha",
+    "total": "Total",
+    "status": "Estado"
+  },
+  "navigation": {
+    "home": "Inicio",
+    "grupos": "Grupos Económicos",
+    "companies": "Empresas",
+    "customers": "Clientes",
+    "suppliers": "Proveedores",
+    "accounts": "Cuentas",
+    "periods": "Períodos Contables",
+    "exchangeRates": "Tipos de Cambio",
+    "userCompanies": "Empresas de Usuario",
+    "comprobantes": "Comprobantes",
+    "reportes": "Reportes",
+    "dashboard": "Panel de Control",
+    "settings": "Configuración",
+    "logout": "Cerrar Sesión"
+  },
+  "grupos": {
+    "title": "Grupos Económicos",
+    "createButton": "Crear Grupo",
+    "editButton": "Editar Grupo",
+    "deleteButton": "Eliminar Grupo",
+    "viewButton": "Ver Detalles",
+    "searchPlaceholder": "Buscar grupos...",
+    "emptyState": "No hay grupos económicos creados",
+    "emptyStateDescription": "Comienza creando tu primer grupo económico",
+    "noRut": "Sin RUT",
+    "companyOne": "empresa",
+    "companyMany": "empresas",
+    "table": {
+      "name": "Nombre",
+      "country": "País",
+      "currency": "Moneda",
+      "companies": "Empresas",
+      "createdAt": "Fecha de Creación",
+      "status": "Estado"
+    },
+    "form": {
+      "title": "Información del Grupo",
+      "createDescription": "Completa los datos para crear un nuevo grupo económico",
+      "editDescription": "Modifica los datos del grupo económico",
+      "nameLabel": "Nombre del Grupo",
+      "namePlaceholder": "Ej: Grupo XYZ",
+      "nameRequired": "El nombre es requerido",
+      "nameMinLength": "El nombre debe tener al menos 3 caracteres",
+      "countryLabel": "País Principal",
+      "countryPlaceholder": "Selecciona un país",
+      "countryRequired": "El país es requerido",
+      "currencyLabel": "Moneda Base",
+      "currencyPlaceholder": "Selecciona una moneda",
+      "currencyRequired": "La moneda es requerida"
+    },
+    "countries": {
+      "UY": "Uruguay",
+      "AR": "Argentina",
+      "BR": "Brasil",
+      "CL": "Chile",
+      "US": "Estados Unidos"
+    },
+    "currencies": {
+      "UYU": "Peso Uruguayo",
+      "USD": "Dólar Estadounidense",
+      "ARS": "Peso Argentino",
+      "BRL": "Real Brasileño",
+      "CLP": "Peso Chileno"
+    },
+    "messages": {
+      "created": "Grupo económico creado exitosamente",
+      "updated": "Grupo económico actualizado exitosamente",
+      "deleted": "Grupo económico eliminado exitosamente",
+      "loadError": "Error al cargar grupos",
+      "createError": "Error al crear grupo",
+      "updateError": "Error al actualizar grupo",
+      "deleteError": "Error al eliminar grupo"
+    },
+    "deleteConfirm": {
+      "title": "¿Eliminar grupo?",
+      "description": "Esta acción no se puede deshacer. El grupo será marcado como inactivo.",
+      "confirmButton": "Sí, eliminar"
+    },
+    "details": {
+      "title": "Detalles del Grupo",
+      "information": "Información General",
+      "companies": "Empresas",
+      "accountingPlan": "Plan de Cuentas",
+      "configuration": "Configuración",
+      "noCompanies": "No hay empresas en este grupo",
+      "createCompanyButton": "Crear Primera Empresa"
+    },
+    "filters": {
+      "all": "Todos",
+      "active": "Activos",
+      "inactive": "Inactivos",
+      "byCountry": "Por país"
+    },
+    "stats": {
+      "totalGroups": "Total Grupos",
+      "activeGroups": "Grupos Activos",
+      "inactiveGroups": "Grupos Inactivos",
+      "totalCompanies": "Total Empresas"
+    }
+  },
+  "companies": {
+    "title": "Empresas",
+    "subtitle": "Gestiona las empresas de tus grupos económicos",
+    "createButton": "Crear Empresa",
+    "editButton": "Editar Empresa",
+    "deleteButton": "Eliminar Empresa",
+    "viewButton": "Ver Detalles",
+    "searchPlaceholder": "Buscar empresas...",
+    "emptyState": "No hay empresas creadas",
+    "emptyStateDescription": "Comienza creando tu primera empresa",
+    "notFound": "Empresa no encontrada",
+    "table": {
+      "name": "Nombre",
+      "tradeName": "Nombre Comercial",
+      "rut": "RUT",
+      "economicGroup": "Grupo Económico",
+      "currency": "Moneda",
+      "country": "País",
+      "status": "Estado"
+    },
+    "form": {
+      "title": "Información de la Empresa",
+      "createDescription": "Completa los datos para crear una nueva empresa",
+      "editDescription": "Modifica los datos de la empresa",
+      "nameLabel": "Nombre de la Empresa",
+      "namePlaceholder": "Ej: Acme Corp",
+      "nameRequired": "El nombre es requerido",
+      "tradeNameLabel": "Nombre Comercial",
+      "tradeNamePlaceholder": "Ej: Acme",
+      "rutLabel": "RUT",
+      "rutPlaceholder": "Ej: 211234560019",
+      "rutRequired": "El RUT es requerido",
+      "rutInvalid": "El RUT no es válido",
+      "economicGroupLabel": "Grupo Económico",
+      "economicGroupPlaceholder": "Selecciona un grupo",
+      "economicGroupRequired": "El grupo es requerido",
+      "countryLabel": "País",
+      "countryPlaceholder": "Selecciona un país",
+      "functionalCurrencyLabel": "Moneda Funcional",
+      "functionalCurrencyPlaceholder": "Selecciona una moneda",
+      "functionalCurrencyRequired": "La moneda es requerida",
+      "startDateLabel": "Fecha de Inicio",
+      "startDatePlaceholder": "Selecciona una fecha"
+    },
+    "filters": {
+      "all": "Todas",
+      "active": "Activas",
+      "inactive": "Inactivas",
+      "byCountry": "Por país",
+      "byGroup": "Por grupo"
+    },
+    "stats": {
+      "totalCompanies": "Total Empresas",
+      "activeCompanies": "Empresas Activas",
+      "inactiveCompanies": "Empresas Inactivas",
+      "topCountry": "País Principal"
+    },
+    "details": {
+      "information": "Información",
+      "generalInformation": "Información General",
+      "journalEntries": "Asientos Contables",
+      "noJournalEntries": "No hay asientos contables",
+      "journalEntriesDescription": "Los asientos contables aparecerán aquí"
+    },
+    "deleteConfirm": {
+      "title": "¿Eliminar empresa?",
+      "description": "Esta acción no se puede deshacer. La empresa será marcada como inactiva."
+    },
+    "messages": {
+      "created": "Empresa creada exitosamente",
+      "updated": "Empresa actualizada exitosamente",
+      "deleted": "Empresa eliminada exitosamente",
+      "loadError": "Error al cargar empresas",
+      "createError": "Error al crear empresa",
+      "updateError": "Error al actualizar empresa",
+      "deleteError": "Error al eliminar empresa"
+    }
+  },
+  "accounts": {
+    "title": "Plan de Cuentas",
+    "subtitle": "Gestiona tu plan de cuentas contable",
+    "createButton": "Crear Cuenta",
+    "editButton": "Editar Cuenta",
+    "addChildButton": "Agregar Subcuenta",
+    "searchPlaceholder": "Buscar cuentas...",
+    "emptyState": "No hay cuentas creadas",
+    "emptyStateDescription": "Comienza creando tu primera cuenta",
+    "notFound": "Cuenta no encontrada",
+    "postable": "Imputable",
+    "level": "Nivel",
+    "table": {
+      "code": "Código",
+      "name": "Nombre",
+      "type": "Tipo",
+      "level": "Nivel",
+      "postable": "Imputable",
+      "currency": "Moneda",
+      "status": "Estado"
+    },
+    "form": {
+      "createDescription": "Completa los datos para crear una nueva cuenta",
+      "editDescription": "Modifica los datos de la cuenta",
+      "addChildDescription": "Agregar subcuenta a: {parent}",
+      "parentAccountLabel": "Cuenta Padre",
+      "parentAccountPlaceholder": "Selecciona una cuenta padre",
+      "noParent": "Sin padre (cuenta raíz)",
+      "codeLabel": "Código",
+      "codePlaceholder": "Ej: 1.1.01",
+      "nameLabel": "Nombre",
+      "namePlaceholder": "Ej: Caja",
+      "typeLabel": "Tipo de Cuenta",
+      "levelLabel": "Nivel",
+      "currencyLabel": "Moneda",
+      "natureLabel": "Naturaleza",
+      "postableLabel": "Cuenta imputable (permite movimientos)",
+      "requiresAuxiliaryLabel": "Requiere auxiliar",
+      "auxiliaryTypeLabel": "Tipo de Auxiliar"
+    },
+    "types": {
+      "ASSET": "Activo",
+      "LIABILITY": "Pasivo",
+      "EQUITY": "Patrimonio",
+      "INCOME": "Ingreso",
+      "EXPENSE": "Egreso"
+    },
+    "currencies": {
+      "MN": "Moneda Nacional",
+      "USD": "Dólar",
+      "BOTH": "Ambas",
+      "FUNCTIONAL": "Funcional"
+    },
+    "natures": {
+      "CURRENT": "Corriente",
+      "NON_CURRENT": "No Corriente"
+    },
+    "auxiliaryTypes": {
+      "CUSTOMER": "Cliente",
+      "SUPPLIER": "Proveedor",
+      "EMPLOYEE": "Empleado",
+      "OTHER": "Otro"
+    },
+    "viewModes": {
+      "tree": "Vista Árbol",
+      "table": "Vista Tabla"
+    },
+    "actions": {
+      "addChild": "Agregar Subcuenta"
+    },
+    "filters": {
+      "all": "Todas",
+      "byType": "Por tipo",
+      "postable": "Imputabilidad",
+      "postableOnly": "Solo imputables",
+      "nonPostable": "No imputables"
+    },
+    "stats": {
+      "total": "Total Cuentas"
+    },
+    "details": {
+      "information": "Información",
+      "generalInformation": "Información General",
+      "hierarchy": "Jerarquía",
+      "parentAccount": "Cuenta Padre",
+      "subaccounts": "Subcuentas",
+      "noSubaccounts": "No hay subcuentas"
+    },
+    "deleteConfirm": {
+      "title": "¿Eliminar cuenta?",
+      "description": "Esta acción no se puede deshacer. La cuenta será marcada como inactiva."
+    },
+    "messages": {
+      "created": "Cuenta creada exitosamente",
+      "updated": "Cuenta actualizada exitosamente",
+      "deleted": "Cuenta eliminada exitosamente",
+      "loadError": "Error al cargar cuentas",
+      "createError": "Error al crear cuenta",
+      "updateError": "Error al actualizar cuenta",
+      "deleteError": "Error al eliminar cuenta"
+    }
+  },
+  "periods": {
+    "title": "Períodos Contables",
+    "subtitle": "Gestiona los períodos fiscales y mensuales",
+    "createButton": "Crear Período",
+    "editButton": "Editar Período",
+    "searchPlaceholder": "Buscar períodos...",
+    "emptyState": "No hay períodos creados",
+    "emptyStateDescription": "Comienza creando tu primer período",
+    "notFound": "Período no encontrado",
+    "to": "hasta",
+    "table": {
+      "fiscalYear": "Año Fiscal",
+      "type": "Tipo",
+      "period": "Período",
+      "dateRange": "Rango de Fechas",
+      "status": "Estado",
+      "closedBy": "Cerrado Por",
+      "economicGroup": "Grupo Económico"
+    },
+    "form": {
+      "createDescription": "Completa los datos para crear un nuevo período",
+      "editDescription": "Modifica los datos del período",
+      "economicGroupLabel": "Grupo Económico",
+      "economicGroupPlaceholder": "Selecciona un grupo",
+      "typeLabel": "Tipo de Período",
+      "fiscalYearLabel": "Año Fiscal",
+      "monthLabel": "Mes",
+      "monthPlaceholder": "Selecciona un mes",
+      "startDateLabel": "Fecha de Inicio",
+      "endDateLabel": "Fecha de Fin",
+      "selectDate": "Seleccionar fecha"
+    },
+    "types": {
+      "FISCAL_YEAR": "Año Fiscal",
+      "MONTH": "Mes"
+    },
+    "months": {
+      "January": "Enero",
+      "February": "Febrero",
+      "March": "Marzo",
+      "April": "Abril",
+      "May": "Mayo",
+      "June": "Junio",
+      "July": "Julio",
+      "August": "Agosto",
+      "September": "Septiembre",
+      "October": "Octubre",
+      "November": "Noviembre",
+      "December": "Diciembre"
+    },
+    "status": {
+      "open": "Abierto",
+      "closed": "Cerrado"
+    },
+    "actions": {
+      "close": "Cerrar Período",
+      "reopen": "Reabrir Período"
+    },
+    "filters": {
+      "all": "Todos",
+      "byType": "Por tipo",
+      "status": "Estado"
+    },
+    "stats": {
+      "totalPeriods": "Total Períodos",
+      "openPeriods": "Períodos Abiertos",
+      "closedPeriods": "Períodos Cerrados",
+      "currentYear": "Año Actual"
+    },
+    "details": {
+      "information": "Información",
+      "generalInformation": "Información General",
+      "journalEntries": "Asientos Contables",
+      "noJournalEntries": "No hay asientos contables",
+      "journalEntriesDescription": "Los asientos contables aparecerán aquí",
+      "closedAt": "Fecha de Cierre"
+    },
+    "closeConfirm": {
+      "title": "¿Cerrar período?",
+      "description": "Esta acción cerrará el período y no se podrán hacer más movimientos. ¿Deseas continuar?"
+    },
+    "reopenConfirm": {
+      "title": "¿Reabrir período?",
+      "description": "Esta acción reabrirá el período y se podrán hacer movimientos nuevamente. ¿Deseas continuar?"
+    },
+    "deleteConfirm": {
+      "title": "¿Eliminar período?",
+      "description": "Esta acción no se puede deshacer."
+    },
+    "messages": {
+      "created": "Período creado exitosamente",
+      "updated": "Período actualizado exitosamente",
+      "deleted": "Período eliminado exitosamente",
+      "closed": "Período cerrado exitosamente",
+      "reopened": "Período reabierto exitosamente",
+      "loadError": "Error al cargar períodos",
+      "createError": "Error al crear período",
+      "updateError": "Error al actualizar período",
+      "deleteError": "Error al eliminar período",
+      "closeError": "Error al cerrar período",
+      "reopenError": "Error al reabrir período"
+    }
+  },
+  "validation": {
+    "required": "Este campo es requerido",
+    "minLength": "Debe tener al menos {min} caracteres",
+    "maxLength": "Debe tener como máximo {max} caracteres",
+    "email": "Debe ser un email válido",
+    "number": "Debe ser un número",
+    "positive": "Debe ser un número positivo",
+    "integer": "Debe ser un número entero",
+    "min": "El valor mínimo es {min}",
+    "max": "El valor máximo es {max}"
+  },
+  "pagination": {
+    "showing": "Mostrando",
+    "of": "de",
+    "results": "resultados",
+    "page": "Página",
+    "rowsPerPage": "Filas por página",
+    "first": "Primera",
+    "last": "Última"
+  }
+}

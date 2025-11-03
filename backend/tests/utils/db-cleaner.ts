@@ -8,6 +8,7 @@ export async function cleanDatabase() {
   const tables = [
     'entry_lines',
     'entries',
+    'accounting_periods',
     'accounts',
     'charts_of_accounts',
     'accounting_configuration',
@@ -127,7 +128,7 @@ export async function seedTestData() {
   });
 
   // Crear empresas de prueba
-  await prisma.company.create({
+  const company1 = await prisma.company.create({
     data: {
       id: 1,
       economicGroupId: group1.id,
@@ -140,7 +141,7 @@ export async function seedTestData() {
     },
   });
 
-  await prisma.company.create({
+  const company2 = await prisma.company.create({
     data: {
       id: 2,
       economicGroupId: group1.id,
@@ -150,6 +151,183 @@ export async function seedTestData() {
       country: 'US',
       functionalCurrency: 'USD',
       active: true,
+    },
+  });
+
+  // Crear cuentas de prueba (Plan de Cuentas)
+  // Activos
+  const account1 = await prisma.account.create({
+    data: {
+      id: 1,
+      chartOfAccountsId: chartOfAccounts.id,
+      code: '1',
+      name: 'ACTIVO',
+      type: 'ASSET',
+      level: 1,
+      postable: false,
+      requiresAuxiliary: false,
+      currency: 'FUNCTIONAL',
+      active: true,
+    },
+  });
+
+  await prisma.account.create({
+    data: {
+      id: 2,
+      chartOfAccountsId: chartOfAccounts.id,
+      code: '1.1',
+      name: 'ACTIVO CORRIENTE',
+      parentAccountId: account1.id,
+      type: 'ASSET',
+      level: 2,
+      postable: false,
+      requiresAuxiliary: false,
+      currency: 'FUNCTIONAL',
+      nature: 'CURRENT',
+      active: true,
+    },
+  });
+
+  await prisma.account.create({
+    data: {
+      id: 3,
+      chartOfAccountsId: chartOfAccounts.id,
+      code: '1.1.01',
+      name: 'Caja',
+      parentAccountId: 2,
+      type: 'ASSET',
+      level: 3,
+      postable: true,
+      requiresAuxiliary: false,
+      currency: 'FUNCTIONAL',
+      nature: 'CURRENT',
+      ifrsCategory: 'CASH_AND_EQUIVALENTS',
+      active: true,
+    },
+  });
+
+  await prisma.account.create({
+    data: {
+      id: 4,
+      chartOfAccountsId: chartOfAccounts.id,
+      code: '1.1.02',
+      name: 'Bancos',
+      parentAccountId: 2,
+      type: 'ASSET',
+      level: 3,
+      postable: true,
+      requiresAuxiliary: false,
+      currency: 'FUNCTIONAL',
+      nature: 'CURRENT',
+      ifrsCategory: 'CASH_AND_EQUIVALENTS',
+      active: true,
+    },
+  });
+
+  // Pasivos
+  const account5 = await prisma.account.create({
+    data: {
+      id: 5,
+      chartOfAccountsId: chartOfAccounts.id,
+      code: '2',
+      name: 'PASIVO',
+      type: 'LIABILITY',
+      level: 1,
+      postable: false,
+      requiresAuxiliary: false,
+      currency: 'FUNCTIONAL',
+      active: true,
+    },
+  });
+
+  await prisma.account.create({
+    data: {
+      id: 6,
+      chartOfAccountsId: chartOfAccounts.id,
+      code: '2.1',
+      name: 'PASIVO CORRIENTE',
+      parentAccountId: account5.id,
+      type: 'LIABILITY',
+      level: 2,
+      postable: false,
+      requiresAuxiliary: false,
+      currency: 'FUNCTIONAL',
+      nature: 'CURRENT',
+      active: true,
+    },
+  });
+
+  // Patrimonio
+  await prisma.account.create({
+    data: {
+      id: 7,
+      chartOfAccountsId: chartOfAccounts.id,
+      code: '3',
+      name: 'PATRIMONIO',
+      type: 'EQUITY',
+      level: 1,
+      postable: false,
+      requiresAuxiliary: false,
+      currency: 'FUNCTIONAL',
+      active: true,
+    },
+  });
+
+  // Ingresos
+  await prisma.account.create({
+    data: {
+      id: 8,
+      chartOfAccountsId: chartOfAccounts.id,
+      code: '4',
+      name: 'INGRESOS',
+      type: 'INCOME',
+      level: 1,
+      postable: false,
+      requiresAuxiliary: false,
+      currency: 'FUNCTIONAL',
+      active: true,
+    },
+  });
+
+  // Egresos
+  await prisma.account.create({
+    data: {
+      id: 9,
+      chartOfAccountsId: chartOfAccounts.id,
+      code: '5',
+      name: 'EGRESOS',
+      type: 'EXPENSE',
+      level: 1,
+      postable: false,
+      requiresAuxiliary: false,
+      currency: 'FUNCTIONAL',
+      active: true,
+    },
+  });
+
+  // Crear períodos contables de prueba
+  await prisma.accountingPeriod.create({
+    data: {
+      id: 1,
+      economicGroupId: group1.id,
+      type: 'FISCAL_YEAR',
+      fiscalYear: 2024,
+      startDate: new Date('2024-01-01'),
+      endDate: new Date('2024-12-31'),
+      closed: false,
+    },
+  });
+
+  await prisma.accountingPeriod.create({
+    data: {
+      id: 2,
+      economicGroupId: group1.id,
+      type: 'MONTH',
+      fiscalYear: 2024,
+      month: 1,
+      startDate: new Date('2024-01-01'),
+      endDate: new Date('2024-01-31'),
+      closed: false,
     },
   });
 
@@ -168,6 +346,12 @@ export async function seedTestData() {
   `);
   await prisma.$executeRawUnsafe(`
     SELECT setval(pg_get_serial_sequence('"accounting_configuration"', 'id'), COALESCE(MAX(id), 1)) FROM "accounting_configuration";
+  `);
+  await prisma.$executeRawUnsafe(`
+    SELECT setval(pg_get_serial_sequence('"accounts"', 'id'), COALESCE(MAX(id), 1)) FROM "accounts";
+  `);
+  await prisma.$executeRawUnsafe(`
+    SELECT setval(pg_get_serial_sequence('"accounting_periods"', 'id'), COALESCE(MAX(id), 1)) FROM "accounting_periods";
   `);
 
   return {

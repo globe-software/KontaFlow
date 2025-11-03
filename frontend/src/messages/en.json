@@ -36,9 +36,14 @@
   "navigation": {
     "home": "Home",
     "grupos": "Economic Groups",
-    "empresas": "Companies",
+    "companies": "Companies",
+    "customers": "Customers",
+    "suppliers": "Suppliers",
+    "accounts": "Accounts",
+    "periods": "Accounting Periods",
+    "exchangeRates": "Exchange Rates",
+    "userCompanies": "User Companies",
     "comprobantes": "Vouchers",
-    "cuentas": "Accounts",
     "reportes": "Reports",
     "dashboard": "Dashboard",
     "settings": "Settings",
@@ -170,6 +175,538 @@
       "createError": "Error creating company",
       "updateError": "Error updating company",
       "deleteError": "Error deleting company"
+    }
+  },
+  "companies": {
+    "title": "Companies",
+    "subtitle": "Manage the companies in your economic groups",
+    "createButton": "Create Company",
+    "editButton": "Edit Company",
+    "deleteButton": "Delete Company",
+    "viewButton": "View Details",
+    "searchPlaceholder": "Search companies...",
+    "emptyState": "No companies created",
+    "emptyStateDescription": "Start by creating your first company",
+    "notFound": "Company not found",
+    "table": {
+      "name": "Name",
+      "tradeName": "Trade Name",
+      "rut": "RUT",
+      "economicGroup": "Economic Group",
+      "currency": "Currency",
+      "country": "Country",
+      "status": "Status"
+    },
+    "form": {
+      "title": "Company Information",
+      "createDescription": "Fill in the data to create a new company",
+      "editDescription": "Modify the company data",
+      "nameLabel": "Company Name",
+      "namePlaceholder": "E.g.: Acme Corp",
+      "nameRequired": "Name is required",
+      "tradeNameLabel": "Trade Name",
+      "tradeNamePlaceholder": "E.g.: Acme",
+      "rutLabel": "RUT",
+      "rutPlaceholder": "E.g.: 211234560019",
+      "rutRequired": "RUT is required",
+      "rutInvalid": "RUT is not valid",
+      "economicGroupLabel": "Economic Group",
+      "economicGroupPlaceholder": "Select a group",
+      "economicGroupRequired": "Group is required",
+      "countryLabel": "Country",
+      "countryPlaceholder": "Select a country",
+      "functionalCurrencyLabel": "Functional Currency",
+      "functionalCurrencyPlaceholder": "Select a currency",
+      "functionalCurrencyRequired": "Currency is required",
+      "startDateLabel": "Start Date",
+      "startDatePlaceholder": "Select a date"
+    },
+    "filters": {
+      "all": "All",
+      "active": "Active",
+      "inactive": "Inactive",
+      "byCountry": "By country",
+      "byGroup": "By group"
+    },
+    "stats": {
+      "totalCompanies": "Total Companies",
+      "activeCompanies": "Active Companies",
+      "inactiveCompanies": "Inactive Companies",
+      "topCountry": "Main Country"
+    },
+    "details": {
+      "information": "Information",
+      "generalInformation": "General Information",
+      "journalEntries": "Journal Entries",
+      "noJournalEntries": "No journal entries",
+      "journalEntriesDescription": "Journal entries will appear here"
+    },
+    "deleteConfirm": {
+      "title": "Delete company?",
+      "description": "This action cannot be undone. The company will be marked as inactive."
+    },
+    "messages": {
+      "created": "Company created successfully",
+      "updated": "Company updated successfully",
+      "deleted": "Company deleted successfully",
+      "loadError": "Error loading companies",
+      "createError": "Error creating company",
+      "updateError": "Error updating company",
+      "deleteError": "Error deleting company"
+    }
+  },
+  "accounts": {
+    "title": "Chart of Accounts",
+    "subtitle": "Manage your accounting chart of accounts",
+    "createButton": "Create Account",
+    "editButton": "Edit Account",
+    "addChildButton": "Add Sub-Account",
+    "searchPlaceholder": "Search accounts...",
+    "emptyState": "No accounts created",
+    "emptyStateDescription": "Start by creating your first account",
+    "notFound": "Account not found",
+    "postable": "Postable",
+    "level": "Level",
+    "table": {
+      "code": "Code",
+      "name": "Name",
+      "type": "Type",
+      "level": "Level",
+      "postable": "Postable",
+      "currency": "Currency",
+      "status": "Status"
+    },
+    "form": {
+      "createDescription": "Fill in the data to create a new account",
+      "editDescription": "Modify the account data",
+      "addChildDescription": "Add sub-account to: {parent}",
+      "parentAccountLabel": "Parent Account",
+      "parentAccountPlaceholder": "Select a parent account",
+      "noParent": "No parent (root account)",
+      "codeLabel": "Code",
+      "codePlaceholder": "E.g.: 1.1.01",
+      "nameLabel": "Name",
+      "namePlaceholder": "E.g.: Cash",
+      "typeLabel": "Account Type",
+      "levelLabel": "Level",
+      "currencyLabel": "Currency",
+      "natureLabel": "Nature",
+      "postableLabel": "Postable account (allows movements)",
+      "requiresAuxiliaryLabel": "Requires auxiliary",
+      "auxiliaryTypeLabel": "Auxiliary Type"
+    },
+    "types": {
+      "ASSET": "Asset",
+      "LIABILITY": "Liability",
+      "EQUITY": "Equity",
+      "INCOME": "Income",
+      "EXPENSE": "Expense"
+    },
+    "currencies": {
+      "MN": "Local Currency",
+      "USD": "US Dollar",
+      "BOTH": "Both",
+      "FUNCTIONAL": "Functional"
+    },
+    "natures": {
+      "CURRENT": "Current",
+      "NON_CURRENT": "Non-Current"
+    },
+    "auxiliaryTypes": {
+      "CUSTOMER": "Customer",
+      "SUPPLIER": "Supplier",
+      "EMPLOYEE": "Employee",
+      "OTHER": "Other"
+    },
+    "viewModes": {
+      "tree": "Tree View",
+      "table": "Table View"
+    },
+    "actions": {
+      "addChild": "Add Sub-Account"
+    },
+    "filters": {
+      "all": "All",
+      "byType": "By type",
+      "postable": "Postability",
+      "postableOnly": "Postable only",
+      "nonPostable": "Non-Postable"
+    },
+    "stats": {
+      "total": "Total Accounts"
+    },
+    "details": {
+      "information": "Information",
+      "generalInformation": "General Information",
+      "hierarchy": "Hierarchy",
+      "parentAccount": "Parent Account",
+      "subaccounts": "Sub-Accounts",
+      "noSubaccounts": "No sub-accounts"
+    },
+    "deleteConfirm": {
+      "title": "Delete account?",
+      "description": "This action cannot be undone. The account will be marked as inactive."
+    },
+    "messages": {
+      "created": "Account created successfully",
+      "updated": "Account updated successfully",
+      "deleted": "Account deleted successfully",
+      "loadError": "Error loading accounts",
+      "createError": "Error creating account",
+      "updateError": "Error updating account",
+      "deleteError": "Error deleting account"
+    }
+  },
+  "customers": {
+    "title": "Customers",
+    "subtitle": "Manage your customer database",
+    "createButton": "Create Customer",
+    "editButton": "Edit Customer",
+    "searchPlaceholder": "Search customers...",
+    "emptyState": "No customers created",
+    "emptyStateDescription": "Start by creating your first customer",
+    "notFound": "Customer not found",
+    "table": {
+      "name": "Name",
+      "rut": "RUT",
+      "email": "Email",
+      "phone": "Phone",
+      "status": "Status",
+      "createdAt": "Created At"
+    },
+    "form": {
+      "createDescription": "Fill in the data to create a new customer",
+      "editDescription": "Modify the customer data",
+      "nameLabel": "Customer Name",
+      "namePlaceholder": "E.g.: John Doe",
+      "rutLabel": "RUT",
+      "rutPlaceholder": "E.g.: 211234560019",
+      "emailLabel": "Email",
+      "emailPlaceholder": "E.g.: customer@example.com",
+      "phoneLabel": "Phone",
+      "phonePlaceholder": "E.g.: +598 99 123 456",
+      "addressLabel": "Address",
+      "addressPlaceholder": "E.g.: 123 Main St",
+      "errors": {
+        "nameRequired": "Name is required",
+        "rutRequired": "RUT is required",
+        "emailInvalid": "Invalid email format"
+      }
+    },
+    "filters": {
+      "all": "All",
+      "active": "Active",
+      "inactive": "Inactive"
+    },
+    "stats": {
+      "total": "Total Customers",
+      "active": "Active",
+      "inactive": "Inactive",
+      "withEmail": "With Email"
+    },
+    "deleteConfirm": {
+      "title": "Delete customer?",
+      "description": "This action cannot be undone. The customer will be marked as inactive."
+    },
+    "details": {
+      "information": "Customer Information",
+      "transactionsTitle": "Transaction History",
+      "transactionsComingSoon": "Transaction history and account balance coming soon"
+    },
+    "messages": {
+      "created": "Customer created successfully",
+      "updated": "Customer updated successfully",
+      "deleted": "Customer deleted successfully",
+      "loadError": "Error loading customers",
+      "notFound": "Customer not found",
+      "createError": "Error creating customer",
+      "updateError": "Error updating customer",
+      "deleteError": "Error deleting customer"
+    }
+  },
+  "suppliers": {
+    "title": "Suppliers",
+    "subtitle": "Manage your supplier database",
+    "createButton": "Create Supplier",
+    "editButton": "Edit Supplier",
+    "searchPlaceholder": "Search suppliers...",
+    "emptyState": "No suppliers created",
+    "emptyStateDescription": "Start by creating your first supplier",
+    "notFound": "Supplier not found",
+    "table": {
+      "name": "Name",
+      "rut": "RUT",
+      "email": "Email",
+      "phone": "Phone",
+      "status": "Status",
+      "createdAt": "Created At"
+    },
+    "form": {
+      "createDescription": "Fill in the data to create a new supplier",
+      "editDescription": "Modify the supplier data",
+      "nameLabel": "Supplier Name",
+      "namePlaceholder": "E.g.: ABC Supplies Inc.",
+      "rutLabel": "RUT",
+      "rutPlaceholder": "E.g.: 211234560019",
+      "emailLabel": "Email",
+      "emailPlaceholder": "E.g.: supplier@example.com",
+      "phoneLabel": "Phone",
+      "phonePlaceholder": "E.g.: +598 99 123 456",
+      "addressLabel": "Address",
+      "addressPlaceholder": "E.g.: 123 Industrial Ave",
+      "errors": {
+        "nameRequired": "Name is required",
+        "rutRequired": "RUT is required",
+        "emailInvalid": "Invalid email format"
+      }
+    },
+    "filters": {
+      "all": "All",
+      "active": "Active",
+      "inactive": "Inactive"
+    },
+    "stats": {
+      "total": "Total Suppliers",
+      "active": "Active",
+      "inactive": "Inactive",
+      "withEmail": "With Email"
+    },
+    "deleteConfirm": {
+      "title": "Delete supplier?",
+      "description": "This action cannot be undone. The supplier will be marked as inactive."
+    },
+    "details": {
+      "information": "Supplier Information",
+      "transactionsTitle": "Transaction History",
+      "transactionsComingSoon": "Transaction history and account balance coming soon"
+    },
+    "messages": {
+      "created": "Supplier created successfully",
+      "updated": "Supplier updated successfully",
+      "deleted": "Supplier deleted successfully",
+      "loadError": "Error loading suppliers",
+      "notFound": "Supplier not found",
+      "createError": "Error creating supplier",
+      "updateError": "Error updating supplier",
+      "deleteError": "Error deleting supplier"
+    }
+  },
+  "userCompanies": {
+    "title": "User Companies",
+    "description": "Manage user permissions for companies",
+    "createButton": "Grant Access",
+    "editButton": "Edit Permissions",
+    "searchPlaceholder": "Search by user or company...",
+    "emptyState": "No user permissions",
+    "emptyStateDescription": "Start by granting access to users",
+    "table": {
+      "user": "User",
+      "company": "Company",
+      "permissions": "Permissions"
+    },
+    "permissions": {
+      "write": "Write",
+      "read": "Read Only",
+      "writeDescription": "Can create and modify records",
+      "readDescription": "Can only view records"
+    },
+    "actions": {
+      "togglePermission": "Toggle Permission"
+    },
+    "form": {
+      "createDescription": "Grant a user access to a company",
+      "editDescription": "Modify user permissions",
+      "userLabel": "User",
+      "userPlaceholder": "Select a user",
+      "companyLabel": "Company",
+      "companyPlaceholder": "Select a company",
+      "permissionLabel": "Permission Level",
+      "errors": {
+        "userRequired": "User is required",
+        "companyRequired": "Company is required"
+      }
+    },
+    "stats": {
+      "totalPermissions": "Total Access Grants",
+      "usersWithAccess": "Users with Access",
+      "companiesShared": "Companies Shared",
+      "writeAccess": "With Write Access"
+    },
+    "deleteConfirm": {
+      "title": "Revoke access?",
+      "description": "This action will remove the user's access to this company."
+    },
+    "messages": {
+      "created": "Access granted successfully",
+      "updated": "Permissions updated successfully",
+      "deleted": "Access revoked successfully",
+      "loadError": "Error loading permissions",
+      "createError": "Error granting access",
+      "updateError": "Error updating permissions",
+      "deleteError": "Error revoking access"
+    }
+  },
+  "periods": {
+    "title": "Accounting Periods",
+    "subtitle": "Manage fiscal and monthly periods",
+    "createButton": "Create Period",
+    "editButton": "Edit Period",
+    "searchPlaceholder": "Search periods...",
+    "emptyState": "No periods created",
+    "emptyStateDescription": "Start by creating your first period",
+    "notFound": "Period not found",
+    "to": "to",
+    "table": {
+      "fiscalYear": "Fiscal Year",
+      "type": "Type",
+      "period": "Period",
+      "dateRange": "Date Range",
+      "status": "Status",
+      "closedBy": "Closed By",
+      "economicGroup": "Economic Group"
+    },
+    "form": {
+      "createDescription": "Fill in the data to create a new period",
+      "editDescription": "Modify the period data",
+      "economicGroupLabel": "Economic Group",
+      "economicGroupPlaceholder": "Select a group",
+      "typeLabel": "Period Type",
+      "fiscalYearLabel": "Fiscal Year",
+      "monthLabel": "Month",
+      "monthPlaceholder": "Select a month",
+      "startDateLabel": "Start Date",
+      "endDateLabel": "End Date",
+      "selectDate": "Select date"
+    },
+    "types": {
+      "FISCAL_YEAR": "Fiscal Year",
+      "MONTH": "Month"
+    },
+    "months": {
+      "January": "January",
+      "February": "February",
+      "March": "March",
+      "April": "April",
+      "May": "May",
+      "June": "June",
+      "July": "July",
+      "August": "August",
+      "September": "September",
+      "October": "October",
+      "November": "November",
+      "December": "December"
+    },
+    "status": {
+      "open": "Open",
+      "closed": "Closed"
+    },
+    "actions": {
+      "close": "Close Period",
+      "reopen": "Reopen Period"
+    },
+    "filters": {
+      "all": "All",
+      "byType": "By type",
+      "status": "Status"
+    },
+    "stats": {
+      "totalPeriods": "Total Periods",
+      "openPeriods": "Open Periods",
+      "closedPeriods": "Closed Periods",
+      "currentYear": "Current Year"
+    },
+    "details": {
+      "information": "Information",
+      "generalInformation": "General Information",
+      "journalEntries": "Journal Entries",
+      "noJournalEntries": "No journal entries",
+      "journalEntriesDescription": "Journal entries will appear here",
+      "journalEntriesHint": "View all entries from the main menu with filters",
+      "closedAt": "Closure Date"
+    },
+    "closeConfirm": {
+      "title": "Close period?",
+      "description": "This action will close the period and no more movements can be made. Do you want to continue?"
+    },
+    "reopenConfirm": {
+      "title": "Reopen period?",
+      "description": "This action will reopen the period and movements can be made again. Do you want to continue?"
+    },
+    "deleteConfirm": {
+      "title": "Delete period?",
+      "description": "This action cannot be undone."
+    },
+    "messages": {
+      "created": "Period created successfully",
+      "updated": "Period updated successfully",
+      "deleted": "Period deleted successfully",
+      "closed": "Period closed successfully",
+      "reopened": "Period reopened successfully",
+      "loadError": "Error loading periods",
+      "createError": "Error creating period",
+      "updateError": "Error updating period",
+      "deleteError": "Error deleting period",
+      "closeError": "Error closing period",
+      "reopenError": "Error reopening period"
+    }
+  },
+  "exchangeRates": {
+    "title": "Exchange Rates",
+    "subtitle": "Manage currency exchange rates",
+    "createButton": "Add Rate",
+    "editButton": "Edit Rate",
+    "searchPlaceholder": "Search rates...",
+    "emptyState": "No exchange rates",
+    "emptyStateDescription": "Start by adding your first exchange rate",
+    "table": {
+      "date": "Date",
+      "sourceCurrency": "From",
+      "targetCurrency": "To",
+      "rate": "Rate",
+      "source": "Source",
+      "createdAt": "Created At"
+    },
+    "form": {
+      "createDescription": "Add a new exchange rate",
+      "editDescription": "Modify the exchange rate",
+      "dateLabel": "Date",
+      "datePlaceholder": "Select date",
+      "sourceCurrencyLabel": "Source Currency",
+      "sourceCurrencyPlaceholder": "Select currency",
+      "targetCurrencyLabel": "Target Currency",
+      "targetCurrencyPlaceholder": "Select currency",
+      "rateLabel": "Exchange Rate",
+      "ratePlaceholder": "E.g.: 38.5000",
+      "sourceLabel": "Source (Optional)",
+      "sourcePlaceholder": "E.g.: Central Bank",
+      "errors": {
+        "dateRequired": "Date is required",
+        "sourceCurrencyRequired": "Source currency is required",
+        "targetCurrencyRequired": "Target currency is required",
+        "rateRequired": "Rate is required",
+        "ratePositive": "Rate must be positive"
+      }
+    },
+    "filters": {
+      "all": "All",
+      "bySourceCurrency": "From currency",
+      "byTargetCurrency": "To currency",
+      "dateRange": "Date range"
+    },
+    "stats": {
+      "totalRates": "Total Rates",
+      "currencyPairs": "Currency Pairs",
+      "lastUpdate": "Last Update"
+    },
+    "deleteConfirm": {
+      "title": "Delete exchange rate?",
+      "description": "This action cannot be undone."
+    },
+    "messages": {
+      "created": "Exchange rate created successfully",
+      "updated": "Exchange rate updated successfully",
+      "deleted": "Exchange rate deleted successfully",
+      "loadError": "Error loading exchange rates"
     }
   },
   "validation": {

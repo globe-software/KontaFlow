@@ -7,6 +7,14 @@ export type Country = 'UY' | 'AR' | 'BR' | 'CL' | 'PY' | 'US';
 
 export type Currency = 'UYU' | 'USD' | 'ARS' | 'BRL' | 'CLP' | 'PYG';
 
+export interface CompanySummary {
+  id: number;
+  name: string;
+  rut: string;
+  functionalCurrency: string;
+  active: boolean;
+}
+
 export interface EconomicGroup {
   id: number;
   name: string;
@@ -17,6 +25,13 @@ export interface EconomicGroup {
   _count?: {
     companies: number;
   };
+  companies?: CompanySummary[];
+  chartOfAccounts?: {
+    id: number;
+    name: string;
+    active: boolean;
+  };
+  configuration?: any;
 }
 
 export interface CreateEconomicGroupDto {
