@@ -1,24 +1,24 @@
 'use client';
 
-import type { GrupoEconomico } from '@/types/grupo';
+import type { EconomicGroup } from '@/types/economic-group';
 import { Building2, CheckCircle2, XCircle, TrendingUp } from 'lucide-react';
 import { useTranslation } from '@/contexts/I18nContext';
 
-interface GruposStatsProps {
-  grupos: GrupoEconomico[];
+interface EconomicGroupsStatsProps {
+  groups: EconomicGroup[];
 }
 
-export function GruposStats({ grupos }: GruposStatsProps) {
+export function EconomicGroupsStats({ groups }: EconomicGroupsStatsProps) {
   const { t } = useTranslation();
-  const totalGrupos = grupos.length;
-  const gruposActivos = grupos.filter((g) => g.activo).length;
-  const gruposInactivos = totalGrupos - gruposActivos;
-  const totalEmpresas = grupos.reduce((sum, g) => sum + (g._count?.empresas || 0), 0);
+  const totalGroups = groups.length;
+  const activeGroups = groups.filter((g) => g.active).length;
+  const inactiveGroups = totalGroups - activeGroups;
+  const totalCompanies = groups.reduce((sum, g) => sum + (g._count?.companies || 0), 0);
 
   const stats = [
     {
       label: t('grupos.stats.totalGroups'),
-      value: totalGrupos,
+      value: totalGroups,
       icon: Building2,
       bgColor: 'bg-primary/10',
       iconColor: 'text-primary',
@@ -26,15 +26,15 @@ export function GruposStats({ grupos }: GruposStatsProps) {
     },
     {
       label: t('grupos.stats.activeGroups'),
-      value: gruposActivos,
+      value: activeGroups,
       icon: CheckCircle2,
       bgColor: 'bg-green-50',
       iconColor: 'text-green-600',
-      trend: totalGrupos > 0 ? Math.round((gruposActivos / totalGrupos) * 100) : 0,
+      trend: totalGroups > 0 ? Math.round((activeGroups / totalGroups) * 100) : 0,
     },
     {
       label: t('grupos.stats.inactiveGroups'),
-      value: gruposInactivos,
+      value: inactiveGroups,
       icon: XCircle,
       bgColor: 'bg-gray-100',
       iconColor: 'text-gray-500',
@@ -42,7 +42,7 @@ export function GruposStats({ grupos }: GruposStatsProps) {
     },
     {
       label: t('grupos.stats.totalCompanies'),
-      value: totalEmpresas,
+      value: totalCompanies,
       icon: TrendingUp,
       bgColor: 'bg-accent',
       iconColor: 'text-accent-foreground',

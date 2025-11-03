@@ -31,7 +31,7 @@ export function Sidebar({ className }: SidebarProps) {
     {
       label: t('navigation.grupos'),
       icon: Building2,
-      href: '/grupos',
+      href: '/economic-groups',
     },
     {
       label: t('navigation.empresas'),

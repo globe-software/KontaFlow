@@ -1,14 +1,14 @@
 /**
- * Sistema de errores personalizado para KontaFlow
+ * Custom error system for KontaFlow
  *
- * Jerarquía de errores:
- * - AppError: Base para todos los errores de la aplicación
- * - ValidationError: Errores de validación de datos (400)
- * - NotFoundError: Recurso no encontrado (404)
- * - ForbiddenError: Acceso denegado (403)
- * - UnauthorizedError: No autenticado (401)
- * - ConflictError: Conflicto de recursos (409)
- * - BusinessRuleError: Violación de regla de negocio (422)
+ * Error hierarchy:
+ * - AppError: Base for all application errors
+ * - ValidationError: Data validation errors (400)
+ * - NotFoundError: Resource not found (404)
+ * - ForbiddenError: Access denied (403)
+ * - UnauthorizedError: Not authenticated (401)
+ * - ConflictError: Resource conflict (409)
+ * - BusinessRuleError: Business rule violation (422)
  */
 
 export class AppError extends Error {
@@ -23,16 +23,16 @@ export class AppError extends Error {
     this.code = code;
     this.isOperational = isOperational;
 
-    // Mantener stack trace correcto
+    // Keep correct stack trace
     Error.captureStackTrace(this, this.constructor);
 
-    // Setear el nombre de la clase
+    // Set class name
     this.name = this.constructor.name;
   }
 }
 
 /**
- * Error de validación de datos
+ * Data validation error
  * HTTP 400 - Bad Request
  */
 export class ValidationError extends AppError {
@@ -46,41 +46,41 @@ export class ValidationError extends AppError {
 }
 
 /**
- * Recurso no encontrado
+ * Resource not found
  * HTTP 404 - Not Found
  */
 export class NotFoundError extends AppError {
   constructor(resource: string, id?: number | string) {
     const message = id
-      ? `${resource} con id ${id} no encontrado`
-      : `${resource} no encontrado`;
+      ? `${resource} with id ${id} not found`
+      : `${resource} not found`;
 
     super(message, 404, 'NOT_FOUND');
   }
 }
 
 /**
- * Acceso denegado por permisos
+ * Access denied by permissions
  * HTTP 403 - Forbidden
  */
 export class ForbiddenError extends AppError {
-  constructor(message: string = 'No tienes permisos para realizar esta acción') {
+  constructor(message: string = 'You do not have permission to perform this action') {
     super(message, 403, 'FORBIDDEN');
   }
 }
 
 /**
- * No autenticado
+ * Not authenticated
  * HTTP 401 - Unauthorized
  */
 export class UnauthorizedError extends AppError {
-  constructor(message: string = 'Debes iniciar sesión para continuar') {
+  constructor(message: string = 'You must log in to continue') {
     super(message, 401, 'UNAUTHORIZED');
   }
 }
 
 /**
- * Conflicto de recursos (ej: registro duplicado)
+ * Resource conflict (eg: duplicate record)
  * HTTP 409 - Conflict
  */
 export class ConflictError extends AppError {
@@ -94,7 +94,7 @@ export class ConflictError extends AppError {
 }
 
 /**
- * Violación de regla de negocio
+ * Business rule violation
  * HTTP 422 - Unprocessable Entity
  */
 export class BusinessRuleError extends AppError {
@@ -108,7 +108,7 @@ export class BusinessRuleError extends AppError {
 }
 
 /**
- * Helper para verificar si un error es operacional
+ * Helper to check if an error is operational
  */
 export function isOperationalError(error: Error): boolean {
   if (error instanceof AppError) {
@@ -118,33 +118,33 @@ export function isOperationalError(error: Error): boolean {
 }
 
 /**
- * Helper para formatear errores de Prisma
+ * Helper to format Prisma errors
  */
 export function handlePrismaError(error: any): AppError {
   // P2002: Unique constraint violation
   if (error.code === 'P2002') {
-    const field = error.meta?.target?.[0] || 'campo';
+    const field = error.meta?.target?.[0] || 'field';
     return new ConflictError(
-      `Ya existe un registro con ese ${field}`,
+      `A record with that ${field} already exists`,
       field
     );
   }
 
   // P2025: Record not found
   if (error.code === 'P2025') {
-    return new NotFoundError('Registro');
+    return new NotFoundError('Record');
   }
 
   // P2003: Foreign key constraint violation
   if (error.code === 'P2003') {
     return new BusinessRuleError(
-      'No se puede completar la operación debido a relaciones con otros registros'
+      'Cannot complete the operation due to relationships with other records'
     );
   }
 
-  // Error genérico de Prisma
+  // Generic Prisma error
   return new AppError(
-    'Error en la base de datos',
+    'Database error',
     500,
     'DATABASE_ERROR',
     false
@@ -152,7 +152,7 @@ export function handlePrismaError(error: any): AppError {
 }
 
 /**
- * Helper para formatear errores de Zod
+ * Helper to format Zod errors
  */
 export function handleZodError(error: any): ValidationError {
   const details: Record<string, string[]> = {};
@@ -168,7 +168,7 @@ export function handleZodError(error: any): ValidationError {
   }
 
   return new ValidationError(
-    'Error de validación en los datos enviados',
+    'Validation error in submitted data',
     details
   );
 }

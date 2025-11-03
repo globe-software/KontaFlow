@@ -4,7 +4,7 @@ import helmet from '@fastify/helmet';
 import rateLimit from '@fastify/rate-limit';
 import { corsOptions, rateLimitOptions } from '../../src/lib/config';
 import { errorHandler, notFoundHandler } from '../../src/middleware/error-handler';
-import { gruposRoutes } from '../../src/routes/grupos.routes';
+import { economicGroupsRoutes } from '../../src/routes/economic-groups.routes';
 
 let testServerInstance: FastifyInstance | null = null;
 
@@ -44,7 +44,7 @@ export async function createTestServer(): Promise<FastifyInstance> {
   // Routes
   await fastify.register(
     async (instance) => {
-      await instance.register(gruposRoutes, { prefix: '/grupos' });
+      await instance.register(economicGroupsRoutes, { prefix: '/economic-groups' });
     },
     { prefix: '/api' }
   );

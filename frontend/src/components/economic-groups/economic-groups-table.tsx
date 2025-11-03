@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import type { GrupoEconomico } from '@/types/grupo';
+import type { EconomicGroup } from '@/types/economic-group';
 import { useTranslation } from '@/contexts/I18nContext';
 import {
   Table,
@@ -39,17 +39,17 @@ import {
   XCircle,
 } from 'lucide-react';
 
-interface GruposTableProps {
-  grupos: GrupoEconomico[];
-  onEdit: (grupo: GrupoEconomico) => void;
-  onDelete: (grupo: GrupoEconomico) => void;
+interface EconomicGroupsTableProps {
+  groups: EconomicGroup[];
+  onEdit: (group: EconomicGroup) => void;
+  onDelete: (group: EconomicGroup) => void;
 }
 
-export function GruposTable({ grupos, onEdit, onDelete }: GruposTableProps) {
+export function EconomicGroupsTable({ groups, onEdit, onDelete }: EconomicGroupsTableProps) {
   const router = useRouter();
   const { t } = useTranslation();
 
-  if (grupos.length === 0) {
+  if (groups.length === 0) {
     return (
       <div className="flex min-h-[400px] flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-200 bg-gray-50/50 p-12">
         <Building2 className="mb-4 h-16 w-16 text-gray-300" />
@@ -69,7 +69,6 @@ export function GruposTable({ grupos, onEdit, onDelete }: GruposTableProps) {
         <TableHeader className="bg-gray-50/50">
           <TableRow className="hover:bg-gray-50/50">
             <TableHead className="font-semibold">{t('grupos.table.name')}</TableHead>
-            <TableHead className="font-semibold">RUT</TableHead>
             <TableHead className="font-semibold">{t('grupos.table.country')}</TableHead>
             <TableHead className="font-semibold">{t('grupos.table.currency')}</TableHead>
             <TableHead className="font-semibold">
@@ -89,9 +88,9 @@ export function GruposTable({ grupos, onEdit, onDelete }: GruposTableProps) {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {grupos.map((grupo, index) => (
+          {groups.map((group, index) => (
             <TableRow
-              key={grupo.id}
+              key={group.id}
               className={`group transition-colors hover:bg-primary/5 ${
                 index % 2 === 0 ? 'bg-white' : 'bg-primary/3'
               }`}
@@ -102,25 +101,20 @@ export function GruposTable({ grupos, onEdit, onDelete }: GruposTableProps) {
                     <Building2 className="h-4 w-4" />
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-gray-900">{grupo.nombre}</p>
+                    <p className="text-sm font-medium text-gray-900">{group.name}</p>
                   </div>
                 </div>
               </TableCell>
-              <TableCell className="py-2 font-mono text-xs text-gray-600">
-                {grupo.rutControlador || (
-                  <span className="text-gray-400">{t('grupos.noRut')}</span>
-                )}
-              </TableCell>
               <TableCell className="py-2 text-sm text-gray-700">
-                {PAISES[grupo.paisPrincipal]}
+                {PAISES[group.mainCountry]}
               </TableCell>
               <TableCell className="py-2">
                 <div className="flex items-center gap-1.5">
                   <span className="text-sm font-medium text-gray-700">
-                    {grupo.monedaBase}
+                    {group.baseCurrency}
                   </span>
                   <span className="text-xs text-gray-500">
-                    {MONEDAS[grupo.monedaBase]}
+                    {MONEDAS[group.baseCurrency]}
                   </span>
                 </div>
               </TableCell>
@@ -128,16 +122,16 @@ export function GruposTable({ grupos, onEdit, onDelete }: GruposTableProps) {
                 <div className="flex items-center gap-1.5">
                   <div className="flex h-6 min-w-[1.5rem] items-center justify-center rounded bg-primary/10 px-1.5">
                     <span className="text-xs font-bold text-primary">
-                      {grupo._count?.empresas || 0}
+                      {group._count?.companies || 0}
                     </span>
                   </div>
                   <span className="text-xs text-gray-600">
-                    {grupo._count?.empresas === 1 ? t('grupos.companyOne') : t('grupos.companyMany')}
+                    {group._count?.companies === 1 ? t('grupos.companyOne') : t('grupos.companyMany')}
                   </span>
                 </div>
               </TableCell>
               <TableCell className="py-2">
-                {grupo.activo ? (
+                {group.active ? (
                   <Badge
                     variant="success"
                     className="flex w-fit items-center gap-1 px-2 py-0.5 text-xs"
@@ -157,11 +151,11 @@ export function GruposTable({ grupos, onEdit, onDelete }: GruposTableProps) {
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <span className="cursor-help">
-                        {formatRelativeTime(grupo.fechaCreacion)}
+                        {formatRelativeTime(group.createdAt)}
                       </span>
                     </TooltipTrigger>
                     <TooltipContent>
-                      <p>{formatDate(grupo.fechaCreacion)}</p>
+                      <p>{formatDate(group.createdAt)}</p>
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
@@ -181,14 +175,14 @@ export function GruposTable({ grupos, onEdit, onDelete }: GruposTableProps) {
                   <DropdownMenuContent align="end" className="w-48">
                     <DropdownMenuItem
                       className="cursor-pointer"
-                      onClick={() => onEdit(grupo)}
+                      onClick={() => onEdit(group)}
                     >
                       <Edit2 className="mr-2 h-4 w-4" />
                       <span>{t('common.edit')}</span>
                     </DropdownMenuItem>
                     <DropdownMenuItem
                       className="cursor-pointer"
-                      onClick={() => router.push(`/grupos/${grupo.id}`)}
+                      onClick={() => router.push(`/economic-groups/${group.id}`)}
                     >
                       <FileText className="mr-2 h-4 w-4" />
                       <span>{t('common.details')}</span>
@@ -196,8 +190,8 @@ export function GruposTable({ grupos, onEdit, onDelete }: GruposTableProps) {
                     <DropdownMenuSeparator />
                     <DropdownMenuItem
                       className="cursor-pointer text-red-600 focus:text-red-600"
-                      onClick={() => onDelete(grupo)}
-                      disabled={!grupo.activo}
+                      onClick={() => onDelete(group)}
+                      disabled={!group.active}
                     >
                       <Trash2 className="mr-2 h-4 w-4" />
                       <span>{t('common.delete')}</span>

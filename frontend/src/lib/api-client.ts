@@ -4,7 +4,7 @@
  */
 
 import { config } from './config';
-import type { ApiError } from '@/types/grupo';
+import type { ApiError } from '@/types/economic-group';
 
 interface RequestOptions extends RequestInit {
   params?: Record<string, string | number | boolean | undefined>;

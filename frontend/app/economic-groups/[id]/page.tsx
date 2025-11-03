@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
-import type { GrupoEconomico } from '@/types/grupo';
-import { gruposApi } from '@/lib/api/grupos';
+import type { EconomicGroup } from '@/types/economic-group';
+import { economicGroupsService } from '@/services/economic-groups.service';
 import { MainLayout } from '@/components/layout/main-layout';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -28,29 +28,29 @@ import {
   AlertCircle,
 } from 'lucide-react';
 
-export default function GrupoDetailPage() {
+export default function EconomicGroupDetailPage() {
   const router = useRouter();
   const params = useParams();
-  const grupoId = Number(params.id);
+  const groupId = Number(params.id);
 
-  const [grupo, setGrupo] = useState<GrupoEconomico | null>(null);
+  const [group, setGroup] = useState<EconomicGroup | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    loadGrupo();
-  }, [grupoId]);
+    loadGroup();
+  }, [groupId]);
 
-  const loadGrupo = async () => {
+  const loadGroup = async () => {
     try {
       setIsLoading(true);
       setError(null);
-      const response = await gruposApi.getById(grupoId);
-      console.log('Grupo response:', response);
-      console.log('Grupo data:', JSON.stringify(response, null, 2));
-      setGrupo(response);
+      const response = await economicGroupsService.getById(groupId);
+      console.log('Group response:', response);
+      console.log('Group data:', JSON.stringify(response, null, 2));
+      setGroup(response.data);
     } catch (err) {
-      console.error('Error loading grupo:', err);
+      console.error('Error loading group:', err);
       setError(getErrorMessage(err));
     } finally {
       setIsLoading(false);
@@ -58,19 +58,19 @@ export default function GrupoDetailPage() {
   };
 
   const handleEdit = () => {
-    // Navegar a la lista con query param para abrir modal de edición
-    router.push(`/grupos?edit=${grupoId}`);
+    // Navigate to list with query param to open edit modal
+    router.push(`/economic-groups?edit=${groupId}`);
   };
 
   const handleDelete = async () => {
-    if (!grupo) return;
-    if (!confirm(`¿Estás seguro de eliminar el grupo "${grupo.nombre}"?`)) {
+    if (!group) return;
+    if (!confirm(`¿Estás seguro de eliminar el grupo "${group.name}"?`)) {
       return;
     }
 
     try {
-      await gruposApi.delete(grupo.id);
-      router.push('/grupos');
+      await economicGroupsService.delete(group.id);
+      router.push('/economic-groups');
     } catch (err) {
       alert(getErrorMessage(err));
     }
@@ -82,14 +82,14 @@ export default function GrupoDetailPage() {
         <div className="container mx-auto py-6 px-6">
           <div className="flex min-h-[400px] flex-col items-center justify-center">
             <Loader2 className="h-8 w-8 animate-spin text-primary mb-3" />
-            <p className="text-sm font-medium text-gray-600">Cargando grupo...</p>
+            <p className="text-sm font-medium text-gray-600">Loading group...</p>
           </div>
         </div>
       </MainLayout>
     );
   }
 
-  if (error || !grupo) {
+  if (error || !group) {
     return (
       <MainLayout>
         <div className="container mx-auto py-6 px-6">
@@ -97,16 +97,16 @@ export default function GrupoDetailPage() {
             <div className="flex items-center gap-3">
               <AlertCircle className="h-5 w-5 text-red-600" />
               <div>
-                <h3 className="font-semibold text-red-900">Error al cargar grupo</h3>
+                <h3 className="font-semibold text-red-900">Error loading group</h3>
                 <p className="text-sm text-red-700 mt-0.5">
-                  {error || 'Grupo no encontrado'}
+                  {error || 'Group not found'}
                 </p>
               </div>
             </div>
           </div>
-          <Button onClick={() => router.push('/grupos')} variant="outline">
+          <Button onClick={() => router.push('/economic-groups')} variant="outline">
             <ArrowLeft className="h-4 w-4 mr-2" />
-            Volver a Grupos
+            Back to Groups
           </Button>
         </div>
       </MainLayout>
@@ -120,32 +120,32 @@ export default function GrupoDetailPage() {
         <div className="mb-6 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <Button
-              onClick={() => router.push('/grupos')}
+              onClick={() => router.push('/economic-groups')}
               variant="ghost"
               size="sm"
             >
               <ArrowLeft className="h-4 w-4 mr-2" />
-              Volver
+              Back
             </Button>
             <span className="text-gray-400">/</span>
-            <span className="text-sm text-gray-600">Grupos Económicos</span>
+            <span className="text-sm text-gray-600">Economic Groups</span>
             <span className="text-gray-400">/</span>
-            <span className="text-sm font-medium text-gray-900">{grupo.nombre}</span>
+            <span className="text-sm font-medium text-gray-900">{group.name}</span>
           </div>
 
           <div className="flex items-center gap-2">
             <Button onClick={handleEdit} variant="outline" size="sm">
               <Edit2 className="h-4 w-4 mr-2" />
-              Editar
+              Edit
             </Button>
             <Button
               onClick={handleDelete}
               variant="outline"
               size="sm"
-              disabled={!grupo.activo}
+              disabled={!group.active}
             >
               <Trash2 className="h-4 w-4 mr-2" />
-              Eliminar
+              Delete
             </Button>
           </div>
         </div>
@@ -159,31 +159,31 @@ export default function GrupoDetailPage() {
               </div>
               <div>
                 <h1 className="text-2xl font-bold text-gray-900 mb-1">
-                  {grupo.nombre}
+                  {group.name}
                 </h1>
                 <div className="flex items-center gap-3 text-sm text-gray-600">
-                  <span>{PAISES[grupo.paisPrincipal]}</span>
+                  <span>{PAISES[group.mainCountry]}</span>
                   <span>•</span>
                   <span>
-                    {grupo.monedaBase} ({MONEDAS[grupo.monedaBase]})
+                    {group.baseCurrency} ({MONEDAS[group.baseCurrency]})
                   </span>
                 </div>
                 <p className="text-sm text-gray-500 mt-1">
-                  Creado el {formatDate(grupo.fechaCreacion)}
+                  Created on {formatDate(group.createdAt)}
                 </p>
               </div>
             </div>
 
             <div>
-              {grupo.activo ? (
+              {group.active ? (
                 <Badge variant="success" className="flex items-center gap-1">
                   <CheckCircle2 className="h-3 w-3" />
-                  Activo
+                  Active
                 </Badge>
               ) : (
                 <Badge className="flex items-center gap-1 bg-gray-100 text-gray-700">
                   <XCircle className="h-3 w-3" />
-                  Inactivo
+                  Inactive
                 </Badge>
               )}
             </div>
@@ -195,51 +195,51 @@ export default function GrupoDetailPage() {
           <TabsList className="mb-4">
             <TabsTrigger value="info">
               <Building2 className="h-4 w-4 mr-2" />
-              Información
+              Information
             </TabsTrigger>
             <TabsTrigger value="empresas">
               <Users className="h-4 w-4 mr-2" />
-              Empresas ({grupo._count?.empresas || 0})
+              Companies ({group._count?.companies || 0})
             </TabsTrigger>
             <TabsTrigger value="config">
               <Settings className="h-4 w-4 mr-2" />
-              Configuración
+              Configuration
             </TabsTrigger>
           </TabsList>
 
           <TabsContent value="info">
             <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
               <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                Información General
+                General Information
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label className="text-sm font-medium text-gray-700">Nombre</label>
-                  <p className="mt-1 text-gray-900">{grupo.nombre}</p>
+                  <label className="text-sm font-medium text-gray-700">Name</label>
+                  <p className="mt-1 text-gray-900">{group.name}</p>
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-gray-700">País Principal</label>
-                  <p className="mt-1 text-gray-900">{PAISES[grupo.paisPrincipal]}</p>
+                  <label className="text-sm font-medium text-gray-700">Main Country</label>
+                  <p className="mt-1 text-gray-900">{PAISES[group.mainCountry]}</p>
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-gray-700">Moneda Base</label>
+                  <label className="text-sm font-medium text-gray-700">Base Currency</label>
                   <p className="mt-1 text-gray-900">
-                    {grupo.monedaBase} - {MONEDAS[grupo.monedaBase]}
+                    {group.baseCurrency} - {MONEDAS[group.baseCurrency]}
                   </p>
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-gray-700">Estado</label>
+                  <label className="text-sm font-medium text-gray-700">Status</label>
                   <p className="mt-1">
-                    {grupo.activo ? (
-                      <span className="text-green-600 font-medium">Activo</span>
+                    {group.active ? (
+                      <span className="text-green-600 font-medium">Active</span>
                     ) : (
-                      <span className="text-gray-600 font-medium">Inactivo</span>
+                      <span className="text-gray-600 font-medium">Inactive</span>
                     )}
                   </p>
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-gray-700">Fecha de Creación</label>
-                  <p className="mt-1 text-gray-900">{formatDate(grupo.fechaCreacion)}</p>
+                  <label className="text-sm font-medium text-gray-700">Created Date</label>
+                  <p className="mt-1 text-gray-900">{formatDate(group.createdAt)}</p>
                 </div>
               </div>
             </div>
@@ -249,18 +249,18 @@ export default function GrupoDetailPage() {
             <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-lg font-semibold text-gray-900">
-                  Empresas Asociadas
+                  Associated Companies
                 </h3>
                 <Button size="sm">
                   <Building2 className="h-4 w-4 mr-2" />
-                  Agregar Empresa
+                  Add Company
                 </Button>
               </div>
               <div className="text-center py-12 text-gray-500">
                 <Users className="h-12 w-12 mx-auto mb-3 text-gray-300" />
-                <p>No hay empresas asociadas a este grupo</p>
+                <p>No companies associated with this group</p>
                 <p className="text-sm mt-1">
-                  Las empresas que agregues aparecerán aquí
+                  Companies you add will appear here
                 </p>
               </div>
             </div>
@@ -269,13 +269,13 @@ export default function GrupoDetailPage() {
           <TabsContent value="config">
             <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
               <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                Configuración Contable
+                Accounting Configuration
               </h3>
               <div className="text-center py-12 text-gray-500">
                 <Settings className="h-12 w-12 mx-auto mb-3 text-gray-300" />
-                <p>La configuración contable estará disponible próximamente</p>
+                <p>Accounting configuration will be available soon</p>
                 <p className="text-sm mt-1">
-                  Plan de cuentas, ejercicios fiscales, etc.
+                  Chart of accounts, fiscal years, etc.
                 </p>
               </div>
             </div>

@@ -4,16 +4,16 @@ import { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useTranslation } from '@/contexts/I18nContext';
 import type {
-  GrupoEconomico,
-  CreateGrupoDto,
-  ListGruposFilters,
-} from '@/types/grupo';
-import { gruposApi } from '@/lib/api/grupos';
+  EconomicGroup,
+  CreateEconomicGroupDto,
+  ListEconomicGroupsFilters,
+} from '@/types/economic-group';
+import { economicGroupsService } from '@/services/economic-groups.service';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { GruposTable } from '@/components/grupos/grupos-table';
-import { GrupoForm } from '@/components/grupos/grupo-form';
-import { GruposStats } from '@/components/grupos/grupos-stats';
+import { EconomicGroupsTable } from '@/components/economic-groups/economic-groups-table';
+import { EconomicGroupForm } from '@/components/economic-groups/economic-group-form';
+import { EconomicGroupsStats } from '@/components/economic-groups/economic-groups-stats';
 import { MainLayout } from '@/components/layout/main-layout';
 import { getErrorMessage } from '@/lib/utils';
 import { useDebounce } from '@/hooks/useDebounce';
@@ -34,16 +34,16 @@ import {
   AlertCircle,
 } from 'lucide-react';
 
-export default function GruposPage() {
+export default function EconomicGroupsPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { t } = useTranslation();
 
-  const [grupos, setGrupos] = useState<GrupoEconomico[]>([]);
+  const [groups, setGroups] = useState<EconomicGroup[]>([]);
   const [isInitialLoading, setIsInitialLoading] = useState(true);
   const [isSearching, setIsSearching] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [selectedGrupo, setSelectedGrupo] = useState<GrupoEconomico | undefined>();
+  const [selectedGroup, setSelectedGroup] = useState<EconomicGroup | undefined>();
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [pagination, setPagination] = useState({
     page: 1,
@@ -59,7 +59,7 @@ export default function GruposPage() {
   const debouncedSearch = useDebounce(searchInput, 400);
 
   // Filtros
-  const [filters, setFilters] = useState<ListGruposFilters>({
+  const [filters, setFilters] = useState<ListEconomicGroupsFilters>({
     page: 1,
     limit: 10,
     search: '',
@@ -68,7 +68,7 @@ export default function GruposPage() {
   });
 
   // Cargar grupos
-  const loadGrupos = async (showSearchIndicator = false) => {
+  const loadGroups = async (showSearchIndicator = false) => {
     try {
       if (showSearchIndicator) {
         setIsSearching(true);
@@ -76,8 +76,8 @@ export default function GruposPage() {
         setIsInitialLoading(true);
       }
       setError(null);
-      const response = await gruposApi.list(filters);
-      setGrupos(response.data);
+      const response = await economicGroupsService.list(filters);
+      setGroups(response.data);
       setPagination(response.pagination);
     } catch (err) {
       setError(getErrorMessage(err));
@@ -100,58 +100,58 @@ export default function GruposPage() {
   useEffect(() => {
     // En el primer render
     if (isInitialLoading && filters.search === '') {
-      loadGrupos(false);
+      loadGroups(false);
     } else {
       // Búsqueda subsecuente
-      loadGrupos(true);
+      loadGroups(true);
     }
   }, [filters]);
 
-  // Efecto para detectar query param edit=ID
+  // Effect to detect query param edit=ID
   useEffect(() => {
     const editId = searchParams.get('edit');
     if (editId) {
-      const grupoId = Number(editId);
-      // Cargar el grupo para editar
-      gruposApi.getById(grupoId).then((grupo) => {
-        setSelectedGrupo(grupo);
+      const groupId = Number(editId);
+      // Load the group to edit
+      economicGroupsService.getById(groupId).then((response) => {
+        setSelectedGroup(response.data);
         setIsFormOpen(true);
-        // Limpiar query param
-        router.replace('/grupos', { scroll: false });
+        // Clear query param
+        router.replace('/economic-groups', { scroll: false });
       }).catch((err) => {
-        console.error('Error loading grupo for edit:', err);
+        console.error('Error loading group for edit:', err);
       });
     }
   }, [searchParams, router]);
 
   // Crear grupo
-  const handleCreate = async (data: CreateGrupoDto) => {
-    await gruposApi.create(data);
-    await loadGrupos(false);
+  const handleCreate = async (data: CreateEconomicGroupDto) => {
+    await economicGroupsService.create(data);
+    await loadGroups(false);
   };
 
-  // Editar grupo
-  const handleEdit = (grupo: GrupoEconomico) => {
-    setSelectedGrupo(grupo);
+  // Edit group
+  const handleEdit = (group: EconomicGroup) => {
+    setSelectedGroup(group);
     setIsFormOpen(true);
   };
 
   // Actualizar grupo
-  const handleUpdate = async (data: CreateGrupoDto) => {
-    if (!selectedGrupo) return;
-    await gruposApi.update(selectedGrupo.id, data);
-    await loadGrupos(false);
+  const handleUpdate = async (data: CreateEconomicGroupDto) => {
+    if (!selectedGroup) return;
+    await economicGroupsService.update(selectedGroup.id, data);
+    await loadGroups(false);
   };
 
-  // Eliminar grupo
-  const handleDelete = async (grupo: GrupoEconomico) => {
+  // Delete group
+  const handleDelete = async (group: EconomicGroup) => {
     if (!confirm(t('grupos.deleteConfirm.description'))) {
       return;
     }
 
     try {
-      await gruposApi.delete(grupo.id);
-      await loadGrupos(false);
+      await economicGroupsService.delete(group.id);
+      await loadGroups(false);
     } catch (err) {
       alert(getErrorMessage(err));
     }
@@ -178,9 +178,9 @@ export default function GruposPage() {
     setFilters({ ...filters, page: newPage });
   };
 
-  // Abrir formulario de crear
+  // Open create form
   const handleOpenCreate = () => {
-    setSelectedGrupo(undefined);
+    setSelectedGroup(undefined);
     setIsFormOpen(true);
   };
 
@@ -195,8 +195,8 @@ export default function GruposPage() {
           </p>
         </div>
 
-        {/* Estadísticas - solo mostrar cuando no es carga inicial */}
-        {!isInitialLoading && <GruposStats grupos={grupos} />}
+        {/* Statistics - only show when not initial loading */}
+        {!isInitialLoading && <EconomicGroupsStats groups={groups} />}
 
         {/* Filtros y acciones - Card mejorado */}
         <div className="mb-6 rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
@@ -288,20 +288,20 @@ export default function GruposPage() {
           </div>
         )}
 
-        {/* Tabla - mostrar siempre después de carga inicial */}
+        {/* Table - always show after initial load */}
         {!isInitialLoading && (
           <>
-            <GruposTable
-              grupos={grupos}
+            <EconomicGroupsTable
+              groups={groups}
               onEdit={handleEdit}
               onDelete={handleDelete}
             />
 
-            {/* Paginación */}
+            {/* Pagination */}
             {pagination.totalPages > 1 && (
               <div className="mt-4 flex items-center justify-between">
                 <p className="text-sm text-muted-foreground">
-                  {t('pagination.showing')} {grupos.length} {t('pagination.of')} {pagination.total} {t('pagination.results')}
+                  {t('pagination.showing')} {groups.length} {t('pagination.of')} {pagination.total} {t('pagination.results')}
                 </p>
                 <div className="flex gap-2">
                   <Button
@@ -331,12 +331,12 @@ export default function GruposPage() {
           </>
         )}
 
-        {/* Formulario de crear/editar */}
-        <GrupoForm
-          grupo={selectedGrupo}
+        {/* Create/edit form */}
+        <EconomicGroupForm
+          group={selectedGroup}
           open={isFormOpen}
           onOpenChange={setIsFormOpen}
-          onSubmit={selectedGrupo ? handleUpdate : handleCreate}
+          onSubmit={selectedGroup ? handleUpdate : handleCreate}
         />
       </div>
     </MainLayout>

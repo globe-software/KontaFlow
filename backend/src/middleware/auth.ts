@@ -4,12 +4,12 @@ import { prisma } from '../lib/prisma';
 import { logger } from '../lib/logger';
 
 /**
- * Middleware de autenticación
+ * Authentication middleware
  *
- * NOTA: Esta es una versión simplificada para desarrollo/testing.
- * En producción se integrará con Clerk para autenticación JWT real.
+ * NOTE: This is a simplified version for development/testing.
+ * In production it will integrate with Clerk for real JWT authentication.
  *
- * Por ahora, acepta un header 'x-user-id' para simular usuarios.
+ * For now, it accepts an 'x-user-id' header to simulate users.
  */
 
 declare module 'fastify' {
@@ -17,68 +17,68 @@ declare module 'fastify' {
     user?: {
       id: number;
       email: string;
-      nombre: string;
-      grupoEconomicoId: number;
-      rol: string;
+      name: string;
+      economicGroupId: number;
+      role: string;
     };
   }
 }
 
 /**
- * Middleware para autenticar usuarios
- * Verifica que el request tenga un usuario válido
+ * Middleware to authenticate users
+ * Verifies that the request has a valid user
  */
 export async function authenticateUser(request: FastifyRequest, reply: FastifyReply) {
   try {
-    // En desarrollo: permitir autenticación con header x-user-id
+    // In development: allow authentication with x-user-id header
     const userId = request.headers['x-user-id'];
 
     if (!userId) {
-      throw new UnauthorizedError('No se proporcionó autenticación');
+      throw new UnauthorizedError('No authentication provided');
     }
 
-    // Buscar usuario en la base de datos
-    const usuario = await prisma.usuario.findUnique({
+    // Find user in database
+    const user = await prisma.user.findUnique({
       where: { id: Number(userId) },
       include: {
-        grupos: {
+        groups: {
           include: {
-            grupoEconomico: true,
+            economicGroup: true,
           },
         },
       },
     });
 
-    if (!usuario) {
-      throw new UnauthorizedError('Usuario no encontrado');
+    if (!user) {
+      throw new UnauthorizedError('User not found');
     }
 
-    if (!usuario.activo) {
-      throw new ForbiddenError('Usuario desactivado');
+    if (!user.active) {
+      throw new ForbiddenError('User deactivated');
     }
 
-    // Verificar que tenga acceso a al menos un grupo
-    if (usuario.grupos.length === 0) {
-      throw new ForbiddenError('Usuario sin grupo económico asignado');
+    // Verify has access to at least one group
+    if (user.groups.length === 0) {
+      throw new ForbiddenError('User has no economic group assigned');
     }
 
-    // Por ahora, usar el primer grupo
-    // TODO: Permitir al usuario seleccionar el grupo activo
-    const grupoActivo = usuario.grupos[0];
+    // For now, use the first group
+    // TODO: Allow user to select active group
+    const activeGroup = user.groups[0];
 
-    // Agregar usuario al request
+    // Add user to request
     request.user = {
-      id: usuario.id,
-      email: usuario.email,
-      nombre: usuario.nombre,
-      grupoEconomicoId: grupoActivo.grupoEconomicoId,
-      rol: grupoActivo.rol,
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      economicGroupId: activeGroup.economicGroupId,
+      role: activeGroup.role,
     };
 
     logger.debug({
       type: 'auth',
-      userId: usuario.id,
-      grupoEconomicoId: grupoActivo.grupoEconomicoId,
+      userId: user.id,
+      economicGroupId: activeGroup.economicGroupId,
     });
   } catch (error) {
     if (error instanceof UnauthorizedError || error instanceof ForbiddenError) {
@@ -90,13 +90,13 @@ export async function authenticateUser(request: FastifyRequest, reply: FastifyRe
       error,
     });
 
-    throw new UnauthorizedError('Error al autenticar usuario');
+    throw new UnauthorizedError('Error authenticating user');
   }
 }
 
 /**
- * Middleware para verificar roles
- * Usar después de authenticateUser
+ * Middleware to verify roles
+ * Use after authenticateUser
  */
 export function requireRole(...allowedRoles: string[]) {
   return async (request: FastifyRequest, reply: FastifyReply) => {
@@ -104,18 +104,18 @@ export function requireRole(...allowedRoles: string[]) {
       throw new UnauthorizedError();
     }
 
-    if (!allowedRoles.includes(request.user.rol)) {
+    if (!allowedRoles.includes(request.user.role)) {
       throw new ForbiddenError(
-        `Se requiere uno de los siguientes roles: ${allowedRoles.join(', ')}`
+        `One of the following roles is required: ${allowedRoles.join(', ')}`
       );
     }
   };
 }
 
 /**
- * Middleware para verificar acceso a un grupo económico
+ * Middleware to verify access to an economic group
  */
-export async function verifyGrupoAccess(
+export async function verifyGroupAccess(
   request: FastifyRequest,
   reply: FastifyReply
 ) {
@@ -123,20 +123,20 @@ export async function verifyGrupoAccess(
     throw new UnauthorizedError();
   }
 
-  // Obtener grupoId del parámetro o query
-  const grupoId =
-    Number((request.params as any).grupoId) ||
-    Number((request.query as any).grupoId);
+  // Get groupId from parameter or query
+  const groupId =
+    Number((request.params as any).groupId) ||
+    Number((request.query as any).groupId);
 
-  if (grupoId && grupoId !== request.user.grupoEconomicoId) {
-    throw new ForbiddenError('No tienes acceso a este grupo económico');
+  if (groupId && groupId !== request.user.economicGroupId) {
+    throw new ForbiddenError('You do not have access to this economic group');
   }
 }
 
 /**
- * TODO: Integración con Clerk
+ * TODO: Clerk Integration
  *
- * Cuando se integre Clerk, reemplazar authenticateUser con:
+ * When Clerk is integrated, replace authenticateUser with:
  *
  * import { clerkClient } from '@clerk/backend';
  *
@@ -148,22 +148,22 @@ export async function verifyGrupoAccess(
  *   }
  *
  *   try {
- *     // Verificar JWT con Clerk
+ *     // Verify JWT with Clerk
  *     const session = await clerkClient.sessions.verifySession(sessionId, token);
  *     const clerkUser = await clerkClient.users.getUser(session.userId);
  *
- *     // Buscar usuario en nuestra DB
- *     const usuario = await prisma.usuario.findUnique({
+ *     // Find user in our DB
+ *     const user = await prisma.user.findUnique({
  *       where: { authProviderId: clerkUser.id }
  *     });
  *
  *     request.user = {
- *       id: usuario.id,
+ *       id: user.id,
  *       email: clerkUser.emailAddresses[0].emailAddress,
  *       ...
  *     };
  *   } catch (error) {
- *     throw new UnauthorizedError('Token inválido');
+ *     throw new UnauthorizedError('Invalid token');
  *   }
  * }
  */

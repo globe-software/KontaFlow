@@ -6,7 +6,7 @@ import { prisma } from './lib/prisma';
 import { logger } from './lib/logger';
 import { config, corsOptions, rateLimitOptions } from './lib/config';
 import { errorHandler, notFoundHandler } from './middleware/error-handler';
-import { gruposRoutes } from './routes/grupos.routes';
+import { economicGroupsRoutes } from './routes/economic-groups.routes';
 
 /**
  * KontaFlow API Server
@@ -92,16 +92,16 @@ async function registerRoutes() {
     };
   });
 
-  // API Routes (sin versionado por ahora, luego será /api/v1)
+  // API Routes (no versioning for now, later will be /api/v1)
   await fastify.register(
     async (instance) => {
-      // Grupos Económicos
-      await instance.register(gruposRoutes, { prefix: '/grupos' });
+      // Economic Groups
+      await instance.register(economicGroupsRoutes, { prefix: '/economic-groups' });
 
-      // TODO: Más features
-      // await instance.register(empresasRoutes, { prefix: '/empresas' });
-      // await instance.register(cuentasRoutes, { prefix: '/cuentas' });
-      // await instance.register(asientosRoutes, { prefix: '/asientos' });
+      // TODO: More features
+      // await instance.register(companiesRoutes, { prefix: '/companies' });
+      // await instance.register(accountsRoutes, { prefix: '/accounts' });
+      // await instance.register(entriesRoutes, { prefix: '/entries' });
     },
     { prefix: '/api' }
   );
@@ -133,15 +133,15 @@ async function start() {
     logger.info('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
     logger.info('');
     logger.info('📋 Available Endpoints:');
-    logger.info('   GET  /api/grupos           - Listar grupos');
-    logger.info('   GET  /api/grupos/mis-grupos - Mis grupos');
-    logger.info('   GET  /api/grupos/:id        - Obtener grupo');
-    logger.info('   POST /api/grupos            - Crear grupo');
-    logger.info('   PUT  /api/grupos/:id        - Actualizar grupo');
-    logger.info('   DELETE /api/grupos/:id      - Eliminar grupo');
+    logger.info('   GET    /api/economic-groups           - List groups');
+    logger.info('   GET    /api/economic-groups/my-groups - My groups');
+    logger.info('   GET    /api/economic-groups/:id       - Get group');
+    logger.info('   POST   /api/economic-groups           - Create group');
+    logger.info('   PUT    /api/economic-groups/:id       - Update group');
+    logger.info('   DELETE /api/economic-groups/:id       - Delete group');
     logger.info('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
     logger.info('');
-    logger.info('💡 Tip: Use header "x-user-id: 1" para autenticación en desarrollo');
+    logger.info('💡 Tip: Use header "x-user-id: 1" for authentication in development');
     logger.info('');
   } catch (err) {
     console.error('❌ Error starting server:', err);

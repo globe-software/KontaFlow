@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import type { GrupoEconomico, CreateGrupoDto, Pais, Moneda } from '@/types/grupo';
+import type { EconomicGroup, CreateEconomicGroupDto, Country, Currency } from '@/types/economic-group';
 import { useTranslation } from '@/contexts/I18nContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -23,40 +23,40 @@ import {
 } from '@/components/ui/sheet';
 import { PAISES, MONEDAS } from '@/lib/config';
 
-interface GrupoFormProps {
-  grupo?: GrupoEconomico;
+interface EconomicGroupFormProps {
+  group?: EconomicGroup;
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onSubmit: (data: CreateGrupoDto) => Promise<void>;
+  onSubmit: (data: CreateEconomicGroupDto) => Promise<void>;
 }
 
-export function GrupoForm({ grupo, open, onOpenChange, onSubmit }: GrupoFormProps) {
+export function EconomicGroupForm({ group, open, onOpenChange, onSubmit }: EconomicGroupFormProps) {
   const { t } = useTranslation();
-  const [formData, setFormData] = useState<CreateGrupoDto>({
-    nombre: '',
-    paisPrincipal: 'UY',
-    monedaBase: 'UYU',
+  const [formData, setFormData] = useState<CreateEconomicGroupDto>({
+    name: '',
+    mainCountry: 'UY',
+    baseCurrency: 'UYU',
   });
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
-  // Cargar datos del grupo al editar
+  // Load group data when editing
   useEffect(() => {
-    if (grupo) {
+    if (group) {
       setFormData({
-        nombre: grupo.nombre,
-        paisPrincipal: grupo.paisPrincipal,
-        monedaBase: grupo.monedaBase,
+        name: group.name,
+        mainCountry: group.mainCountry,
+        baseCurrency: group.baseCurrency,
       });
     } else {
       setFormData({
-        nombre: '',
-        paisPrincipal: 'UY',
-        monedaBase: 'UYU',
+        name: '',
+        mainCountry: 'UY',
+        baseCurrency: 'UYU',
       });
     }
     setErrors({});
-  }, [grupo, open]);
+  }, [group, open]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -80,10 +80,10 @@ export function GrupoForm({ grupo, open, onOpenChange, onSubmit }: GrupoFormProp
       <SheetContent side="right" className="w-full sm:max-w-[540px] overflow-y-auto">
         <SheetHeader>
           <SheetTitle>
-            {grupo ? t('grupos.editButton') : t('grupos.createButton')}
+            {group ? t('grupos.editButton') : t('grupos.createButton')}
           </SheetTitle>
           <SheetDescription>
-            {grupo
+            {group
               ? t('grupos.form.editDescription')
               : t('grupos.form.createDescription')}
           </SheetDescription>
@@ -91,37 +91,37 @@ export function GrupoForm({ grupo, open, onOpenChange, onSubmit }: GrupoFormProp
 
         <form onSubmit={handleSubmit} className="mt-6">
           <div className="grid gap-4 py-4">
-            {/* Nombre */}
+            {/* Name */}
             <div className="grid gap-2">
-              <Label htmlFor="nombre">
+              <Label htmlFor="name">
                 {t('grupos.form.nameLabel')} <span className="text-red-500">*</span>
               </Label>
               <Input
-                id="nombre"
-                value={formData.nombre}
+                id="name"
+                value={formData.name}
                 onChange={(e) =>
-                  setFormData({ ...formData, nombre: e.target.value })
+                  setFormData({ ...formData, name: e.target.value })
                 }
                 placeholder={t('grupos.form.namePlaceholder')}
-                className={errors.nombre ? 'border-red-500' : ''}
+                className={errors.name ? 'border-red-500' : ''}
               />
-              {errors.nombre && (
-                <p className="text-sm text-red-500">{errors.nombre}</p>
+              {errors.name && (
+                <p className="text-sm text-red-500">{errors.name}</p>
               )}
             </div>
 
-            {/* País Principal */}
+            {/* Main Country */}
             <div className="grid gap-2">
-              <Label htmlFor="paisPrincipal">
+              <Label htmlFor="mainCountry">
                 {t('grupos.form.countryLabel')} <span className="text-red-500">*</span>
               </Label>
               <Select
-                value={formData.paisPrincipal}
-                onValueChange={(value: Pais) =>
-                  setFormData({ ...formData, paisPrincipal: value })
+                value={formData.mainCountry}
+                onValueChange={(value: Country) =>
+                  setFormData({ ...formData, mainCountry: value })
                 }
               >
-                <SelectTrigger className={errors.paisPrincipal ? 'border-red-500' : ''}>
+                <SelectTrigger className={errors.mainCountry ? 'border-red-500' : ''}>
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -132,23 +132,23 @@ export function GrupoForm({ grupo, open, onOpenChange, onSubmit }: GrupoFormProp
                   ))}
                 </SelectContent>
               </Select>
-              {errors.paisPrincipal && (
-                <p className="text-sm text-red-500">{errors.paisPrincipal}</p>
+              {errors.mainCountry && (
+                <p className="text-sm text-red-500">{errors.mainCountry}</p>
               )}
             </div>
 
-            {/* Moneda Base */}
+            {/* Base Currency */}
             <div className="grid gap-2">
-              <Label htmlFor="monedaBase">
+              <Label htmlFor="baseCurrency">
                 {t('grupos.form.currencyLabel')} <span className="text-red-500">*</span>
               </Label>
               <Select
-                value={formData.monedaBase}
-                onValueChange={(value: Moneda) =>
-                  setFormData({ ...formData, monedaBase: value })
+                value={formData.baseCurrency}
+                onValueChange={(value: Currency) =>
+                  setFormData({ ...formData, baseCurrency: value })
                 }
               >
-                <SelectTrigger className={errors.monedaBase ? 'border-red-500' : ''}>
+                <SelectTrigger className={errors.baseCurrency ? 'border-red-500' : ''}>
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -159,8 +159,8 @@ export function GrupoForm({ grupo, open, onOpenChange, onSubmit }: GrupoFormProp
                   ))}
                 </SelectContent>
               </Select>
-              {errors.monedaBase && (
-                <p className="text-sm text-red-500">{errors.monedaBase}</p>
+              {errors.baseCurrency && (
+                <p className="text-sm text-red-500">{errors.baseCurrency}</p>
               )}
             </div>
           </div>
@@ -175,7 +175,7 @@ export function GrupoForm({ grupo, open, onOpenChange, onSubmit }: GrupoFormProp
               {t('common.cancel')}
             </Button>
             <Button type="submit" disabled={isLoading}>
-              {isLoading ? t('common.saving') : grupo ? t('common.save') : t('common.create')}
+              {isLoading ? t('common.saving') : group ? t('common.save') : t('common.create')}
             </Button>
           </SheetFooter>
         </form>
