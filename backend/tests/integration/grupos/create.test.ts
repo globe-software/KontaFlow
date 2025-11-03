@@ -30,28 +30,6 @@ describe('POST /api/grupos', () => {
       expect(body.message).toBe('Grupo económico creado correctamente');
     });
 
-    it('debe crear un grupo con todos los campos', async () => {
-      const server = getTestServer();
-      const grupoData = grupoPresets.conRUT();
-
-      const response = await server.inject({
-        method: 'POST',
-        url: '/api/grupos',
-        headers: { 'x-user-id': '1' },
-        payload: grupoData,
-      });
-
-      expect(response.statusCode).toBe(201);
-      const body = JSON.parse(response.body);
-
-      expect(body.data).toMatchObject({
-        rutControlador: '217890120018',
-        paisPrincipal: grupoData.paisPrincipal,
-        monedaBase: grupoData.monedaBase,
-        activo: true,
-      });
-    });
-
     it('debe crear plan de cuentas automáticamente', async () => {
       const server = getTestServer();
       const grupoData = buildGrupo();
@@ -256,48 +234,6 @@ describe('POST /api/grupos', () => {
       const body = JSON.parse(response.body);
       expect(body.error.code).toBe('VALIDATION_ERROR');
       expect(body.error.details.monedaBase).toBeDefined();
-    });
-
-    it('debe retornar 400 si RUT tiene formato incorrecto', async () => {
-      const server = getTestServer();
-      const grupoData = buildGrupo({ rutControlador: '12345' as any });
-
-      const response = await server.inject({
-        method: 'POST',
-        url: '/api/grupos',
-        headers: { 'x-user-id': '1' },
-        payload: grupoData,
-      });
-
-      expect(response.statusCode).toBe(400);
-      const body = JSON.parse(response.body);
-      expect(body.error.code).toBe('VALIDATION_ERROR');
-      expect(body.error.details.rutControlador).toContain('El RUT debe tener 12 dígitos');
-    });
-
-    it('debe aceptar RUT vacío o undefined', async () => {
-      const server = getTestServer();
-
-      // Test con string vacío
-      const grupoData1 = buildGrupo({ rutControlador: '' as any });
-      const response1 = await server.inject({
-        method: 'POST',
-        url: '/api/grupos',
-        headers: { 'x-user-id': '1' },
-        payload: grupoData1,
-      });
-      expect(response1.statusCode).toBe(201);
-
-      // Test con undefined (omitido)
-      const grupoData2 = buildGrupo();
-      delete (grupoData2 as any).rutControlador;
-      const response2 = await server.inject({
-        method: 'POST',
-        url: '/api/grupos',
-        headers: { 'x-user-id': '1' },
-        payload: grupoData2,
-      });
-      expect(response2.statusCode).toBe(201);
     });
 
     it('debe retornar 400 si faltan campos requeridos', async () => {

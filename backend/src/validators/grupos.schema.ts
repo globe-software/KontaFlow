@@ -22,12 +22,6 @@ export const CreateGrupoSchema = z.object({
     .max(200, 'El nombre no puede exceder 200 caracteres')
     .trim(),
 
-  rutControlador: z
-    .string()
-    .regex(/^[0-9]{12}$/, 'El RUT debe tener 12 dígitos')
-    .optional()
-    .or(z.literal('')),
-
   paisPrincipal: z
     .enum(PAISES_VALIDOS, {
       errorMap: () => ({
@@ -54,12 +48,6 @@ export const UpdateGrupoSchema = z.object({
     .max(200, 'El nombre no puede exceder 200 caracteres')
     .trim()
     .optional(),
-
-  rutControlador: z
-    .string()
-    .regex(/^[0-9]{12}$/, 'El RUT debe tener 12 dígitos')
-    .optional()
-    .or(z.literal('')),
 
   paisPrincipal: z
     .enum(PAISES_VALIDOS)

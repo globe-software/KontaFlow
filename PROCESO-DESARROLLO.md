@@ -1182,6 +1182,828 @@ SELECT * FROM grupos_economicos;
 
 ---
 
+## Fase 3.6: Frontend UI/UX Best Practices (NUEVO)
+
+### 3.6.1. Sistema de Diseño
+
+#### Paleta de Colores
+
+**Definida en** `frontend/app/globals.css`:
+
+```css
+:root {
+  /* Color primario - Globe Software: rgb(204, 153, 255) = #CC99FF */
+  --primary: 270 100% 65%;
+  --primary-foreground: 0 0% 100%;
+
+  /* Secundarios */
+  --secondary: 270 30% 95%;
+  --accent: 270 60% 92%;
+
+  /* Estados */
+  --success: 142 76% 36%;
+  --warning: 38 92% 50%;
+  --destructive: 0 84% 60%;
+
+  /* Grises */
+  --muted: 210 40% 96%;
+  --border: 214 32% 91%;
+}
+```
+
+**Aplicación**: Usar variables CSS en lugar de colores hardcodeados
+```tsx
+// ✅ Correcto
+<div className="bg-primary text-primary-foreground">
+
+// ❌ Incorrecto
+<div className="bg-purple-400 text-white">
+```
+
+#### Tipografía
+
+```css
+:root {
+  --font-sans: 'Inter', system-ui, sans-serif;
+}
+
+/* Escalas recomendadas */
+.text-xs    /* 0.75rem - 12px - Hints, footnotes */
+.text-sm    /* 0.875rem - 14px - Secondary text, labels */
+.text-base  /* 1rem - 16px - Body text */
+.text-lg    /* 1.125rem - 18px - Destacados */
+.text-xl    /* 1.25rem - 20px - Subtítulos */
+.text-2xl   /* 1.5rem - 24px - Títulos de página */
+```
+
+#### Espaciado
+
+**Principio**: Aplicaciones financieras requieren **alta densidad de información**
+
+```tsx
+// ❌ MAL - Mucho espacio vertical desperdiciado
+<TableRow className="py-6">
+  <TableCell className="p-6">
+
+// ✅ BIEN - Compacto pero legible
+<TableRow className="py-2">
+  <TableCell className="p-3">
+```
+
+**Contenedores estándar**:
+```tsx
+<div className="container mx-auto py-6 px-6">
+  {/* Contenido de página */}
+</div>
+```
+
+#### Iconografía
+
+**Biblioteca**: lucide-react (consistente con shadcn/ui)
+
+```tsx
+import {
+  Building2,      // Grupos Económicos
+  Building,       // Empresas
+  FileText,       // Comprobantes
+  BookOpen,       // Plan de Cuentas
+  BarChart3,      // Reportes
+  Settings,       // Configuración
+  Plus,           // Crear
+  Edit2,          // Editar
+  Trash2,         // Eliminar
+  Search,         // Buscar
+  Filter,         // Filtrar
+  CheckCircle2,   // Activo/Success
+  XCircle,        // Inactivo/Error
+  AlertCircle,    // Advertencia
+  Loader2,        // Loading
+  MoreVertical,   // Menú acciones
+} from 'lucide-react';
+```
+
+**Tamaños consistentes**:
+```tsx
+<Icon className="h-4 w-4" />  // Estándar: botones, menús
+<Icon className="h-5 w-5" />  // Headers de card
+<Icon className="h-6 w-6" />  // Logo
+<Icon className="h-8 w-8" />  // Loading states, empty states
+```
+
+---
+
+### 3.6.2. Componentes de Layout
+
+#### Header
+
+**Archivo**: `frontend/src/components/layout/header.tsx`
+
+**Elementos obligatorios**:
+- Logo (esquina superior izquierda)
+- Información del usuario (esquina superior derecha)
+- Selector de idioma (próximo a implementar)
+
+```tsx
+export function Header() {
+  return (
+    <header className="sticky top-0 z-50 w-full border-b bg-white">
+      <div className="flex h-16 items-center px-6">
+        {/* Logo */}
+        <div className="flex items-center gap-3">
+          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+            <Building2 className="h-6 w-6" />
+          </div>
+          <h1 className="text-xl font-bold">KontaFlow</h1>
+        </div>
+
+        {/* Usuario y selector de idioma */}
+        <div className="ml-auto flex items-center gap-4">
+          {/* Selector de idioma aquí */}
+          <UserMenu />
+        </div>
+      </div>
+    </header>
+  );
+}
+```
+
+#### Sidebar (Navegación)
+
+**Archivo**: `frontend/src/components/layout/sidebar.tsx`
+
+**Consideraciones**:
+- Ancho fijo en desktop (250-280px)
+- Colapsable en mobile (drawer/sheet)
+- Items activos visualmente destacados
+- Iconos consistentes
+
+```tsx
+const menuItems = [
+  { href: '/dashboard', icon: Home, label: 'Dashboard' },
+  { href: '/grupos', icon: Building2, label: 'Grupos Económicos' },
+  { href: '/empresas', icon: Building, label: 'Empresas' },
+  { href: '/comprobantes', icon: FileText, label: 'Comprobantes' },
+  { href: '/cuentas', icon: BookOpen, label: 'Plan de Cuentas' },
+  { href: '/reportes', icon: BarChart3, label: 'Reportes' },
+  { href: '/configuracion', icon: Settings, label: 'Configuración' },
+];
+
+export function Sidebar() {
+  const pathname = usePathname();
+
+  return (
+    <aside className="w-64 border-r bg-white">
+      <nav className="space-y-1 p-4">
+        {menuItems.map((item) => (
+          <Link
+            key={item.href}
+            href={item.href}
+            className={cn(
+              "flex items-center gap-3 px-3 py-2 rounded-lg transition-colors",
+              pathname === item.href
+                ? "bg-primary/10 text-primary font-medium"
+                : "hover:bg-gray-50 text-gray-700"
+            )}
+          >
+            <item.icon className="h-4 w-4" />
+            {item.label}
+          </Link>
+        ))}
+      </nav>
+    </aside>
+  );
+}
+```
+
+#### MainLayout
+
+**Archivo**: `frontend/src/components/layout/main-layout.tsx`
+
+```tsx
+export function MainLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="min-h-screen bg-gray-50">
+      <Header />
+      <div className="flex">
+        <Sidebar />
+        <main className="flex-1">
+          {children}
+        </main>
+      </div>
+    </div>
+  );
+}
+```
+
+---
+
+### 3.6.3. Tablas de Datos
+
+**Mejores prácticas implementadas**:
+
+```tsx
+export function DataTable({ items }: Props) {
+  const router = useRouter();
+
+  return (
+    <div className="rounded-xl border border-gray-200 bg-white shadow-sm overflow-hidden">
+      <Table>
+        <TableHeader>
+          <TableRow className="bg-gray-50">
+            <TableHead>Nombre</TableHead>
+            <TableHead>Estado</TableHead>
+            <TableHead className="text-right">Acciones</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {items.map((item, index) => (
+            <TableRow
+              key={item.id}
+              className={cn(
+                "group transition-colors hover:bg-primary/5",
+                // Zebra striping con tonos pastel
+                index % 2 === 0 ? "bg-white" : "bg-primary/3"
+              )}
+            >
+              <TableCell className="font-medium py-2">
+                {item.nombre}
+              </TableCell>
+
+              <TableCell className="py-2">
+                <Badge variant={item.activo ? "success" : "secondary"}>
+                  {item.activo ? (
+                    <><CheckCircle2 className="h-3 w-3 mr-1" /> Activo</>
+                  ) : (
+                    <><XCircle className="h-3 w-3 mr-1" /> Inactivo</>
+                  )}
+                </Badge>
+              </TableCell>
+
+              <TableCell className="text-right py-2">
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" size="sm">
+                      <MoreVertical className="h-4 w-4" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuItem onClick={() => router.push(`/items/${item.id}`)}>
+                      <FileText className="mr-2 h-4 w-4" />
+                      Ver detalles
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => onEdit(item)}>
+                      <Edit2 className="mr-2 h-4 w-4" />
+                      Editar
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem
+                      onClick={() => onDelete(item)}
+                      className="text-red-600"
+                    >
+                      <Trash2 className="mr-2 h-4 w-4" />
+                      Eliminar
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </div>
+  );
+}
+```
+
+**Características clave**:
+- ✅ Zebra striping con tonos pastel (`bg-primary/3`)
+- ✅ Hover states (`hover:bg-primary/5`)
+- ✅ Altura de fila reducida (`py-2`)
+- ✅ Dropdown menu para acciones
+- ✅ Badges con iconos para estados
+- ✅ Bordes redondeados y sombras suaves
+
+---
+
+### 3.6.4. Optimizaciones de Performance
+
+#### Debouncing en Búsquedas
+
+**Problema**: Cada keystroke dispara un request al servidor → 5 requests al escribir "Globe"
+
+**Solución**: Hook personalizado de debounce
+
+**Archivo**: `frontend/src/hooks/useDebounce.ts`
+```typescript
+import { useState, useEffect } from 'react';
+
+export function useDebounce<T>(value: T, delay: number = 400): T {
+  const [debouncedValue, setDebouncedValue] = useState<T>(value);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedValue(value);
+    }, delay);
+
+    return () => clearTimeout(handler);
+  }, [value, delay]);
+
+  return debouncedValue;
+}
+```
+
+**Uso en componente**:
+```tsx
+const [searchInput, setSearchInput] = useState('');
+const debouncedSearch = useDebounce(searchInput, 400);
+
+useEffect(() => {
+  setFilters(prev => ({
+    ...prev,
+    search: debouncedSearch,
+    page: 1  // Reset a página 1 al buscar
+  }));
+}, [debouncedSearch]);
+
+// Input muestra valor inmediato
+<Input
+  value={searchInput}
+  onChange={(e) => setSearchInput(e.target.value)}
+/>
+```
+
+#### Estados de Carga Separados
+
+**Problema**: Stats cards y toda la página se recargan en cada búsqueda
+
+**Solución**: Separar loading inicial de búsquedas subsecuentes
+
+```tsx
+const [isInitialLoading, setIsInitialLoading] = useState(true);
+const [isSearching, setIsSearching] = useState(false);
+
+const loadData = async (showSearchIndicator = false) => {
+  if (showSearchIndicator) {
+    setIsSearching(true);
+  } else {
+    setIsInitialLoading(true);
+  }
+
+  try {
+    const response = await api.list(filters);
+    setData(response.data);
+  } finally {
+    setIsInitialLoading(false);
+    setIsSearching(false);
+  }
+};
+
+// En el render
+{/* Loading inicial - pantalla completa */}
+{isInitialLoading && <LoadingSkeleton />}
+
+{/* Stats cards - solo mostrar después de carga inicial */}
+{!isInitialLoading && <StatsCards data={data} />}
+
+{/* Tabla - con indicador de búsqueda */}
+{!isInitialLoading && (
+  <div className="relative">
+    {isSearching && (
+      <Loader2 className="absolute right-3 top-3 h-4 w-4 animate-spin" />
+    )}
+    <DataTable data={data} />
+  </div>
+)}
+```
+
+---
+
+### 3.6.5. Estrategia de ABM (Alta/Baja/Modificación)
+
+**Patrón Híbrido** según complejidad de la entidad:
+
+#### Sheet (Drawer Lateral) - Para entidades simples
+**Usar cuando**:
+- 3-6 campos
+- Sin relaciones complejas
+- Formulario rápido
+
+**Ejemplos**: Grupos Económicos, Empresas, Monedas, Tipos de Cuenta
+
+```tsx
+<Sheet open={isOpen} onOpenChange={setIsOpen}>
+  <SheetContent side="right" className="w-full sm:max-w-[540px] overflow-y-auto">
+    <SheetHeader>
+      <SheetTitle>Crear Grupo Económico</SheetTitle>
+    </SheetHeader>
+    {/* Formulario */}
+  </SheetContent>
+</Sheet>
+```
+
+#### Página Completa - Para entidades complejas
+**Usar cuando**:
+- Más de 6 campos
+- Múltiples tabs/secciones
+- Relaciones complejas
+- Necesita más espacio visual
+
+**Ejemplos**: Comprobantes Contables, Configuración, Reportes
+
+```tsx
+// app/comprobantes/[id]/page.tsx
+export default function ComprobantePage() {
+  return (
+    <MainLayout>
+      <Tabs>
+        <TabsList>
+          <TabsTrigger value="info">Información</TabsTrigger>
+          <TabsTrigger value="lineas">Líneas de Asiento</TabsTrigger>
+          <TabsTrigger value="adjuntos">Adjuntos</TabsTrigger>
+        </TabsList>
+        {/* Contenido de tabs */}
+      </Tabs>
+    </MainLayout>
+  );
+}
+```
+
+---
+
+## Fase 3.7: Internacionalización (i18n) (NUEVO)
+
+### 3.7.1. Idiomas Soportados
+
+- 🇪🇸 Español (es) - Default
+- 🇧🇷 Português (pt-BR)
+- 🇺🇸 English (en)
+
+### 3.7.2. Setup con next-intl
+
+**Instalar dependencia**:
+```bash
+cd frontend
+npm install next-intl
+```
+
+**Estructura de archivos**:
+```
+frontend/
+├── messages/
+│   ├── es.json
+│   ├── pt.json
+│   └── en.json
+├── middleware.ts
+├── i18n.ts
+└── app/
+    └── [locale]/
+        ├── layout.tsx
+        └── grupos/
+            └── page.tsx
+```
+
+---
+
+### 3.7.3. Configuración
+
+**Archivo**: `frontend/i18n.ts`
+```typescript
+import { getRequestConfig } from 'next-intl/server';
+import { notFound } from 'next/navigation';
+
+export const locales = ['es', 'pt', 'en'] as const;
+export const defaultLocale = 'es';
+
+export default getRequestConfig(async ({ locale }) => {
+  if (!locales.includes(locale as any)) notFound();
+
+  return {
+    messages: (await import(`./messages/${locale}.json`)).default,
+  };
+});
+```
+
+**Archivo**: `frontend/middleware.ts`
+```typescript
+import createMiddleware from 'next-intl/middleware';
+import { locales, defaultLocale } from './i18n';
+
+export default createMiddleware({
+  locales,
+  defaultLocale,
+  localePrefix: 'always', // URLs: /es/grupos, /pt/grupos, /en/grupos
+});
+
+export const config = {
+  matcher: ['/', '/(es|pt|en)/:path*']
+};
+```
+
+---
+
+### 3.7.4. Archivos de Mensajes
+
+**Archivo**: `frontend/messages/es.json`
+```json
+{
+  "common": {
+    "create": "Crear",
+    "edit": "Editar",
+    "delete": "Eliminar",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "search": "Buscar",
+    "active": "Activo",
+    "inactive": "Inactivo",
+    "loading": "Cargando...",
+    "noResults": "No hay resultados",
+    "confirmDelete": "¿Estás seguro de eliminar?"
+  },
+  "grupos": {
+    "title": "Grupos Económicos",
+    "description": "Gestiona tus grupos económicos y empresas",
+    "createButton": "Crear Grupo",
+    "editTitle": "Editar Grupo",
+    "fields": {
+      "nombre": "Nombre",
+      "nombrePlaceholder": "Ej: Grupo Pragmatic",
+      "paisPrincipal": "País Principal",
+      "monedaBase": "Moneda Base"
+    },
+    "messages": {
+      "created": "Grupo económico creado correctamente",
+      "updated": "Grupo económico actualizado correctamente",
+      "deleted": "Grupo económico eliminado correctamente",
+      "loadError": "Error al cargar grupos"
+    },
+    "errors": {
+      "nombreRequired": "El nombre es requerido",
+      "nombreTooShort": "El nombre debe tener al menos 3 caracteres",
+      "nombreTooLong": "El nombre no puede exceder 200 caracteres",
+      "paisRequired": "Selecciona un país",
+      "monedaRequired": "Selecciona una moneda"
+    }
+  }
+}
+```
+
+**Archivo**: `frontend/messages/pt.json`
+```json
+{
+  "common": {
+    "create": "Criar",
+    "edit": "Editar",
+    "delete": "Excluir",
+    "save": "Salvar",
+    "cancel": "Cancelar",
+    "search": "Pesquisar",
+    "active": "Ativo",
+    "inactive": "Inativo",
+    "loading": "Carregando...",
+    "noResults": "Nenhum resultado encontrado",
+    "confirmDelete": "Tem certeza que deseja excluir?"
+  },
+  "grupos": {
+    "title": "Grupos Econômicos",
+    "description": "Gerencie seus grupos econômicos e empresas",
+    "createButton": "Criar Grupo",
+    "editTitle": "Editar Grupo",
+    "fields": {
+      "nombre": "Nome",
+      "nombrePlaceholder": "Ex: Grupo Pragmatic",
+      "paisPrincipal": "País Principal",
+      "monedaBase": "Moeda Base"
+    },
+    "messages": {
+      "created": "Grupo econômico criado com sucesso",
+      "updated": "Grupo econômico atualizado com sucesso",
+      "deleted": "Grupo econômico excluído com sucesso",
+      "loadError": "Erro ao carregar grupos"
+    }
+  }
+}
+```
+
+**Archivo**: `frontend/messages/en.json`
+```json
+{
+  "common": {
+    "create": "Create",
+    "edit": "Edit",
+    "delete": "Delete",
+    "save": "Save",
+    "cancel": "Cancel",
+    "search": "Search",
+    "active": "Active",
+    "inactive": "Inactive",
+    "loading": "Loading...",
+    "noResults": "No results found",
+    "confirmDelete": "Are you sure you want to delete?"
+  },
+  "grupos": {
+    "title": "Economic Groups",
+    "description": "Manage your economic groups and companies",
+    "createButton": "Create Group",
+    "editTitle": "Edit Group",
+    "fields": {
+      "nombre": "Name",
+      "nombrePlaceholder": "Ex: Pragmatic Group",
+      "paisPrincipal": "Main Country",
+      "monedaBase": "Base Currency"
+    },
+    "messages": {
+      "created": "Economic group created successfully",
+      "updated": "Economic group updated successfully",
+      "deleted": "Economic group deleted successfully",
+      "loadError": "Error loading groups"
+    }
+  }
+}
+```
+
+---
+
+### 3.7.5. Uso en Componentes
+
+```tsx
+'use client';
+
+import { useTranslations } from 'next-intl';
+import { Plus, Search } from 'lucide-react';
+
+export default function GruposPage() {
+  const t = useTranslations('grupos');
+  const tCommon = useTranslations('common');
+
+  return (
+    <MainLayout>
+      <div className="container mx-auto py-6 px-6">
+        {/* Header */}
+        <div className="mb-6">
+          <h1 className="text-2xl font-bold">{t('title')}</h1>
+          <p className="text-sm text-gray-600">{t('description')}</p>
+        </div>
+
+        {/* Filtros */}
+        <div className="mb-6">
+          <div className="flex items-center justify-between">
+            <Input
+              placeholder={`${tCommon('search')}...`}
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+            <Button onClick={handleCreate}>
+              <Plus className="h-4 w-4 mr-2" />
+              {t('createButton')}
+            </Button>
+          </div>
+        </div>
+
+        {/* Tabla */}
+        <DataTable items={grupos} />
+
+        {/* Mensajes de éxito/error */}
+        {success && toast.success(t('messages.created'))}
+        {error && toast.error(t('messages.loadError'))}
+      </div>
+    </MainLayout>
+  );
+}
+```
+
+---
+
+### 3.7.6. Selector de Idioma en Header
+
+**Archivo**: `frontend/src/components/layout/language-selector.tsx`
+
+```tsx
+'use client';
+
+import { useLocale } from 'next-intl';
+import { usePathname, useRouter } from 'next/navigation';
+import { Languages } from 'lucide-react';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { Button } from '@/components/ui/button';
+
+const languages = {
+  es: { label: 'Español', flag: '🇪🇸' },
+  pt: { label: 'Português', flag: '🇧🇷' },
+  en: { label: 'English', flag: '🇺🇸' },
+};
+
+export function LanguageSelector() {
+  const locale = useLocale();
+  const router = useRouter();
+  const pathname = usePathname();
+
+  const changeLanguage = (newLocale: string) => {
+    // Reemplazar locale en URL: /es/grupos → /pt/grupos
+    const newPath = pathname.replace(`/${locale}`, `/${newLocale}`);
+    router.push(newPath);
+  };
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost" size="sm">
+          <Languages className="h-4 w-4 mr-2" />
+          {languages[locale as keyof typeof languages].flag}
+          <span className="ml-1">
+            {locale.toUpperCase()}
+          </span>
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        {Object.entries(languages).map(([code, { label, flag }]) => (
+          <DropdownMenuItem
+            key={code}
+            onClick={() => changeLanguage(code)}
+            className={locale === code ? 'bg-primary/10' : ''}
+          >
+            <span className="mr-2">{flag}</span>
+            {label}
+          </DropdownMenuItem>
+        ))}
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
+```
+
+**Integrar en Header**:
+```tsx
+import { LanguageSelector } from './language-selector';
+
+export function Header() {
+  return (
+    <header className="...">
+      <div className="flex h-16 items-center px-6">
+        {/* Logo */}
+        <div className="flex items-center gap-3">...</div>
+
+        {/* Usuario y selector de idioma */}
+        <div className="ml-auto flex items-center gap-4">
+          <LanguageSelector />
+          <UserMenu />
+        </div>
+      </div>
+    </header>
+  );
+}
+```
+
+---
+
+### 3.7.7. Validaciones Traducidas
+
+Para mensajes de validación del backend, usar headers de Accept-Language:
+
+**Frontend API Client**:
+```typescript
+private getHeaders(): HeadersInit {
+  return {
+    'Content-Type': 'application/json',
+    'Accept-Language': locale, // 'es', 'pt', 'en'
+    ...(config.isDevelopment ? { 'x-user-id': '1' } : {}),
+  };
+}
+```
+
+**Backend Validators** (futuro):
+Implementar mensajes de error traducidos en Zod schemas:
+```typescript
+export const CreateGrupoSchema = z.object({
+  nombre: z.string()
+    .min(3, { message: getTranslation('grupos.errors.nombreTooShort') })
+    .max(200, { message: getTranslation('grupos.errors.nombreTooLong') }),
+});
+```
+
+---
+
+### 3.7.8. Checklist de i18n por Feature
+
+- [ ] Crear claves de traducción en `messages/es.json`
+- [ ] Traducir a portugués en `messages/pt.json`
+- [ ] Traducir a inglés en `messages/en.json`
+- [ ] Usar `useTranslations()` en componentes
+- [ ] Traducir labels de formulario
+- [ ] Traducir placeholders
+- [ ] Traducir mensajes de éxito/error
+- [ ] Traducir textos de botones
+- [ ] Traducir headers de tabla
+- [ ] Traducir mensajes de confirmación
+- [ ] Probar cambio de idioma en tiempo real
+- [ ] Verificar que no queden textos hardcodeados
+
+---
+
 ## Resumen del Flujo ACTUALIZADO
 
 ```
@@ -1194,12 +2016,17 @@ SELECT * FROM grupos_economicos;
 7. POSTMAN COLLECTION
 8. DOCUMENTACIÓN DE TESTING
 9. FRONTEND (types, API client, listado, formularios)
+   - Aplicar Sistema de Diseño (colores, tipografía, iconos)
+   - Implementar Layout (Header, Sidebar, MainLayout)
+   - Optimizaciones (debouncing, loading states)
+   - ABM según complejidad (Sheet vs Page)
+   - Implementar i18n (traducciones en 3 idiomas)
 10. TESTING MANUAL FRONTEND
 11. COMMIT
 ```
 
 ---
 
-**Última actualización**: 2025-11-02  
-**Versión**: 1.1 (Agregado: Testing Automatizado)
+**Última actualización**: 2025-11-02
+**Versión**: 1.2 (Agregado: UI/UX Best Practices e i18n)
 

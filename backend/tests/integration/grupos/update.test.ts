@@ -51,7 +51,6 @@ describe('PUT /api/grupos/:id', () => {
         payload: {
           nombre: 'Grupo Multi-Update',
           monedaBase: 'UYU',
-          rutControlador: '123456789012',
         },
       });
 
@@ -61,7 +60,6 @@ describe('PUT /api/grupos/:id', () => {
       expect(body.data).toMatchObject({
         nombre: 'Grupo Multi-Update',
         monedaBase: 'UYU',
-        rutControlador: '123456789012',
       });
     });
 
@@ -185,21 +183,6 @@ describe('PUT /api/grupos/:id', () => {
       const body = JSON.parse(response.body);
       expect(body.error.code).toBe('VALIDATION_ERROR');
       expect(body.error.details.nombre).toBeDefined();
-    });
-
-    it('debe retornar 400 si el RUT es inválido', async () => {
-      const server = getTestServer();
-
-      const response = await server.inject({
-        method: 'PUT',
-        url: '/api/grupos/1',
-        headers: { 'x-user-id': '1' },
-        payload: { rutControlador: '123' },
-      });
-
-      expect(response.statusCode).toBe(400);
-      const body = JSON.parse(response.body);
-      expect(body.error.code).toBe('VALIDATION_ERROR');
     });
 
     it('debe retornar 400 si país es inválido', async () => {

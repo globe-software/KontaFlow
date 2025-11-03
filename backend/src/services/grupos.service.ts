@@ -192,14 +192,6 @@ export class GruposService {
       throw new BusinessRuleError('El nombre debe tener al menos 3 caracteres');
     }
 
-    // Validar formato de RUT si está presente
-    if (data.rutControlador) {
-      const rutValido = /^[0-9]{12}$/.test(data.rutControlador);
-      if (!rutValido) {
-        throw new BusinessRuleError('El RUT debe tener 12 dígitos numéricos');
-      }
-    }
-
     // Validaciones adicionales según el país
     if (data.paisPrincipal === 'UY' && data.monedaBase) {
       if (!['UYU', 'USD'].includes(data.monedaBase)) {

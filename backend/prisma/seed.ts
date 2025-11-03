@@ -12,7 +12,6 @@ async function main() {
   const grupo = await prisma.grupoEconomico.create({
     data: {
       nombre: 'Pragmatic Software Group',
-      rutControlador: '217890120018',
       paisPrincipal: 'UY',
       monedaBase: 'UYU',
     },

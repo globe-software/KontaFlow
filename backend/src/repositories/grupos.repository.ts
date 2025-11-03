@@ -22,10 +22,7 @@ export class GruposRepository {
     const where: Prisma.GrupoEconomicoWhereInput = {};
 
     if (search) {
-      where.OR = [
-        { nombre: { contains: search, mode: 'insensitive' } },
-        { rutControlador: { contains: search, mode: 'insensitive' } },
-      ];
+      where.nombre = { contains: search, mode: 'insensitive' };
     }
 
     if (activo !== undefined) {
@@ -46,7 +43,6 @@ export class GruposRepository {
         select: {
           id: true,
           nombre: true,
-          rutControlador: true,
           paisPrincipal: true,
           monedaBase: true,
           fechaCreacion: true,
@@ -132,7 +128,6 @@ export class GruposRepository {
       const grupo = await tx.grupoEconomico.create({
         data: {
           nombre: data.nombre,
-          rutControlador: data.rutControlador || null,
           paisPrincipal: data.paisPrincipal,
           monedaBase: data.monedaBase,
         },
@@ -189,7 +184,6 @@ export class GruposRepository {
       where: { id },
       data: {
         ...(data.nombre && { nombre: data.nombre }),
-        ...(data.rutControlador !== undefined && { rutControlador: data.rutControlador || null }),
         ...(data.paisPrincipal && { paisPrincipal: data.paisPrincipal }),
         ...(data.monedaBase && { monedaBase: data.monedaBase }),
         ...(data.activo !== undefined && { activo: data.activo }),

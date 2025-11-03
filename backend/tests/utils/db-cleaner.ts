@@ -70,7 +70,6 @@ export async function seedTestData() {
     data: {
       id: 1,
       nombre: 'Grupo Test 1',
-      rutControlador: '217890120018',
       paisPrincipal: 'UY',
       monedaBase: 'UYU',
       activo: true,

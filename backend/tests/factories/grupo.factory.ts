@@ -13,7 +13,6 @@ export function buildGrupo(overrides?: Partial<CreateGrupoDto>): CreateGrupoDto 
     nombre: `Grupo Test ${timestamp}-${random}`,
     paisPrincipal: 'UY',
     monedaBase: 'UYU',
-    rutControlador: undefined,
     ...overrides,
   };
 }
@@ -47,9 +46,5 @@ export const grupoPresets = {
   brasil: (): CreateGrupoDto => buildGrupo({
     paisPrincipal: 'BR',
     monedaBase: 'BRL',
-  }),
-
-  conRUT: (): CreateGrupoDto => buildGrupo({
-    rutControlador: '217890120018',
   }),
 };
