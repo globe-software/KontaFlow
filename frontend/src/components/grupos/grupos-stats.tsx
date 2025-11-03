@@ -1,11 +1,15 @@
+'use client';
+
 import type { GrupoEconomico } from '@/types/grupo';
 import { Building2, CheckCircle2, XCircle, TrendingUp } from 'lucide-react';
+import { useTranslation } from '@/contexts/I18nContext';
 
 interface GruposStatsProps {
   grupos: GrupoEconomico[];
 }
 
 export function GruposStats({ grupos }: GruposStatsProps) {
+  const { t } = useTranslation();
   const totalGrupos = grupos.length;
   const gruposActivos = grupos.filter((g) => g.activo).length;
   const gruposInactivos = totalGrupos - gruposActivos;
@@ -13,7 +17,7 @@ export function GruposStats({ grupos }: GruposStatsProps) {
 
   const stats = [
     {
-      label: 'Total Grupos',
+      label: t('grupos.stats.totalGroups'),
       value: totalGrupos,
       icon: Building2,
       bgColor: 'bg-primary/10',
@@ -21,7 +25,7 @@ export function GruposStats({ grupos }: GruposStatsProps) {
       trend: null,
     },
     {
-      label: 'Grupos Activos',
+      label: t('grupos.stats.activeGroups'),
       value: gruposActivos,
       icon: CheckCircle2,
       bgColor: 'bg-green-50',
@@ -29,7 +33,7 @@ export function GruposStats({ grupos }: GruposStatsProps) {
       trend: totalGrupos > 0 ? Math.round((gruposActivos / totalGrupos) * 100) : 0,
     },
     {
-      label: 'Grupos Inactivos',
+      label: t('grupos.stats.inactiveGroups'),
       value: gruposInactivos,
       icon: XCircle,
       bgColor: 'bg-gray-100',
@@ -37,7 +41,7 @@ export function GruposStats({ grupos }: GruposStatsProps) {
       trend: null,
     },
     {
-      label: 'Total Empresas',
+      label: t('grupos.stats.totalCompanies'),
       value: totalEmpresas,
       icon: TrendingUp,
       bgColor: 'bg-accent',

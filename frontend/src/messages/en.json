@@ -1,0 +1,192 @@
+{
+  "common": {
+    "create": "Create",
+    "edit": "Edit",
+    "delete": "Delete",
+    "save": "Save",
+    "saving": "Saving...",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "search": "Search",
+    "filter": "Filter",
+    "loading": "Loading...",
+    "noResults": "No results found",
+    "error": "Error",
+    "success": "Success",
+    "actions": "Actions",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "close": "Close",
+    "view": "View",
+    "details": "Details",
+    "active": "Active",
+    "inactive": "Inactive",
+    "yes": "Yes",
+    "no": "No",
+    "all": "All",
+    "select": "Select",
+    "date": "Date",
+    "total": "Total",
+    "status": "Status"
+  },
+  "navigation": {
+    "home": "Home",
+    "grupos": "Economic Groups",
+    "empresas": "Companies",
+    "comprobantes": "Vouchers",
+    "cuentas": "Accounts",
+    "reportes": "Reports",
+    "dashboard": "Dashboard",
+    "settings": "Settings",
+    "logout": "Logout"
+  },
+  "grupos": {
+    "title": "Economic Groups",
+    "createButton": "Create Group",
+    "editButton": "Edit Group",
+    "deleteButton": "Delete Group",
+    "viewButton": "View Details",
+    "searchPlaceholder": "Search groups...",
+    "emptyState": "No economic groups created",
+    "emptyStateDescription": "Start by creating your first economic group",
+    "noRut": "No RUT",
+    "companyOne": "company",
+    "companyMany": "companies",
+    "table": {
+      "name": "Name",
+      "country": "Country",
+      "currency": "Currency",
+      "companies": "Companies",
+      "createdAt": "Created At",
+      "status": "Status"
+    },
+    "form": {
+      "title": "Group Information",
+      "createDescription": "Fill in the data to create a new economic group",
+      "editDescription": "Modify the economic group data",
+      "nameLabel": "Group Name",
+      "namePlaceholder": "E.g.: XYZ Group",
+      "nameRequired": "Name is required",
+      "nameMinLength": "Name must be at least 3 characters",
+      "countryLabel": "Main Country",
+      "countryPlaceholder": "Select a country",
+      "countryRequired": "Country is required",
+      "currencyLabel": "Base Currency",
+      "currencyPlaceholder": "Select a currency",
+      "currencyRequired": "Currency is required"
+    },
+    "countries": {
+      "UY": "Uruguay",
+      "AR": "Argentina",
+      "BR": "Brazil",
+      "CL": "Chile",
+      "US": "United States"
+    },
+    "currencies": {
+      "UYU": "Uruguayan Peso",
+      "USD": "US Dollar",
+      "ARS": "Argentine Peso",
+      "BRL": "Brazilian Real",
+      "CLP": "Chilean Peso"
+    },
+    "messages": {
+      "created": "Economic group created successfully",
+      "updated": "Economic group updated successfully",
+      "deleted": "Economic group deleted successfully",
+      "loadError": "Error loading groups",
+      "createError": "Error creating group",
+      "updateError": "Error updating group",
+      "deleteError": "Error deleting group"
+    },
+    "deleteConfirm": {
+      "title": "Delete group?",
+      "description": "This action cannot be undone. The group will be marked as inactive.",
+      "confirmButton": "Yes, delete"
+    },
+    "details": {
+      "title": "Group Details",
+      "information": "General Information",
+      "companies": "Companies",
+      "accountingPlan": "Chart of Accounts",
+      "configuration": "Configuration",
+      "noCompanies": "No companies in this group",
+      "createCompanyButton": "Create First Company"
+    },
+    "filters": {
+      "all": "All",
+      "active": "Active",
+      "inactive": "Inactive",
+      "byCountry": "By country"
+    },
+    "stats": {
+      "totalGroups": "Total Groups",
+      "activeGroups": "Active Groups",
+      "inactiveGroups": "Inactive Groups",
+      "totalCompanies": "Total Companies"
+    }
+  },
+  "empresas": {
+    "title": "Companies",
+    "createButton": "Create Company",
+    "editButton": "Edit Company",
+    "deleteButton": "Delete Company",
+    "viewButton": "View Details",
+    "searchPlaceholder": "Search companies...",
+    "emptyState": "No companies created",
+    "emptyStateDescription": "Start by creating your first company",
+    "table": {
+      "name": "Name",
+      "rut": "RUT",
+      "grupo": "Economic Group",
+      "currency": "Currency",
+      "country": "Country",
+      "status": "Status"
+    },
+    "form": {
+      "title": "Company Information",
+      "nameLabel": "Company Name",
+      "namePlaceholder": "E.g.: Acme Corp",
+      "nameRequired": "Name is required",
+      "rutLabel": "RUT",
+      "rutPlaceholder": "E.g.: 211234560019",
+      "rutRequired": "RUT is required",
+      "rutInvalid": "RUT is not valid",
+      "grupoLabel": "Economic Group",
+      "grupoPlaceholder": "Select a group",
+      "grupoRequired": "Group is required",
+      "currencyLabel": "Functional Currency",
+      "currencyPlaceholder": "Select a currency",
+      "currencyRequired": "Currency is required"
+    },
+    "messages": {
+      "created": "Company created successfully",
+      "updated": "Company updated successfully",
+      "deleted": "Company deleted successfully",
+      "loadError": "Error loading companies",
+      "createError": "Error creating company",
+      "updateError": "Error updating company",
+      "deleteError": "Error deleting company"
+    }
+  },
+  "validation": {
+    "required": "This field is required",
+    "minLength": "Must be at least {min} characters",
+    "maxLength": "Must be at most {max} characters",
+    "email": "Must be a valid email",
+    "number": "Must be a number",
+    "positive": "Must be a positive number",
+    "integer": "Must be an integer",
+    "min": "Minimum value is {min}",
+    "max": "Maximum value is {max}"
+  },
+  "pagination": {
+    "showing": "Showing",
+    "of": "of",
+    "results": "results",
+    "page": "Page",
+    "rowsPerPage": "Rows per page",
+    "first": "First",
+    "last": "Last"
+  }
+}

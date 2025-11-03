@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import type { GrupoEconomico } from '@/types/grupo';
+import { useTranslation } from '@/contexts/I18nContext';
 import {
   Table,
   TableBody,
@@ -46,17 +47,17 @@ interface GruposTableProps {
 
 export function GruposTable({ grupos, onEdit, onDelete }: GruposTableProps) {
   const router = useRouter();
+  const { t } = useTranslation();
 
   if (grupos.length === 0) {
     return (
       <div className="flex min-h-[400px] flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-200 bg-gray-50/50 p-12">
         <Building2 className="mb-4 h-16 w-16 text-gray-300" />
         <h3 className="mb-2 text-xl font-semibold text-gray-900">
-          No hay grupos económicos
+          {t('grupos.emptyState')}
         </h3>
         <p className="mb-6 max-w-sm text-center text-sm text-gray-500">
-          Comienza creando tu primer grupo económico para gestionar tus empresas y
-          contabilidad
+          {t('grupos.emptyStateDescription')}
         </p>
       </div>
     );
@@ -67,21 +68,21 @@ export function GruposTable({ grupos, onEdit, onDelete }: GruposTableProps) {
       <Table>
         <TableHeader className="bg-gray-50/50">
           <TableRow className="hover:bg-gray-50/50">
-            <TableHead className="font-semibold">Nombre</TableHead>
+            <TableHead className="font-semibold">{t('grupos.table.name')}</TableHead>
             <TableHead className="font-semibold">RUT</TableHead>
-            <TableHead className="font-semibold">País</TableHead>
-            <TableHead className="font-semibold">Moneda Base</TableHead>
+            <TableHead className="font-semibold">{t('grupos.table.country')}</TableHead>
+            <TableHead className="font-semibold">{t('grupos.table.currency')}</TableHead>
             <TableHead className="font-semibold">
               <div className="flex items-center gap-1.5">
                 <Building2 className="h-4 w-4" />
-                <span>Empresas</span>
+                <span>{t('grupos.table.companies')}</span>
               </div>
             </TableHead>
-            <TableHead className="font-semibold">Estado</TableHead>
+            <TableHead className="font-semibold">{t('grupos.table.status')}</TableHead>
             <TableHead className="font-semibold">
               <div className="flex items-center gap-1.5">
                 <Calendar className="h-4 w-4" />
-                <span>Creado</span>
+                <span>{t('grupos.table.createdAt')}</span>
               </div>
             </TableHead>
             <TableHead className="w-[70px]"></TableHead>
@@ -107,7 +108,7 @@ export function GruposTable({ grupos, onEdit, onDelete }: GruposTableProps) {
               </TableCell>
               <TableCell className="py-2 font-mono text-xs text-gray-600">
                 {grupo.rutControlador || (
-                  <span className="text-gray-400">Sin RUT</span>
+                  <span className="text-gray-400">{t('grupos.noRut')}</span>
                 )}
               </TableCell>
               <TableCell className="py-2 text-sm text-gray-700">
@@ -131,7 +132,7 @@ export function GruposTable({ grupos, onEdit, onDelete }: GruposTableProps) {
                     </span>
                   </div>
                   <span className="text-xs text-gray-600">
-                    {grupo._count?.empresas === 1 ? 'empresa' : 'empresas'}
+                    {grupo._count?.empresas === 1 ? t('grupos.companyOne') : t('grupos.companyMany')}
                   </span>
                 </div>
               </TableCell>
@@ -142,12 +143,12 @@ export function GruposTable({ grupos, onEdit, onDelete }: GruposTableProps) {
                     className="flex w-fit items-center gap-1 px-2 py-0.5 text-xs"
                   >
                     <CheckCircle2 className="h-3 w-3" />
-                    Activo
+                    {t('common.active')}
                   </Badge>
                 ) : (
                   <Badge className="flex w-fit items-center gap-1 bg-gray-100 px-2 py-0.5 text-xs text-gray-700 hover:bg-gray-100/80">
                     <XCircle className="h-3 w-3" />
-                    Inactivo
+                    {t('common.inactive')}
                   </Badge>
                 )}
               </TableCell>
@@ -174,7 +175,7 @@ export function GruposTable({ grupos, onEdit, onDelete }: GruposTableProps) {
                       className="h-7 w-7 p-0 opacity-0 transition-opacity group-hover:opacity-100"
                     >
                       <MoreHorizontal className="h-3.5 w-3.5" />
-                      <span className="sr-only">Abrir menú</span>
+                      <span className="sr-only">{t('common.actions')}</span>
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end" className="w-48">
@@ -183,14 +184,14 @@ export function GruposTable({ grupos, onEdit, onDelete }: GruposTableProps) {
                       onClick={() => onEdit(grupo)}
                     >
                       <Edit2 className="mr-2 h-4 w-4" />
-                      <span>Editar</span>
+                      <span>{t('common.edit')}</span>
                     </DropdownMenuItem>
                     <DropdownMenuItem
                       className="cursor-pointer"
                       onClick={() => router.push(`/grupos/${grupo.id}`)}
                     >
                       <FileText className="mr-2 h-4 w-4" />
-                      <span>Ver detalles</span>
+                      <span>{t('common.details')}</span>
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem
@@ -199,7 +200,7 @@ export function GruposTable({ grupos, onEdit, onDelete }: GruposTableProps) {
                       disabled={!grupo.activo}
                     >
                       <Trash2 className="mr-2 h-4 w-4" />
-                      <span>Eliminar</span>
+                      <span>{t('common.delete')}</span>
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import type { GrupoEconomico, CreateGrupoDto, Pais, Moneda } from '@/types/grupo';
+import { useTranslation } from '@/contexts/I18nContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -30,6 +31,7 @@ interface GrupoFormProps {
 }
 
 export function GrupoForm({ grupo, open, onOpenChange, onSubmit }: GrupoFormProps) {
+  const { t } = useTranslation();
   const [formData, setFormData] = useState<CreateGrupoDto>({
     nombre: '',
     paisPrincipal: 'UY',
@@ -78,12 +80,12 @@ export function GrupoForm({ grupo, open, onOpenChange, onSubmit }: GrupoFormProp
       <SheetContent side="right" className="w-full sm:max-w-[540px] overflow-y-auto">
         <SheetHeader>
           <SheetTitle>
-            {grupo ? 'Editar Grupo Económico' : 'Crear Grupo Económico'}
+            {grupo ? t('grupos.editButton') : t('grupos.createButton')}
           </SheetTitle>
           <SheetDescription>
             {grupo
-              ? 'Modifica los datos del grupo económico'
-              : 'Completa los datos para crear un nuevo grupo económico'}
+              ? t('grupos.form.editDescription')
+              : t('grupos.form.createDescription')}
           </SheetDescription>
         </SheetHeader>
 
@@ -92,7 +94,7 @@ export function GrupoForm({ grupo, open, onOpenChange, onSubmit }: GrupoFormProp
             {/* Nombre */}
             <div className="grid gap-2">
               <Label htmlFor="nombre">
-                Nombre <span className="text-red-500">*</span>
+                {t('grupos.form.nameLabel')} <span className="text-red-500">*</span>
               </Label>
               <Input
                 id="nombre"
@@ -100,7 +102,7 @@ export function GrupoForm({ grupo, open, onOpenChange, onSubmit }: GrupoFormProp
                 onChange={(e) =>
                   setFormData({ ...formData, nombre: e.target.value })
                 }
-                placeholder="Ej: Grupo Pragmatic"
+                placeholder={t('grupos.form.namePlaceholder')}
                 className={errors.nombre ? 'border-red-500' : ''}
               />
               {errors.nombre && (
@@ -111,7 +113,7 @@ export function GrupoForm({ grupo, open, onOpenChange, onSubmit }: GrupoFormProp
             {/* País Principal */}
             <div className="grid gap-2">
               <Label htmlFor="paisPrincipal">
-                País Principal <span className="text-red-500">*</span>
+                {t('grupos.form.countryLabel')} <span className="text-red-500">*</span>
               </Label>
               <Select
                 value={formData.paisPrincipal}
@@ -138,7 +140,7 @@ export function GrupoForm({ grupo, open, onOpenChange, onSubmit }: GrupoFormProp
             {/* Moneda Base */}
             <div className="grid gap-2">
               <Label htmlFor="monedaBase">
-                Moneda Base <span className="text-red-500">*</span>
+                {t('grupos.form.currencyLabel')} <span className="text-red-500">*</span>
               </Label>
               <Select
                 value={formData.monedaBase}
@@ -170,10 +172,10 @@ export function GrupoForm({ grupo, open, onOpenChange, onSubmit }: GrupoFormProp
               onClick={() => onOpenChange(false)}
               disabled={isLoading}
             >
-              Cancelar
+              {t('common.cancel')}
             </Button>
             <Button type="submit" disabled={isLoading}>
-              {isLoading ? 'Guardando...' : grupo ? 'Guardar' : 'Crear'}
+              {isLoading ? t('common.saving') : grupo ? t('common.save') : t('common.create')}
             </Button>
           </SheetFooter>
         </form>

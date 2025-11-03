@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { useTranslation } from '@/contexts/I18nContext';
 import type {
   GrupoEconomico,
   CreateGrupoDto,
@@ -36,6 +37,7 @@ import {
 export default function GruposPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { t } = useTranslation();
 
   const [grupos, setGrupos] = useState<GrupoEconomico[]>([]);
   const [isInitialLoading, setIsInitialLoading] = useState(true);
@@ -120,7 +122,7 @@ export default function GruposPage() {
         console.error('Error loading grupo for edit:', err);
       });
     }
-  }, [searchParams]);
+  }, [searchParams, router]);
 
   // Crear grupo
   const handleCreate = async (data: CreateGrupoDto) => {
@@ -143,7 +145,7 @@ export default function GruposPage() {
 
   // Eliminar grupo
   const handleDelete = async (grupo: GrupoEconomico) => {
-    if (!confirm(`¿Estás seguro de eliminar el grupo "${grupo.nombre}"?`)) {
+    if (!confirm(t('grupos.deleteConfirm.description'))) {
       return;
     }
 
@@ -187,9 +189,9 @@ export default function GruposPage() {
       <div className="container mx-auto py-6 px-6">
         {/* Header simplificado */}
         <div className="mb-6">
-          <h1 className="text-2xl font-bold text-gray-900">Grupos Económicos</h1>
+          <h1 className="text-2xl font-bold text-gray-900">{t('grupos.title')}</h1>
           <p className="text-sm text-gray-600 mt-1">
-            Gestiona tus grupos económicos y empresas
+            {t('grupos.emptyStateDescription')}
           </p>
         </div>
 
@@ -204,7 +206,7 @@ export default function GruposPage() {
               <div className="relative flex-1 max-w-sm">
                 <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
                 <Input
-                  placeholder="Buscar por nombre..."
+                  placeholder={t('grupos.searchPlaceholder')}
                   value={searchInput}
                   onChange={(e) => setSearchInput(e.target.value)}
                   className="pl-9"
@@ -222,10 +224,10 @@ export default function GruposPage() {
                   onValueChange={handlePaisFilter}
                 >
                   <SelectTrigger className="w-[180px]">
-                    <SelectValue placeholder="Todos los países" />
+                    <SelectValue placeholder={t('grupos.filters.byCountry')} />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all">Todos los países</SelectItem>
+                    <SelectItem value="all">{t('grupos.filters.all')}</SelectItem>
                     {Object.entries(PAISES).map(([code, name]) => (
                       <SelectItem key={code} value={code}>
                         {name}
@@ -247,12 +249,12 @@ export default function GruposPage() {
                 onValueChange={handleActivoFilter}
               >
                 <SelectTrigger className="w-[180px]">
-                  <SelectValue placeholder="Todos los estados" />
+                  <SelectValue placeholder={t('common.status')} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">Todos los estados</SelectItem>
-                  <SelectItem value="true">Activos</SelectItem>
-                  <SelectItem value="false">Inactivos</SelectItem>
+                  <SelectItem value="all">{t('grupos.filters.all')}</SelectItem>
+                  <SelectItem value="true">{t('grupos.filters.active')}</SelectItem>
+                  <SelectItem value="false">{t('grupos.filters.inactive')}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -260,7 +262,7 @@ export default function GruposPage() {
             {/* Botón crear con ícono */}
             <Button onClick={handleOpenCreate} size="default" className="gap-2">
               <Plus className="h-4 w-4" />
-              Crear Grupo
+              {t('grupos.createButton')}
             </Button>
           </div>
         </div>
@@ -271,7 +273,7 @@ export default function GruposPage() {
             <div className="flex items-center gap-3">
               <AlertCircle className="h-5 w-5 text-red-600" />
               <div>
-                <h3 className="font-semibold text-red-900">Error al cargar grupos</h3>
+                <h3 className="font-semibold text-red-900">{t('grupos.messages.loadError')}</h3>
                 <p className="text-sm text-red-700 mt-0.5">{error}</p>
               </div>
             </div>
@@ -282,7 +284,7 @@ export default function GruposPage() {
         {isInitialLoading && (
           <div className="flex min-h-[400px] flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-200 bg-gray-50/50">
             <Loader2 className="h-8 w-8 animate-spin text-primary mb-3" />
-            <p className="text-sm font-medium text-gray-600">Cargando grupos económicos...</p>
+            <p className="text-sm font-medium text-gray-600">{t('common.loading')}</p>
           </div>
         )}
 
@@ -299,7 +301,7 @@ export default function GruposPage() {
             {pagination.totalPages > 1 && (
               <div className="mt-4 flex items-center justify-between">
                 <p className="text-sm text-muted-foreground">
-                  Mostrando {grupos.length} de {pagination.total} resultados
+                  {t('pagination.showing')} {grupos.length} {t('pagination.of')} {pagination.total} {t('pagination.results')}
                 </p>
                 <div className="flex gap-2">
                   <Button
@@ -308,11 +310,11 @@ export default function GruposPage() {
                     onClick={() => handlePageChange(pagination.page - 1)}
                     disabled={pagination.page === 1}
                   >
-                    Anterior
+                    {t('common.previous')}
                   </Button>
                   <div className="flex items-center gap-2">
                     <span className="text-sm">
-                      Página {pagination.page} de {pagination.totalPages}
+                      {t('pagination.page')} {pagination.page} {t('pagination.of')} {pagination.totalPages}
                     </span>
                   </div>
                   <Button
@@ -321,7 +323,7 @@ export default function GruposPage() {
                     onClick={() => handlePageChange(pagination.page + 1)}
                     disabled={pagination.page === pagination.totalPages}
                   >
-                    Siguiente
+                    {t('common.next')}
                   </Button>
                 </div>
               </div>

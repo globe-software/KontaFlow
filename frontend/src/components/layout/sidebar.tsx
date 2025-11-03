@@ -12,44 +12,7 @@ import {
   Wallet,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-
-const menuItems = [
-  {
-    label: 'Dashboard',
-    icon: LayoutDashboard,
-    href: '/',
-  },
-  {
-    label: 'Grupos Económicos',
-    icon: Building2,
-    href: '/grupos',
-  },
-  {
-    label: 'Empresas',
-    icon: Users,
-    href: '/empresas',
-  },
-  {
-    label: 'Comprobantes',
-    icon: FileText,
-    href: '/comprobantes',
-  },
-  {
-    label: 'Cuentas',
-    icon: Wallet,
-    href: '/cuentas',
-  },
-  {
-    label: 'Reportes',
-    icon: BarChart3,
-    href: '/reportes',
-  },
-  {
-    label: 'Configuración',
-    icon: Settings,
-    href: '/configuracion',
-  },
-];
+import { useTranslation } from '@/contexts/I18nContext';
 
 interface SidebarProps {
   className?: string;
@@ -57,6 +20,45 @@ interface SidebarProps {
 
 export function Sidebar({ className }: SidebarProps) {
   const pathname = usePathname();
+  const { t } = useTranslation();
+
+  const menuItems = [
+    {
+      label: t('navigation.dashboard'),
+      icon: LayoutDashboard,
+      href: '/',
+    },
+    {
+      label: t('navigation.grupos'),
+      icon: Building2,
+      href: '/grupos',
+    },
+    {
+      label: t('navigation.empresas'),
+      icon: Users,
+      href: '/empresas',
+    },
+    {
+      label: t('navigation.comprobantes'),
+      icon: FileText,
+      href: '/comprobantes',
+    },
+    {
+      label: t('navigation.cuentas'),
+      icon: Wallet,
+      href: '/cuentas',
+    },
+    {
+      label: t('navigation.reportes'),
+      icon: BarChart3,
+      href: '/reportes',
+    },
+    {
+      label: t('navigation.settings'),
+      icon: Settings,
+      href: '/configuracion',
+    },
+  ];
 
   return (
     <aside

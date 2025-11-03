@@ -1,0 +1,192 @@
+{
+  "common": {
+    "create": "Crear",
+    "edit": "Editar",
+    "delete": "Eliminar",
+    "save": "Guardar",
+    "saving": "Guardando...",
+    "cancel": "Cancelar",
+    "confirm": "Confirmar",
+    "search": "Buscar",
+    "filter": "Filtrar",
+    "loading": "Cargando...",
+    "noResults": "No se encontraron resultados",
+    "error": "Error",
+    "success": "Éxito",
+    "actions": "Acciones",
+    "back": "Volver",
+    "next": "Siguiente",
+    "previous": "Anterior",
+    "close": "Cerrar",
+    "view": "Ver",
+    "details": "Detalles",
+    "active": "Activo",
+    "inactive": "Inactivo",
+    "yes": "Sí",
+    "no": "No",
+    "all": "Todos",
+    "select": "Seleccionar",
+    "date": "Fecha",
+    "total": "Total",
+    "status": "Estado"
+  },
+  "navigation": {
+    "home": "Inicio",
+    "grupos": "Grupos Económicos",
+    "empresas": "Empresas",
+    "comprobantes": "Comprobantes",
+    "cuentas": "Cuentas",
+    "reportes": "Reportes",
+    "dashboard": "Panel de Control",
+    "settings": "Configuración",
+    "logout": "Cerrar Sesión"
+  },
+  "grupos": {
+    "title": "Grupos Económicos",
+    "createButton": "Crear Grupo",
+    "editButton": "Editar Grupo",
+    "deleteButton": "Eliminar Grupo",
+    "viewButton": "Ver Detalles",
+    "searchPlaceholder": "Buscar grupos...",
+    "emptyState": "No hay grupos económicos creados",
+    "emptyStateDescription": "Comienza creando tu primer grupo económico",
+    "noRut": "Sin RUT",
+    "companyOne": "empresa",
+    "companyMany": "empresas",
+    "table": {
+      "name": "Nombre",
+      "country": "País",
+      "currency": "Moneda",
+      "companies": "Empresas",
+      "createdAt": "Fecha de Creación",
+      "status": "Estado"
+    },
+    "form": {
+      "title": "Información del Grupo",
+      "createDescription": "Completa los datos para crear un nuevo grupo económico",
+      "editDescription": "Modifica los datos del grupo económico",
+      "nameLabel": "Nombre del Grupo",
+      "namePlaceholder": "Ej: Grupo XYZ",
+      "nameRequired": "El nombre es requerido",
+      "nameMinLength": "El nombre debe tener al menos 3 caracteres",
+      "countryLabel": "País Principal",
+      "countryPlaceholder": "Selecciona un país",
+      "countryRequired": "El país es requerido",
+      "currencyLabel": "Moneda Base",
+      "currencyPlaceholder": "Selecciona una moneda",
+      "currencyRequired": "La moneda es requerida"
+    },
+    "countries": {
+      "UY": "Uruguay",
+      "AR": "Argentina",
+      "BR": "Brasil",
+      "CL": "Chile",
+      "US": "Estados Unidos"
+    },
+    "currencies": {
+      "UYU": "Peso Uruguayo",
+      "USD": "Dólar Estadounidense",
+      "ARS": "Peso Argentino",
+      "BRL": "Real Brasileño",
+      "CLP": "Peso Chileno"
+    },
+    "messages": {
+      "created": "Grupo económico creado exitosamente",
+      "updated": "Grupo económico actualizado exitosamente",
+      "deleted": "Grupo económico eliminado exitosamente",
+      "loadError": "Error al cargar grupos",
+      "createError": "Error al crear grupo",
+      "updateError": "Error al actualizar grupo",
+      "deleteError": "Error al eliminar grupo"
+    },
+    "deleteConfirm": {
+      "title": "¿Eliminar grupo?",
+      "description": "Esta acción no se puede deshacer. El grupo será marcado como inactivo.",
+      "confirmButton": "Sí, eliminar"
+    },
+    "details": {
+      "title": "Detalles del Grupo",
+      "information": "Información General",
+      "companies": "Empresas",
+      "accountingPlan": "Plan de Cuentas",
+      "configuration": "Configuración",
+      "noCompanies": "No hay empresas en este grupo",
+      "createCompanyButton": "Crear Primera Empresa"
+    },
+    "filters": {
+      "all": "Todos",
+      "active": "Activos",
+      "inactive": "Inactivos",
+      "byCountry": "Por país"
+    },
+    "stats": {
+      "totalGroups": "Total Grupos",
+      "activeGroups": "Grupos Activos",
+      "inactiveGroups": "Grupos Inactivos",
+      "totalCompanies": "Total Empresas"
+    }
+  },
+  "empresas": {
+    "title": "Empresas",
+    "createButton": "Crear Empresa",
+    "editButton": "Editar Empresa",
+    "deleteButton": "Eliminar Empresa",
+    "viewButton": "Ver Detalles",
+    "searchPlaceholder": "Buscar empresas...",
+    "emptyState": "No hay empresas creadas",
+    "emptyStateDescription": "Comienza creando tu primera empresa",
+    "table": {
+      "name": "Nombre",
+      "rut": "RUT",
+      "grupo": "Grupo Económico",
+      "currency": "Moneda",
+      "country": "País",
+      "status": "Estado"
+    },
+    "form": {
+      "title": "Información de la Empresa",
+      "nameLabel": "Nombre de la Empresa",
+      "namePlaceholder": "Ej: Acme Corp",
+      "nameRequired": "El nombre es requerido",
+      "rutLabel": "RUT",
+      "rutPlaceholder": "Ej: 211234560019",
+      "rutRequired": "El RUT es requerido",
+      "rutInvalid": "El RUT no es válido",
+      "grupoLabel": "Grupo Económico",
+      "grupoPlaceholder": "Selecciona un grupo",
+      "grupoRequired": "El grupo es requerido",
+      "currencyLabel": "Moneda Funcional",
+      "currencyPlaceholder": "Selecciona una moneda",
+      "currencyRequired": "La moneda es requerida"
+    },
+    "messages": {
+      "created": "Empresa creada exitosamente",
+      "updated": "Empresa actualizada exitosamente",
+      "deleted": "Empresa eliminada exitosamente",
+      "loadError": "Error al cargar empresas",
+      "createError": "Error al crear empresa",
+      "updateError": "Error al actualizar empresa",
+      "deleteError": "Error al eliminar empresa"
+    }
+  },
+  "validation": {
+    "required": "Este campo es requerido",
+    "minLength": "Debe tener al menos {min} caracteres",
+    "maxLength": "Debe tener como máximo {max} caracteres",
+    "email": "Debe ser un email válido",
+    "number": "Debe ser un número",
+    "positive": "Debe ser un número positivo",
+    "integer": "Debe ser un número entero",
+    "min": "El valor mínimo es {min}",
+    "max": "El valor máximo es {max}"
+  },
+  "pagination": {
+    "showing": "Mostrando",
+    "of": "de",
+    "results": "resultados",
+    "page": "Página",
+    "rowsPerPage": "Filas por página",
+    "first": "Primera",
+    "last": "Última"
+  }
+}

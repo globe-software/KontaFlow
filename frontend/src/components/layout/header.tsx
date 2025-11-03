@@ -1,13 +1,29 @@
 'use client';
 
-import { Building2, Menu } from 'lucide-react';
+import { Building2, Menu, Languages } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { useTranslation } from '@/contexts/I18nContext';
 
 interface HeaderProps {
   onMenuClick: () => void;
 }
 
 export function Header({ onMenuClick }: HeaderProps) {
+  const { locale, setLocale } = useTranslation();
+
+  const languages = {
+    es: 'Español',
+    pt: 'Português',
+    en: 'English',
+  };
+
   return (
     <header className="sticky top-0 z-50 w-full border-b border-gray-200 bg-white shadow-sm">
       <div className="flex h-16 items-center gap-4 px-6">
@@ -34,6 +50,23 @@ export function Header({ onMenuClick }: HeaderProps) {
 
         {/* Spacer */}
         <div className="flex-1" />
+
+        {/* Language selector */}
+        <div className="flex items-center gap-2">
+          <Languages className="h-4 w-4 text-gray-500" />
+          <Select value={locale} onValueChange={(value) => setLocale(value as 'es' | 'pt' | 'en')}>
+            <SelectTrigger className="w-[140px]">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {Object.entries(languages).map(([code, name]) => (
+                <SelectItem key={code} value={code}>
+                  {name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
 
         {/* User info */}
         <div className="flex items-center gap-3">
