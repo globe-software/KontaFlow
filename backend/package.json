@@ -37,7 +37,7 @@
   },
   "homepage": "https://github.com/globe-software/KontaFlow#readme",
   "dependencies": {
-    "@clerk/backend": "^0.38.0",
+    "@clerk/backend": "^2.19.1",
     "@fastify/cors": "^8.5.0",
     "@fastify/helmet": "^11.1.1",
     "@fastify/rate-limit": "^9.1.0",
