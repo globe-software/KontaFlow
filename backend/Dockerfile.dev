@@ -1,5 +1,14 @@
 FROM node:20-alpine
 
+# Metadata
+LABEL maintainer="KontaFlow Team"
+LABEL description="KontaFlow Backend - Node.js Development Environment"
+LABEL version="1.0.0"
+LABEL org.opencontainers.image.source="https://github.com/globe-software/kontaflow"
+LABEL org.opencontainers.image.description="KontaFlow Backend - Node.js Application"
+LABEL org.opencontainers.image.vendor="Globe Software"
+LABEL org.opencontainers.image.licenses="Proprietary"
+
 WORKDIR /app
 
 # Instalar dependencias del sistema necesarias para Prisma
