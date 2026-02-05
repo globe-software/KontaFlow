@@ -3,7 +3,7 @@
  * Type definitions for the Accounting Period module
  */
 
-export type PeriodType = 'FISCAL_YEAR' | 'MONTH';
+export type PeriodType = 'FISCAL_YEAR' | 'QUARTER' | 'MONTH';
 
 export interface AccountingPeriod {
   id: number;
@@ -11,6 +11,7 @@ export interface AccountingPeriod {
   type: PeriodType;
   fiscalYear: number;
   month: number | null;
+  quarter: number | null;
   startDate: string;
   endDate: string;
   closed: boolean;
@@ -37,6 +38,7 @@ export interface CreateAccountingPeriodDto {
   type: PeriodType;
   fiscalYear: number;
   month?: number | null;
+  quarter?: number | null;
   startDate: string;
   endDate: string;
 }
@@ -45,6 +47,7 @@ export interface UpdateAccountingPeriodDto {
   type?: PeriodType;
   fiscalYear?: number;
   month?: number | null;
+  quarter?: number | null;
   startDate?: string;
   endDate?: string;
 }

@@ -1,0 +1,238 @@
+{
+  "info": {
+    "name": "KontaFlow - Customers",
+    "description": "API endpoints para gestión de Clientes en KontaFlow",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "kontaflow"
+  },
+  "item": [
+    {
+      "name": "Listar Clientes (con paginación)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "x-user-id",
+            "value": "{{user_id}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/customers?page=1&limit=10",
+          "host": ["{{base_url}}"],
+          "path": ["api", "customers"],
+          "query": [
+            {
+              "key": "page",
+              "value": "1",
+              "description": "Número de página (default: 1)"
+            },
+            {
+              "key": "limit",
+              "value": "10",
+              "description": "Resultados por página (default: 10, max: 100)"
+            },
+            {
+              "key": "search",
+              "value": "",
+              "description": "Buscar por nombre o RUT",
+              "disabled": true
+            },
+            {
+              "key": "economicGroupId",
+              "value": "{{grupo_id}}",
+              "description": "Filtrar por grupo económico",
+              "disabled": true
+            },
+            {
+              "key": "active",
+              "value": "true",
+              "description": "Filtrar por activo/inactivo",
+              "disabled": true
+            }
+          ]
+        },
+        "description": "Lista todos los clientes con paginación y filtros"
+      },
+      "response": []
+    },
+    {
+      "name": "Obtener Cliente por ID",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "x-user-id",
+            "value": "{{user_id}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/customers/{{customer_id}}",
+          "host": ["{{base_url}}"],
+          "path": ["api", "customers", "{{customer_id}}"]
+        },
+        "description": "Obtiene un cliente específico por su ID"
+      },
+      "response": []
+    },
+    {
+      "name": "Crear Cliente - Completo",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "x-user-id",
+            "value": "{{user_id}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"economicGroupId\": 1,\n  \"name\": \"Banco de la República Oriental del Uruguay\",\n  \"rut\": \"217003530018\",\n  \"email\": \"sistemas@brou.com.uy\",\n  \"phone\": \"+598 2900 1000\",\n  \"address\": \"Plaza Zabala s/n, Montevideo\",\n  \"notes\": \"Cliente corporativo - sector bancario\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/customers",
+          "host": ["{{base_url}}"],
+          "path": ["api", "customers"]
+        },
+        "description": "Crea un nuevo cliente con todos los datos opcionales"
+      },
+      "response": []
+    },
+    {
+      "name": "Crear Cliente - Solo requeridos",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "x-user-id",
+            "value": "{{user_id}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"economicGroupId\": 1,\n  \"name\": \"Cliente Prueba SA\",\n  \"rut\": \"218765430020\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/customers",
+          "host": ["{{base_url}}"],
+          "path": ["api", "customers"]
+        },
+        "description": "Crea un cliente con solo los campos requeridos"
+      },
+      "response": []
+    },
+    {
+      "name": "Crear Cliente - Extranjero",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "x-user-id",
+            "value": "{{user_id}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"economicGroupId\": 1,\n  \"name\": \"Global Innovations Inc\",\n  \"rut\": \"US-987654321\",\n  \"email\": \"procurement@globalinnovations.com\",\n  \"address\": \"123 Tech Street, San Francisco, CA, USA\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/customers",
+          "host": ["{{base_url}}"],
+          "path": ["api", "customers"]
+        },
+        "description": "Ejemplo de cliente extranjero"
+      },
+      "response": []
+    },
+    {
+      "name": "Actualizar Cliente",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "x-user-id",
+            "value": "{{user_id}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"nuevo-email@cliente.com\",\n  \"phone\": \"+598 2000 0000\",\n  \"notes\": \"Información actualizada\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/customers/{{customer_id}}",
+          "host": ["{{base_url}}"],
+          "path": ["api", "customers", "{{customer_id}}"]
+        },
+        "description": "Actualiza un cliente existente. Todos los campos son opcionales."
+      },
+      "response": []
+    },
+    {
+      "name": "Eliminar Cliente",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "x-user-id",
+            "value": "{{user_id}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/customers/{{customer_id}}",
+          "host": ["{{base_url}}"],
+          "path": ["api", "customers", "{{customer_id}}"]
+        },
+        "description": "Elimina (soft delete) un cliente. No se puede eliminar si tiene movimientos pendientes."
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8000",
+      "type": "string"
+    },
+    {
+      "key": "user_id",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "grupo_id",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "customer_id",
+      "value": "1",
+      "type": "string"
+    }
+  ]
+}

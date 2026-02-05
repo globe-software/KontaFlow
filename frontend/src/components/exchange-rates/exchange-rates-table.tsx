@@ -1,6 +1,6 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
+import { useTranslation } from '@/contexts/I18nContext';
 import {
   Table,
   TableBody,
@@ -33,7 +33,7 @@ export function ExchangeRatesTable({
   onDelete,
   isLoading,
 }: ExchangeRatesTableProps) {
-  const t = useTranslations('exchangeRates.table');
+  const { t } = useTranslation();
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -80,11 +80,13 @@ export function ExchangeRatesTable({
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>{t('date')}</TableHead>
+            <TableHead>{t('exchangeRates.table.date')}</TableHead>
             <TableHead>Currency Pair</TableHead>
-            <TableHead className="text-right">{t('rate')}</TableHead>
-            <TableHead>{t('source')}</TableHead>
-            <TableHead>{t('createdAt')}</TableHead>
+            <TableHead className="text-right">{t('exchangeRates.table.purchaseRate')}</TableHead>
+            <TableHead className="text-right">{t('exchangeRates.table.averageRate')}</TableHead>
+            <TableHead className="text-right">{t('exchangeRates.table.saleRate')}</TableHead>
+            <TableHead>{t('exchangeRates.table.source')}</TableHead>
+            <TableHead>{t('exchangeRates.table.createdAt')}</TableHead>
             <TableHead className="w-[70px]"></TableHead>
           </TableRow>
         </TableHeader>
@@ -102,7 +104,13 @@ export function ExchangeRatesTable({
                 </div>
               </TableCell>
               <TableCell className="text-right font-mono">
-                {formatRate(exchangeRate.rate)}
+                {formatRate(exchangeRate.purchaseRate)}
+              </TableCell>
+              <TableCell className="text-right font-mono">
+                {formatRate(exchangeRate.averageRate)}
+              </TableCell>
+              <TableCell className="text-right font-mono">
+                {formatRate(exchangeRate.saleRate)}
               </TableCell>
               <TableCell>
                 {exchangeRate.source ? (

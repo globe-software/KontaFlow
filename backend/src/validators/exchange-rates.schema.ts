@@ -37,10 +37,20 @@ export const CreateExchangeRateSchema = z.object({
       }),
     }),
 
-  rate: z
+  purchaseRate: z
     .number()
-    .positive('Rate must be a positive number')
-    .max(999999.9999, 'Rate cannot exceed 999999.9999'),
+    .positive('Purchase rate must be a positive number')
+    .max(999999.9999, 'Purchase rate cannot exceed 999999.9999'),
+
+  saleRate: z
+    .number()
+    .positive('Sale rate must be a positive number')
+    .max(999999.9999, 'Sale rate cannot exceed 999999.9999'),
+
+  averageRate: z
+    .number()
+    .positive('Average rate must be a positive number')
+    .max(999999.9999, 'Average rate cannot exceed 999999.9999'),
 
   source: z
     .string()
@@ -51,13 +61,25 @@ export const CreateExchangeRateSchema = z.object({
 
 /**
  * Schema for updating an Exchange Rate
- * All fields are optional except the rate
+ * All fields are optional
  */
 export const UpdateExchangeRateSchema = z.object({
-  rate: z
+  purchaseRate: z
     .number()
-    .positive('Rate must be a positive number')
-    .max(999999.9999, 'Rate cannot exceed 999999.9999')
+    .positive('Purchase rate must be a positive number')
+    .max(999999.9999, 'Purchase rate cannot exceed 999999.9999')
+    .optional(),
+
+  saleRate: z
+    .number()
+    .positive('Sale rate must be a positive number')
+    .max(999999.9999, 'Sale rate cannot exceed 999999.9999')
+    .optional(),
+
+  averageRate: z
+    .number()
+    .positive('Average rate must be a positive number')
+    .max(999999.9999, 'Average rate cannot exceed 999999.9999')
     .optional(),
 
   source: z

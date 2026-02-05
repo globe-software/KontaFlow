@@ -1,0 +1,203 @@
+{
+  "info": {
+    "name": "KontaFlow - Charts of Accounts",
+    "description": "API endpoints para gestión de Planes de Cuentas en KontaFlow",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "kontaflow"
+  },
+  "item": [
+    {
+      "name": "Listar Planes de Cuentas (con paginación)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "x-user-id",
+            "value": "{{user_id}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/charts-of-accounts?page=1&limit=10",
+          "host": ["{{base_url}}"],
+          "path": ["api", "charts-of-accounts"],
+          "query": [
+            {
+              "key": "page",
+              "value": "1",
+              "description": "Número de página (default: 1)"
+            },
+            {
+              "key": "limit",
+              "value": "10",
+              "description": "Resultados por página (default: 10, max: 100)"
+            },
+            {
+              "key": "search",
+              "value": "",
+              "description": "Buscar por nombre",
+              "disabled": true
+            },
+            {
+              "key": "economicGroupId",
+              "value": "{{grupo_id}}",
+              "description": "Filtrar por grupo económico",
+              "disabled": true
+            }
+          ]
+        },
+        "description": "Lista todos los planes de cuentas con paginación y filtros"
+      },
+      "response": []
+    },
+    {
+      "name": "Obtener Plan de Cuentas por ID",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "x-user-id",
+            "value": "{{user_id}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/charts-of-accounts/{{chart_id}}",
+          "host": ["{{base_url}}"],
+          "path": ["api", "charts-of-accounts", "{{chart_id}}"]
+        },
+        "description": "Obtiene un plan de cuentas específico por su ID con todas sus cuentas"
+      },
+      "response": []
+    },
+    {
+      "name": "Crear Plan de Cuentas",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "x-user-id",
+            "value": "{{user_id}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"economicGroupId\": 1,\n  \"name\": \"Plan de Cuentas Estándar NIIF\",\n  \"description\": \"Plan de cuentas basado en normas internacionales de información financiera\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/charts-of-accounts",
+          "host": ["{{base_url}}"],
+          "path": ["api", "charts-of-accounts"]
+        },
+        "description": "Crea un nuevo plan de cuentas para un grupo económico"
+      },
+      "response": []
+    },
+    {
+      "name": "Crear Plan de Cuentas - Solo requeridos",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "x-user-id",
+            "value": "{{user_id}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"economicGroupId\": 1,\n  \"name\": \"Plan de Cuentas Simplificado\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/charts-of-accounts",
+          "host": ["{{base_url}}"],
+          "path": ["api", "charts-of-accounts"]
+        },
+        "description": "Ejemplo con solo los campos requeridos"
+      },
+      "response": []
+    },
+    {
+      "name": "Actualizar Plan de Cuentas",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "x-user-id",
+            "value": "{{user_id}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Plan de Cuentas Estándar NIIF - Actualizado\",\n  \"description\": \"Plan de cuentas actualizado según NIIF 2024\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/charts-of-accounts/{{chart_id}}",
+          "host": ["{{base_url}}"],
+          "path": ["api", "charts-of-accounts", "{{chart_id}}"]
+        },
+        "description": "Actualiza un plan de cuentas existente. Todos los campos son opcionales."
+      },
+      "response": []
+    },
+    {
+      "name": "Eliminar Plan de Cuentas",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "x-user-id",
+            "value": "{{user_id}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/charts-of-accounts/{{chart_id}}",
+          "host": ["{{base_url}}"],
+          "path": ["api", "charts-of-accounts", "{{chart_id}}"]
+        },
+        "description": "Elimina (soft delete) un plan de cuentas. No se puede eliminar si tiene cuentas asociadas."
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8000",
+      "type": "string"
+    },
+    {
+      "key": "user_id",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "grupo_id",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "chart_id",
+      "value": "1",
+      "type": "string"
+    }
+  ]
+}

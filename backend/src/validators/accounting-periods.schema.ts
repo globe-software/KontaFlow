@@ -38,6 +38,14 @@ export const CreateAccountingPeriodSchema = z
       .optional()
       .nullable(),
 
+    quarter: z
+      .number()
+      .int()
+      .min(1, 'Quarter must be between 1 and 4')
+      .max(4, 'Quarter must be between 1 and 4')
+      .optional()
+      .nullable(),
+
     startDate: z
       .string()
       .or(z.date())
@@ -73,6 +81,45 @@ export const CreateAccountingPeriodSchema = z
     },
     {
       message: 'Month should not be set for FISCAL_YEAR type periods',
+      path: ['month'],
+    }
+  )
+  .refine(
+    (data) => {
+      // If type is QUARTER, quarter is required
+      if (data.type === PeriodType.QUARTER && !data.quarter) {
+        return false;
+      }
+      return true;
+    },
+    {
+      message: 'Quarter is required for QUARTER type periods',
+      path: ['quarter'],
+    }
+  )
+  .refine(
+    (data) => {
+      // If type is FISCAL_YEAR or MONTH, quarter should not be set
+      if ((data.type === PeriodType.FISCAL_YEAR || data.type === PeriodType.MONTH) && data.quarter) {
+        return false;
+      }
+      return true;
+    },
+    {
+      message: 'Quarter should only be set for QUARTER type periods',
+      path: ['quarter'],
+    }
+  )
+  .refine(
+    (data) => {
+      // If type is QUARTER or FISCAL_YEAR, month should not be set
+      if ((data.type === PeriodType.QUARTER || data.type === PeriodType.FISCAL_YEAR) && data.month) {
+        return false;
+      }
+      return true;
+    },
+    {
+      message: 'Month should only be set for MONTH type periods',
       path: ['month'],
     }
   )
@@ -139,7 +186,7 @@ export const ListAccountingPeriodsQuerySchema = z.object({
     })
     .refine(
       (val) => !val || Object.values(PeriodType).includes(val as PeriodType),
-      'Type must be FISCAL_YEAR or MONTH'
+      'Type must be FISCAL_YEAR, QUARTER, or MONTH'
     ),
 
   fiscalYear: z

@@ -1,0 +1,244 @@
+{
+  "info": {
+    "name": "KontaFlow - Exchange Rates",
+    "description": "API endpoints para gestión de Tipos de Cambio en KontaFlow",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "kontaflow"
+  },
+  "item": [
+    {
+      "name": "Listar Tipos de Cambio (con paginación)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "x-user-id",
+            "value": "{{user_id}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/exchange-rates?page=1&limit=10",
+          "host": ["{{base_url}}"],
+          "path": ["api", "exchange-rates"],
+          "query": [
+            {
+              "key": "page",
+              "value": "1",
+              "description": "Número de página (default: 1)"
+            },
+            {
+              "key": "limit",
+              "value": "10",
+              "description": "Resultados por página (default: 10, max: 100)"
+            },
+            {
+              "key": "economicGroupId",
+              "value": "{{grupo_id}}",
+              "description": "Filtrar por grupo económico",
+              "disabled": true
+            },
+            {
+              "key": "sourceCurrency",
+              "value": "USD",
+              "description": "Filtrar por moneda origen (USD, EUR, etc.)",
+              "disabled": true
+            },
+            {
+              "key": "targetCurrency",
+              "value": "UYU",
+              "description": "Filtrar por moneda destino (UYU, ARS, etc.)",
+              "disabled": true
+            },
+            {
+              "key": "date",
+              "value": "2025-11-03",
+              "description": "Filtrar por fecha específica (YYYY-MM-DD)",
+              "disabled": true
+            }
+          ]
+        },
+        "description": "Lista todos los tipos de cambio con paginación y filtros"
+      },
+      "response": []
+    },
+    {
+      "name": "Obtener Tipo de Cambio por ID",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "x-user-id",
+            "value": "{{user_id}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/exchange-rates/{{exchange_rate_id}}",
+          "host": ["{{base_url}}"],
+          "path": ["api", "exchange-rates", "{{exchange_rate_id}}"]
+        },
+        "description": "Obtiene un tipo de cambio específico por su ID"
+      },
+      "response": []
+    },
+    {
+      "name": "Crear Tipo de Cambio - USD/UYU",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "x-user-id",
+            "value": "{{user_id}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"economicGroupId\": 1,\n  \"date\": \"2025-11-03\",\n  \"sourceCurrency\": \"USD\",\n  \"targetCurrency\": \"UYU\",\n  \"rate\": 40.50,\n  \"source\": \"BCU\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/exchange-rates",
+          "host": ["{{base_url}}"],
+          "path": ["api", "exchange-rates"]
+        },
+        "description": "Crea un tipo de cambio USD a UYU según BCU"
+      },
+      "response": []
+    },
+    {
+      "name": "Crear Tipo de Cambio - EUR/UYU",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "x-user-id",
+            "value": "{{user_id}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"economicGroupId\": 1,\n  \"date\": \"2025-11-03\",\n  \"sourceCurrency\": \"EUR\",\n  \"targetCurrency\": \"UYU\",\n  \"rate\": 44.25,\n  \"source\": \"BCU\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/exchange-rates",
+          "host": ["{{base_url}}"],
+          "path": ["api", "exchange-rates"]
+        },
+        "description": "Crea un tipo de cambio EUR a UYU"
+      },
+      "response": []
+    },
+    {
+      "name": "Crear Tipo de Cambio - Con observaciones",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "x-user-id",
+            "value": "{{user_id}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"economicGroupId\": 1,\n  \"date\": \"2025-11-03\",\n  \"sourceCurrency\": \"USD\",\n  \"targetCurrency\": \"UYU\",\n  \"rate\": 40.75,\n  \"source\": \"Banco comercial\",\n  \"observations\": \"Tipo de cambio especial para transacción corporativa\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/exchange-rates",
+          "host": ["{{base_url}}"],
+          "path": ["api", "exchange-rates"]
+        },
+        "description": "Crea un tipo de cambio con observaciones adicionales"
+      },
+      "response": []
+    },
+    {
+      "name": "Actualizar Tipo de Cambio",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "x-user-id",
+            "value": "{{user_id}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"rate\": 40.55,\n  \"observations\": \"Tipo de cambio corregido\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/exchange-rates/{{exchange_rate_id}}",
+          "host": ["{{base_url}}"],
+          "path": ["api", "exchange-rates", "{{exchange_rate_id}}"]
+        },
+        "description": "Actualiza un tipo de cambio existente. Todos los campos son opcionales."
+      },
+      "response": []
+    },
+    {
+      "name": "Eliminar Tipo de Cambio",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "x-user-id",
+            "value": "{{user_id}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/exchange-rates/{{exchange_rate_id}}",
+          "host": ["{{base_url}}"],
+          "path": ["api", "exchange-rates", "{{exchange_rate_id}}"]
+        },
+        "description": "Elimina (hard delete) un tipo de cambio. No se puede eliminar si está siendo usado en asientos."
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8000",
+      "type": "string"
+    },
+    {
+      "key": "user_id",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "grupo_id",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "exchange_rate_id",
+      "value": "1",
+      "type": "string"
+    }
+  ]
+}

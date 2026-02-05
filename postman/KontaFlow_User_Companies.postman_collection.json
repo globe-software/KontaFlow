@@ -1,0 +1,230 @@
+{
+  "info": {
+    "name": "KontaFlow - User Companies",
+    "description": "API endpoints para gestión de Permisos Usuario-Empresa en KontaFlow",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "kontaflow"
+  },
+  "item": [
+    {
+      "name": "Obtener Empresas de un Usuario",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "x-user-id",
+            "value": "{{user_id}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/user-companies/by-user/{{target_user_id}}",
+          "host": ["{{base_url}}"],
+          "path": ["api", "user-companies", "by-user", "{{target_user_id}}"]
+        },
+        "description": "Obtiene todas las empresas a las que un usuario tiene acceso"
+      },
+      "response": []
+    },
+    {
+      "name": "Obtener Usuarios de una Empresa",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "x-user-id",
+            "value": "{{user_id}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/user-companies/by-company/{{company_id}}",
+          "host": ["{{base_url}}"],
+          "path": ["api", "user-companies", "by-company", "{{company_id}}"]
+        },
+        "description": "Obtiene todos los usuarios que tienen acceso a una empresa específica"
+      },
+      "response": []
+    },
+    {
+      "name": "Obtener Permiso Específico",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "x-user-id",
+            "value": "{{user_id}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/user-companies/{{target_user_id}}/{{company_id}}",
+          "host": ["{{base_url}}"],
+          "path": ["api", "user-companies", "{{target_user_id}}", "{{company_id}}"]
+        },
+        "description": "Obtiene el permiso específico de un usuario en una empresa"
+      },
+      "response": []
+    },
+    {
+      "name": "Otorgar Acceso a Empresa - Con permisos",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "x-user-id",
+            "value": "{{user_id}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"userId\": 2,\n  \"companyId\": 1,\n  \"canRead\": true,\n  \"canWrite\": true,\n  \"canDelete\": false,\n  \"canApprove\": false\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/user-companies",
+          "host": ["{{base_url}}"],
+          "path": ["api", "user-companies"]
+        },
+        "description": "Otorga acceso a una empresa con permisos específicos (lectura y escritura, sin eliminación ni aprobación)"
+      },
+      "response": []
+    },
+    {
+      "name": "Otorgar Acceso a Empresa - Solo lectura",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "x-user-id",
+            "value": "{{user_id}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"userId\": 3,\n  \"companyId\": 1,\n  \"canRead\": true,\n  \"canWrite\": false,\n  \"canDelete\": false,\n  \"canApprove\": false\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/user-companies",
+          "host": ["{{base_url}}"],
+          "path": ["api", "user-companies"]
+        },
+        "description": "Otorga acceso de solo lectura a una empresa"
+      },
+      "response": []
+    },
+    {
+      "name": "Otorgar Acceso a Empresa - Permisos completos",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "x-user-id",
+            "value": "{{user_id}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"userId\": 2,\n  \"companyId\": 2,\n  \"canRead\": true,\n  \"canWrite\": true,\n  \"canDelete\": true,\n  \"canApprove\": true\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/user-companies",
+          "host": ["{{base_url}}"],
+          "path": ["api", "user-companies"]
+        },
+        "description": "Otorga acceso completo (todos los permisos) a una empresa"
+      },
+      "response": []
+    },
+    {
+      "name": "Actualizar Permisos de Usuario en Empresa",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "x-user-id",
+            "value": "{{user_id}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"canRead\": true,\n  \"canWrite\": true,\n  \"canDelete\": true,\n  \"canApprove\": false\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/user-companies/{{target_user_id}}/{{company_id}}",
+          "host": ["{{base_url}}"],
+          "path": ["api", "user-companies", "{{target_user_id}}", "{{company_id}}"]
+        },
+        "description": "Actualiza los permisos de un usuario en una empresa. Todos los campos son opcionales."
+      },
+      "response": []
+    },
+    {
+      "name": "Revocar Acceso a Empresa",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "x-user-id",
+            "value": "{{user_id}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/user-companies/{{target_user_id}}/{{company_id}}",
+          "host": ["{{base_url}}"],
+          "path": ["api", "user-companies", "{{target_user_id}}", "{{company_id}}"]
+        },
+        "description": "Revoca el acceso de un usuario a una empresa (elimina el permiso)"
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8000",
+      "type": "string"
+    },
+    {
+      "key": "user_id",
+      "value": "1",
+      "type": "string",
+      "description": "ID del usuario autenticado que realiza la petición"
+    },
+    {
+      "key": "target_user_id",
+      "value": "2",
+      "type": "string",
+      "description": "ID del usuario objetivo (sobre el que se consulta/modifica permisos)"
+    },
+    {
+      "key": "company_id",
+      "value": "1",
+      "type": "string"
+    }
+  ]
+}

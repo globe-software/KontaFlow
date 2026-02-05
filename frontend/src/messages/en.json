@@ -41,6 +41,7 @@
     "suppliers": "Suppliers",
     "accounts": "Accounts",
     "periods": "Accounting Periods",
+    "currencies": "Currencies",
     "exchangeRates": "Exchange Rates",
     "userCompanies": "User Companies",
     "comprobantes": "Vouchers",
@@ -491,6 +492,54 @@
       "deleteError": "Error deleting supplier"
     }
   },
+  "currencies": {
+    "title": "Currencies",
+    "subtitle": "Manage available currencies in the system",
+    "createButton": "Create Currency",
+    "createTitle": "Create New Currency",
+    "createDescription": "Add a new currency to the system following ISO 4217 standard",
+    "editTitle": "Edit Currency",
+    "editDescription": "Modify the selected currency data",
+    "searchPlaceholder": "Search by code or name...",
+    "emptyState": "No currencies registered",
+    "emptyStateDescription": "Start by adding currencies to the system to use them in exchange rates and transactions.",
+    "deleteConfirm": {
+      "title": "Delete Currency",
+      "description": "Are you sure you want to delete this currency? This action cannot be undone and will fail if the currency is in use."
+    },
+    "form": {
+      "code": "ISO Code",
+      "codeHint": "3 letters (e.g.: USD, EUR, UYU)",
+      "name": "Name",
+      "symbol": "Symbol",
+      "decimals": "Decimals",
+      "active": "Active",
+      "activeHint": "Only active currencies can be used in new transactions",
+      "isDefaultFunctional": "Default Functional Currency",
+      "isDefaultFunctionalHint": "This currency will be suggested when creating new economic groups"
+    },
+    "table": {
+      "code": "Code",
+      "name": "Name",
+      "symbol": "Symbol",
+      "decimals": "Decimals",
+      "decimalPlaces": "decimal places",
+      "status": "Status",
+      "default": "Default",
+      "defaultCurrency": "Default"
+    },
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive"
+    },
+    "filters": {
+      "all": "All",
+      "status": "Status"
+    },
+    "messages": {
+      "loadError": "Error loading currencies"
+    }
+  },
   "userCompanies": {
     "title": "User Companies",
     "description": "Manage user permissions for companies",
@@ -574,13 +623,22 @@
       "fiscalYearLabel": "Fiscal Year",
       "monthLabel": "Month",
       "monthPlaceholder": "Select a month",
+      "quarterLabel": "Quarter",
+      "quarterPlaceholder": "Select a quarter",
       "startDateLabel": "Start Date",
       "endDateLabel": "End Date",
       "selectDate": "Select date"
     },
     "types": {
       "FISCAL_YEAR": "Fiscal Year",
+      "QUARTER": "Quarter",
       "MONTH": "Month"
+    },
+    "quarters": {
+      "Q1": "Q1 (Jan-Mar)",
+      "Q2": "Q2 (Apr-Jun)",
+      "Q3": "Q3 (Jul-Sep)",
+      "Q4": "Q4 (Oct-Dec)"
     },
     "months": {
       "January": "January",
@@ -662,7 +720,9 @@
       "date": "Date",
       "sourceCurrency": "From",
       "targetCurrency": "To",
-      "rate": "Rate",
+      "purchaseRate": "Purchase Rate",
+      "averageRate": "Average Rate",
+      "saleRate": "Sale Rate",
       "source": "Source",
       "createdAt": "Created At"
     },
@@ -675,8 +735,12 @@
       "sourceCurrencyPlaceholder": "Select currency",
       "targetCurrencyLabel": "Target Currency",
       "targetCurrencyPlaceholder": "Select currency",
-      "rateLabel": "Exchange Rate",
-      "ratePlaceholder": "E.g.: 38.5000",
+      "purchaseRateLabel": "Purchase Rate",
+      "purchaseRatePlaceholder": "E.g.: 38.5000",
+      "averageRateLabel": "Average Rate",
+      "averageRatePlaceholder": "E.g.: 38.7500",
+      "saleRateLabel": "Sale Rate",
+      "saleRatePlaceholder": "E.g.: 39.0000",
       "sourceLabel": "Source (Optional)",
       "sourcePlaceholder": "E.g.: Central Bank",
       "errors": {

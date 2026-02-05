@@ -41,6 +41,7 @@
     "suppliers": "Fournisseurs",
     "accounts": "Comptes",
     "periods": "Périodes Comptables",
+    "currencies": "Devises",
     "exchangeRates": "Taux de Change",
     "userCompanies": "Entreprises de l'Utilisateur",
     "comprobantes": "Pièces Justificatives",
@@ -491,6 +492,54 @@
       "deleteError": "Erreur lors de la suppression du fournisseur"
     }
   },
+  "currencies": {
+    "title": "Devises",
+    "subtitle": "Gérer les devises disponibles dans le système",
+    "createButton": "Créer une Devise",
+    "createTitle": "Créer une Nouvelle Devise",
+    "createDescription": "Ajouter une nouvelle devise au système selon la norme ISO 4217",
+    "editTitle": "Modifier la Devise",
+    "editDescription": "Modifier les données de la devise sélectionnée",
+    "searchPlaceholder": "Rechercher par code ou nom...",
+    "emptyState": "Aucune devise enregistrée",
+    "emptyStateDescription": "Commencez par ajouter des devises au système pour les utiliser dans les taux de change et les transactions.",
+    "deleteConfirm": {
+      "title": "Supprimer la Devise",
+      "description": "Êtes-vous sûr de vouloir supprimer cette devise ? Cette action ne peut pas être annulée et échouera si la devise est utilisée."
+    },
+    "form": {
+      "code": "Code ISO",
+      "codeHint": "3 lettres (ex: USD, EUR, UYU)",
+      "name": "Nom",
+      "symbol": "Symbole",
+      "decimals": "Décimales",
+      "active": "Active",
+      "activeHint": "Seules les devises actives peuvent être utilisées dans les nouvelles transactions",
+      "isDefaultFunctional": "Devise Fonctionnelle par Défaut",
+      "isDefaultFunctionalHint": "Cette devise sera suggérée lors de la création de nouveaux groupes économiques"
+    },
+    "table": {
+      "code": "Code",
+      "name": "Nom",
+      "symbol": "Symbole",
+      "decimals": "Décimales",
+      "decimalPlaces": "décimales",
+      "status": "Statut",
+      "default": "Par Défaut",
+      "defaultCurrency": "Défaut"
+    },
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive"
+    },
+    "filters": {
+      "all": "Toutes",
+      "status": "Statut"
+    },
+    "messages": {
+      "loadError": "Erreur lors du chargement des devises"
+    }
+  },
   "userCompanies": {
     "title": "Entreprises d'Utilisateur",
     "description": "Gérez les permissions des utilisateurs pour les entreprises",
@@ -574,13 +623,22 @@
       "fiscalYearLabel": "Année Fiscale",
       "monthLabel": "Mois",
       "monthPlaceholder": "Sélectionnez un mois",
+      "quarterLabel": "Trimestre",
+      "quarterPlaceholder": "Sélectionnez un trimestre",
       "startDateLabel": "Date de Début",
       "endDateLabel": "Date de Fin",
       "selectDate": "Sélectionnez une date"
     },
     "types": {
       "FISCAL_YEAR": "Année Fiscale",
+      "QUARTER": "Trimestre",
       "MONTH": "Mois"
+    },
+    "quarters": {
+      "Q1": "T1 (Jan-Mar)",
+      "Q2": "T2 (Avr-Juin)",
+      "Q3": "T3 (Juil-Sep)",
+      "Q4": "T4 (Oct-Déc)"
     },
     "months": {
       "January": "Janvier",
@@ -662,7 +720,9 @@
       "date": "Date",
       "sourceCurrency": "De",
       "targetCurrency": "À",
-      "rate": "Taux",
+      "purchaseRate": "Taux d'Achat",
+      "averageRate": "Taux Moyen",
+      "saleRate": "Taux de Vente",
       "source": "Source",
       "createdAt": "Créé le"
     },
@@ -675,8 +735,12 @@
       "sourceCurrencyPlaceholder": "Sélectionner une devise",
       "targetCurrencyLabel": "Devise Cible",
       "targetCurrencyPlaceholder": "Sélectionner une devise",
-      "rateLabel": "Taux de Change",
-      "ratePlaceholder": "Ex.: 38.5000",
+      "purchaseRateLabel": "Taux d'Achat",
+      "purchaseRatePlaceholder": "Ex.: 38.5000",
+      "averageRateLabel": "Taux Moyen",
+      "averageRatePlaceholder": "Ex.: 38.7500",
+      "saleRateLabel": "Taux de Vente",
+      "saleRatePlaceholder": "Ex.: 39.0000",
       "sourceLabel": "Source (Optionnel)",
       "sourcePlaceholder": "Ex.: Banque Centrale",
       "errors": {

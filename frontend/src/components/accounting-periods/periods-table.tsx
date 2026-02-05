@@ -103,13 +103,21 @@ export function PeriodsTable({ periods, onEdit, onDelete, onClose, onReopen }: P
                 </div>
               </TableCell>
               <TableCell className="py-2">
-                <Badge className={period.type === 'FISCAL_YEAR' ? 'bg-blue-100 text-blue-700' : 'bg-purple-100 text-purple-700'}>
+                <Badge className={
+                  period.type === 'FISCAL_YEAR'
+                    ? 'bg-blue-100 text-blue-700'
+                    : period.type === 'QUARTER'
+                    ? 'bg-green-100 text-green-700'
+                    : 'bg-purple-100 text-purple-700'
+                }>
                   {t(`periods.types.${period.type}`)}
                 </Badge>
               </TableCell>
               <TableCell className="py-2 text-sm text-gray-700">
                 {period.type === 'MONTH' && period.month
                   ? t(`periods.months.${MONTHS[period.month - 1]}`)
+                  : period.type === 'QUARTER' && period.quarter
+                  ? t(`periods.quarters.Q${period.quarter}`)
                   : '-'}
               </TableCell>
               <TableCell className="py-2">

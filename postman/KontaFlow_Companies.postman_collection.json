@@ -1,0 +1,223 @@
+{
+  "info": {
+    "name": "KontaFlow - Companies",
+    "description": "API endpoints para gestión de Empresas en KontaFlow",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "kontaflow"
+  },
+  "item": [
+    {
+      "name": "Listar Empresas (con paginación)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "x-user-id",
+            "value": "{{user_id}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/companies?page=1&limit=10",
+          "host": ["{{base_url}}"],
+          "path": ["api", "companies"],
+          "query": [
+            {
+              "key": "page",
+              "value": "1",
+              "description": "Número de página (default: 1)"
+            },
+            {
+              "key": "limit",
+              "value": "10",
+              "description": "Resultados por página (default: 10, max: 100)"
+            },
+            {
+              "key": "search",
+              "value": "",
+              "description": "Buscar por nombre o RUT",
+              "disabled": true
+            },
+            {
+              "key": "economicGroupId",
+              "value": "{{grupo_id}}",
+              "description": "Filtrar por grupo económico",
+              "disabled": true
+            }
+          ]
+        },
+        "description": "Lista todas las empresas con paginación y filtros"
+      },
+      "response": []
+    },
+    {
+      "name": "Listar Empresas por Grupo",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "x-user-id",
+            "value": "{{user_id}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/companies/by-group/{{grupo_id}}",
+          "host": ["{{base_url}}"],
+          "path": ["api", "companies", "by-group", "{{grupo_id}}"]
+        },
+        "description": "Obtiene todas las empresas de un grupo económico específico"
+      },
+      "response": []
+    },
+    {
+      "name": "Obtener Empresa por ID",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "x-user-id",
+            "value": "{{user_id}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/companies/{{company_id}}",
+          "host": ["{{base_url}}"],
+          "path": ["api", "companies", "{{company_id}}"]
+        },
+        "description": "Obtiene una empresa específica por su ID"
+      },
+      "response": []
+    },
+    {
+      "name": "Crear Empresa",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "x-user-id",
+            "value": "{{user_id}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"economicGroupId\": 1,\n  \"name\": \"Software Solutions S.A.\",\n  \"tradeName\": \"SoftSol\",\n  \"rut\": \"217890120019\",\n  \"country\": \"UY\",\n  \"functionalCurrency\": \"UYU\",\n  \"startDate\": \"2024-01-01\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/companies",
+          "host": ["{{base_url}}"],
+          "path": ["api", "companies"]
+        },
+        "description": "Crea una nueva empresa en un grupo económico"
+      },
+      "response": []
+    },
+    {
+      "name": "Crear Empresa - USD",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "x-user-id",
+            "value": "{{user_id}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"economicGroupId\": 1,\n  \"name\": \"Tech Exports LLC\",\n  \"tradeName\": \"TechExports\",\n  \"rut\": \"US-987654321\",\n  \"country\": \"US\",\n  \"functionalCurrency\": \"USD\",\n  \"startDate\": \"2024-06-01\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/companies",
+          "host": ["{{base_url}}"],
+          "path": ["api", "companies"]
+        },
+        "description": "Ejemplo de empresa con moneda funcional USD"
+      },
+      "response": []
+    },
+    {
+      "name": "Actualizar Empresa",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "x-user-id",
+            "value": "{{user_id}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"tradeName\": \"SoftSol - Actualizado\",\n  \"active\": true\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/companies/{{company_id}}",
+          "host": ["{{base_url}}"],
+          "path": ["api", "companies", "{{company_id}}"]
+        },
+        "description": "Actualiza una empresa existente. Todos los campos son opcionales."
+      },
+      "response": []
+    },
+    {
+      "name": "Eliminar Empresa",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "x-user-id",
+            "value": "{{user_id}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/companies/{{company_id}}",
+          "host": ["{{base_url}}"],
+          "path": ["api", "companies", "{{company_id}}"]
+        },
+        "description": "Elimina (soft delete) una empresa"
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8000",
+      "type": "string"
+    },
+    {
+      "key": "user_id",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "grupo_id",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "company_id",
+      "value": "1",
+      "type": "string"
+    }
+  ]
+}

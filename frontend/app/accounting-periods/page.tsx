@@ -241,6 +241,7 @@ export default function AccountingPeriodsPage() {
                   <SelectContent>
                     <SelectItem value="all">{t('periods.filters.all')}</SelectItem>
                     <SelectItem value="FISCAL_YEAR">{t('periods.types.FISCAL_YEAR')}</SelectItem>
+                    <SelectItem value="QUARTER">{t('periods.types.QUARTER')}</SelectItem>
                     <SelectItem value="MONTH">{t('periods.types.MONTH')}</SelectItem>
                   </SelectContent>
                 </Select>

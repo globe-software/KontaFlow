@@ -41,6 +41,7 @@
     "suppliers": "供应商",
     "accounts": "账户",
     "periods": "会计期间",
+    "currencies": "货币",
     "exchangeRates": "汇率",
     "userCompanies": "用户公司",
     "comprobantes": "凭证",
@@ -491,6 +492,54 @@
       "deleteError": "删除供应商时出错"
     }
   },
+  "currencies": {
+    "title": "货币",
+    "subtitle": "管理系统中可用的货币",
+    "createButton": "创建货币",
+    "createTitle": "创建新货币",
+    "createDescription": "按照ISO 4217标准向系统添加新货币",
+    "editTitle": "编辑货币",
+    "editDescription": "修改所选货币的数据",
+    "searchPlaceholder": "按代码或名称搜索...",
+    "emptyState": "未注册货币",
+    "emptyStateDescription": "开始向系统添加货币以在汇率和交易中使用它们。",
+    "deleteConfirm": {
+      "title": "删除货币",
+      "description": "您确定要删除此货币吗？此操作无法撤消，如果货币正在使用中则会失败。"
+    },
+    "form": {
+      "code": "ISO代码",
+      "codeHint": "3个字母（例如：USD, EUR, CNY）",
+      "name": "名称",
+      "symbol": "符号",
+      "decimals": "小数位",
+      "active": "活跃",
+      "activeHint": "只有活跃的货币才能用于新交易",
+      "isDefaultFunctional": "默认功能货币",
+      "isDefaultFunctionalHint": "创建新经济集团时将建议使用此货币"
+    },
+    "table": {
+      "code": "代码",
+      "name": "名称",
+      "symbol": "符号",
+      "decimals": "小数位",
+      "decimalPlaces": "小数位",
+      "status": "状态",
+      "default": "默认",
+      "defaultCurrency": "默认"
+    },
+    "status": {
+      "active": "活跃",
+      "inactive": "非活跃"
+    },
+    "filters": {
+      "all": "全部",
+      "status": "状态"
+    },
+    "messages": {
+      "loadError": "加载货币时出错"
+    }
+  },
   "userCompanies": {
     "title": "用户公司",
     "description": "管理用户对公司的权限",
@@ -574,13 +623,22 @@
       "fiscalYearLabel": "财政年度",
       "monthLabel": "月份",
       "monthPlaceholder": "选择一个月份",
+      "quarterLabel": "季度",
+      "quarterPlaceholder": "选择一个季度",
       "startDateLabel": "开始日期",
       "endDateLabel": "结束日期",
       "selectDate": "选择日期"
     },
     "types": {
       "FISCAL_YEAR": "财政年度",
+      "QUARTER": "季度",
       "MONTH": "月份"
+    },
+    "quarters": {
+      "Q1": "Q1 (1月-3月)",
+      "Q2": "Q2 (4月-6月)",
+      "Q3": "Q3 (7月-9月)",
+      "Q4": "Q4 (10月-12月)"
     },
     "months": {
       "January": "一月",
@@ -662,7 +720,9 @@
       "date": "日期",
       "sourceCurrency": "源货币",
       "targetCurrency": "目标货币",
-      "rate": "汇率",
+      "purchaseRate": "买入汇率",
+      "averageRate": "平均汇率",
+      "saleRate": "卖出汇率",
       "source": "来源",
       "createdAt": "创建时间"
     },
@@ -675,8 +735,12 @@
       "sourceCurrencyPlaceholder": "选择货币",
       "targetCurrencyLabel": "目标货币",
       "targetCurrencyPlaceholder": "选择货币",
-      "rateLabel": "汇率",
-      "ratePlaceholder": "例如：38.5000",
+      "purchaseRateLabel": "买入汇率",
+      "purchaseRatePlaceholder": "例如：38.5000",
+      "averageRateLabel": "平均汇率",
+      "averageRatePlaceholder": "例如：38.7500",
+      "saleRateLabel": "卖出汇率",
+      "saleRatePlaceholder": "例如：39.0000",
       "sourceLabel": "来源（可选）",
       "sourcePlaceholder": "例如：中央银行",
       "errors": {

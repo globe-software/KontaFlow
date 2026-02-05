@@ -14,27 +14,28 @@ datasource db {
 // ECONOMIC GROUPS (Multi-tenancy)
 // ===================================
 model EconomicGroup {
-  id                   Int       @id @default(autoincrement())
-  name                 String
-  mainCountry          String    @map("main_country") @db.VarChar(2)
-  baseCurrency         String    @map("base_currency") @db.VarChar(3) // For ExchangeRate
-  createdAt            DateTime  @default(now()) @map("created_at")
-  active               Boolean   @default(true)
+  id           Int      @id @default(autoincrement())
+  name         String
+  mainCountry  String   @map("main_country") @db.VarChar(2)
+  baseCurrency String   @map("base_currency") @db.VarChar(3) // For ExchangeRate
+  createdAt    DateTime @default(now()) @map("created_at")
+  active       Boolean  @default(true)
 
   // Useful relationships
-  companies            Company[]
-  chartOfAccounts      ChartOfAccounts?
-  configuration        AccountingConfiguration?
+  baseCurrencyModel CurrencyModel            @relation("EconomicGroupBaseCurrency", fields: [baseCurrency], references: [code])
+  companies         Company[]
+  chartOfAccounts   ChartOfAccounts?
+  configuration     AccountingConfiguration?
 
   // Inverse relationships (required by Prisma - avoid using in queries)
-  journalEntries       JournalEntry[]
-  exchangeRates        ExchangeRate[]
-  entryTemplates       EntryTemplate[]
-  obligations          Obligation[]
-  userGroups           UserGroup[]
-  customers            Customer[]
-  suppliers            Supplier[]
-  accountingPeriods    AccountingPeriod[]
+  journalEntries    JournalEntry[]
+  exchangeRates     ExchangeRate[]
+  entryTemplates    EntryTemplate[]
+  obligations       Obligation[]
+  userGroups        UserGroup[]
+  customers         Customer[]
+  suppliers         Supplier[]
+  accountingPeriods AccountingPeriod[]
 
   @@map("economic_groups")
 }
@@ -43,22 +44,23 @@ model EconomicGroup {
 // COMPANIES
 // ===================================
 model Company {
-  id                Int       @id @default(autoincrement())
-  economicGroupId   Int       @map("economic_group_id")
-  name              String
-  tradeName         String?   @map("trade_name")
-  rut               String
-  country           String    @db.VarChar(2)
-  functionalCurrency String   @map("functional_currency") @db.VarChar(3)
-  startDate         DateTime? @map("start_date") @db.Date
-  active            Boolean   @default(true)
+  id                 Int       @id @default(autoincrement())
+  economicGroupId    Int       @map("economic_group_id")
+  name               String
+  tradeName          String?   @map("trade_name")
+  rut                String
+  country            String    @db.VarChar(2)
+  functionalCurrency String    @map("functional_currency") @db.VarChar(3)
+  startDate          DateTime? @map("start_date") @db.Date
+  active             Boolean   @default(true)
 
   // Relationships
-  economicGroup     EconomicGroup @relation(fields: [economicGroupId], references: [id])
+  economicGroup           EconomicGroup @relation(fields: [economicGroupId], references: [id])
+  functionalCurrencyModel CurrencyModel @relation("CompanyFunctionalCurrency", fields: [functionalCurrency], references: [code])
 
   // Inverse relationships (required by Prisma - avoid using in queries)
-  journalEntries    JournalEntry[]
-  userCompanies     UserCompany[]
+  journalEntries JournalEntry[]
+  userCompanies  UserCompany[]
 
   @@unique([economicGroupId, rut])
   @@index([economicGroupId])
@@ -70,16 +72,16 @@ model Company {
 // One economic group has a single chart of accounts
 // ===================================
 model ChartOfAccounts {
-  id                Int       @id @default(autoincrement())
-  economicGroupId   Int       @unique @map("economic_group_id")
-  name              String    // "Software companies UY chart of accounts"
-  description       String?   @db.Text
-  active            Boolean   @default(true)
-  createdAt         DateTime  @default(now()) @map("created_at")
+  id              Int      @id @default(autoincrement())
+  economicGroupId Int      @unique @map("economic_group_id")
+  name            String // "Software companies UY chart of accounts"
+  description     String?  @db.Text
+  active          Boolean  @default(true)
+  createdAt       DateTime @default(now()) @map("created_at")
 
   // Relationships
-  economicGroup     EconomicGroup @relation(fields: [economicGroupId], references: [id])
-  accounts          Account[]
+  economicGroup EconomicGroup @relation(fields: [economicGroupId], references: [id])
+  accounts      Account[]
 
   @@map("charts_of_accounts")
 }
@@ -88,31 +90,31 @@ model ChartOfAccounts {
 // ACCOUNTS (formerly PlanCuentas)
 // ===================================
 model Account {
-  id                 Int              @id @default(autoincrement())
-  chartOfAccountsId  Int              @map("chart_of_accounts_id")
-  code               String
-  name               String
-  parentAccountId    Int?             @map("parent_account_id")
-  type               AccountType
-  level              Int
-  postable           Boolean          @default(true)
-  requiresAuxiliary  Boolean          @default(false) @map("requires_auxiliary")
-  auxiliaryType      AuxiliaryType?   @map("auxiliary_type")
-  currency           Currency         @default(FUNCTIONAL)
-  active             Boolean          @default(true)
+  id                Int            @id @default(autoincrement())
+  chartOfAccountsId Int            @map("chart_of_accounts_id")
+  code              String
+  name              String
+  parentAccountId   Int?           @map("parent_account_id")
+  type              AccountType
+  level             Int
+  postable          Boolean        @default(true)
+  requiresAuxiliary Boolean        @default(false) @map("requires_auxiliary")
+  auxiliaryType     AuxiliaryType? @map("auxiliary_type")
+  currency          Currency       @default(FUNCTIONAL)
+  active            Boolean        @default(true)
 
   // NIIF/IFRS fields
-  nature             AccountNature?   // CURRENT / NON_CURRENT
-  ifrsCategory       IFRSCategory?    @map("ifrs_category")
-  valuationMethod    ValuationMethod? @map("valuation_method") // For assets/inventory
+  nature          AccountNature? // CURRENT / NON_CURRENT
+  ifrsCategory    IFRSCategory?    @map("ifrs_category")
+  valuationMethod ValuationMethod? @map("valuation_method") // For assets/inventory
 
   // Relationships
-  chartOfAccounts    ChartOfAccounts @relation(fields: [chartOfAccountsId], references: [id])
-  parentAccount      Account?        @relation("AccountsParentChild", fields: [parentAccountId], references: [id])
-  subaccounts        Account[]       @relation("AccountsParentChild")
+  chartOfAccounts ChartOfAccounts @relation(fields: [chartOfAccountsId], references: [id])
+  parentAccount   Account?        @relation("AccountsParentChild", fields: [parentAccountId], references: [id])
+  subaccounts     Account[]       @relation("AccountsParentChild")
 
   // Inverse relationships (required by Prisma - avoid using in queries)
-  entryLines         EntryLine[]
+  entryLines EntryLine[]
 
   @@unique([chartOfAccountsId, code])
   @@index([chartOfAccountsId])
@@ -129,10 +131,10 @@ enum AccountType {
 }
 
 enum Currency {
-  MN          // National Currency
-  USD         // Dollar
-  BOTH        // Allows both
-  FUNCTIONAL  // Uses company's functional currency
+  MN // National Currency
+  USD // Dollar
+  BOTH // Allows both
+  FUNCTIONAL // Uses company's functional currency
 }
 
 enum AuxiliaryType {
@@ -144,8 +146,8 @@ enum AuxiliaryType {
 
 // IFRS Enums
 enum AccountNature {
-  CURRENT       // < 12 months
-  NON_CURRENT   // > 12 months
+  CURRENT // < 12 months
+  NON_CURRENT // > 12 months
 }
 
 enum IFRSCategory {
@@ -188,23 +190,54 @@ enum ValuationMethod {
 }
 
 // ===================================
+// CURRENCIES (ISO 4217 codes)
+// ===================================
+model CurrencyModel {
+  code                String   @id @db.VarChar(3) // ISO 4217: USD, UYU, EUR, etc.
+  name                String   @db.VarChar(100)
+  symbol              String?  @db.VarChar(10)
+  active              Boolean  @default(true)
+  decimals            Int      @default(2)
+  isDefaultFunctional Boolean  @default(false) @map("is_default_functional")
+  createdAt           DateTime @default(now()) @map("created_at")
+  updatedAt           DateTime @updatedAt @map("updated_at")
+
+  // Inverse relationships (required by Prisma - avoid using in queries)
+  economicGroupsAsBase  EconomicGroup[] @relation("EconomicGroupBaseCurrency")
+  companiesAsFunctional Company[]       @relation("CompanyFunctionalCurrency")
+  exchangeRatesAsSource ExchangeRate[]  @relation("ExchangeRateSourceCurrency")
+  exchangeRatesAsTarget ExchangeRate[]  @relation("ExchangeRateTargetCurrency")
+
+  @@map("currencies")
+}
+
+// ===================================
 // EXCHANGE RATE
 // ===================================
 model ExchangeRate {
-  id                Int      @id @default(autoincrement())
-  economicGroupId   Int      @map("economic_group_id")
-  date              DateTime @db.Date
-  sourceCurrency    String   @map("source_currency") @db.VarChar(3)
-  targetCurrency    String   @map("target_currency") @db.VarChar(3) // Always baseCurrency of group
-  rate              Decimal  @db.Decimal(10, 4)
-  source            String?  @db.VarChar(100) // "BCU", "Manual", etc.
-  createdAt         DateTime @default(now()) @map("created_at")
+  id              Int      @id @default(autoincrement())
+  economicGroupId Int      @map("economic_group_id")
+  date            DateTime @db.Date
+  sourceCurrency  String   @map("source_currency") @db.VarChar(3)
+  targetCurrency  String   @map("target_currency") @db.VarChar(3) // Always baseCurrency of group
+
+  // Multiple rates for different transaction types
+  purchaseRate Decimal @map("purchase_rate") @db.Decimal(10, 4) // Buying foreign currency
+  saleRate     Decimal @map("sale_rate") @db.Decimal(10, 4) // Selling foreign currency
+  averageRate  Decimal @map("average_rate") @db.Decimal(10, 4) // Average/reference rate
+
+  source    String?  @db.VarChar(100) // "BCU", "Manual", etc.
+  createdAt DateTime @default(now()) @map("created_at")
 
   // Relationships
-  economicGroup     EconomicGroup @relation(fields: [economicGroupId], references: [id])
+  economicGroup       EconomicGroup @relation(fields: [economicGroupId], references: [id])
+  sourceCurrencyModel CurrencyModel @relation("ExchangeRateSourceCurrency", fields: [sourceCurrency], references: [code])
+  targetCurrencyModel CurrencyModel @relation("ExchangeRateTargetCurrency", fields: [targetCurrency], references: [code])
 
   @@unique([economicGroupId, date, sourceCurrency, targetCurrency])
   @@index([economicGroupId, date])
+  @@index([sourceCurrency])
+  @@index([targetCurrency])
   @@map("exchange_rates")
 }
 
@@ -212,52 +245,54 @@ model ExchangeRate {
 // ACCOUNTING PERIODS
 // ===================================
 model AccountingPeriod {
-  id                Int           @id @default(autoincrement())
-  economicGroupId   Int           @map("economic_group_id")
-  type              PeriodType
-  fiscalYear        Int           @map("fiscal_year") // Year: 2024, 2025
-  month             Int?          // 1-12, only if type = MONTH
-  startDate         DateTime      @map("start_date") @db.Date
-  endDate           DateTime      @map("end_date") @db.Date
-  closed            Boolean       @default(false)
-  closedAt          DateTime?     @map("closed_at")
-  closedBy          Int?          @map("closed_by")
+  id              Int        @id @default(autoincrement())
+  economicGroupId Int        @map("economic_group_id")
+  type            PeriodType
+  fiscalYear      Int        @map("fiscal_year") // Year: 2024, 2025
+  month           Int? // 1-12, only if type = MONTH
+  quarter         Int? // 1-4, only if type = QUARTER
+  startDate       DateTime   @map("start_date") @db.Date
+  endDate         DateTime   @map("end_date") @db.Date
+  closed          Boolean    @default(false)
+  closedAt        DateTime?  @map("closed_at")
+  closedBy        Int?       @map("closed_by")
 
   // Relationships
-  economicGroup     EconomicGroup @relation(fields: [economicGroupId], references: [id])
-  closedByUser      User?         @relation(fields: [closedBy], references: [id])
+  economicGroup EconomicGroup @relation(fields: [economicGroupId], references: [id])
+  closedByUser  User?         @relation(fields: [closedBy], references: [id])
 
-  @@unique([economicGroupId, type, fiscalYear, month])
+  @@unique([economicGroupId, type, fiscalYear, month, quarter])
   @@index([economicGroupId])
   @@map("accounting_periods")
 }
 
 enum PeriodType {
-  FISCAL_YEAR  // Annual
-  MONTH        // Monthly
+  FISCAL_YEAR // Annual
+  QUARTER // Quarterly
+  MONTH // Monthly
 }
 
 // ===================================
 // ACCOUNTING CONFIGURATION
 // ===================================
 model AccountingConfiguration {
-  id                              Int      @id @default(autoincrement())
-  economicGroupId                 Int      @unique @map("economic_group_id")
+  id              Int @id @default(autoincrement())
+  economicGroupId Int @unique @map("economic_group_id")
 
   // Period control
-  allowEntriesInClosedPeriod      Boolean @default(false) @map("allow_entries_in_closed_period")
+  allowEntriesInClosedPeriod Boolean @default(false) @map("allow_entries_in_closed_period")
 
   // Approval control (global)
-  requireGlobalApproval           Boolean @default(false) @map("require_global_approval")
-  minimumApprovalAmount           Decimal? @map("minimum_approval_amount") @db.Decimal(18, 2)
+  requireGlobalApproval Boolean  @default(false) @map("require_global_approval")
+  minimumApprovalAmount Decimal? @map("minimum_approval_amount") @db.Decimal(18, 2)
 
   // Other settings
-  allowUnbalancedEntries          Boolean @default(false) @map("allow_unbalanced_entries")
-  amountDecimals                  Int     @default(2) @map("amount_decimals")
-  exchangeRateDecimals            Int     @default(4) @map("exchange_rate_decimals")
+  allowUnbalancedEntries Boolean @default(false) @map("allow_unbalanced_entries")
+  amountDecimals         Int     @default(2) @map("amount_decimals")
+  exchangeRateDecimals   Int     @default(4) @map("exchange_rate_decimals")
 
   // Relationships
-  economicGroup    EconomicGroup @relation(fields: [economicGroupId], references: [id])
+  economicGroup EconomicGroup @relation(fields: [economicGroupId], references: [id])
 
   @@map("accounting_configuration")
 }
@@ -266,16 +301,16 @@ model AccountingConfiguration {
 // ENTRY TEMPLATES
 // ===================================
 model EntryTemplate {
-  id                    Int      @id @default(autoincrement())
-  economicGroupId       Int      @map("economic_group_id")
-  name                  String
-  description           String?  @db.Text
-  type                  EntryType
-  requiresApproval      Boolean  @default(false) @map("requires_approval")
-  active                Boolean  @default(true)
+  id               Int       @id @default(autoincrement())
+  economicGroupId  Int       @map("economic_group_id")
+  name             String
+  description      String?   @db.Text
+  type             EntryType
+  requiresApproval Boolean   @default(false) @map("requires_approval")
+  active           Boolean   @default(true)
 
   // Relationships
-  economicGroup         EconomicGroup @relation(fields: [economicGroupId], references: [id])
+  economicGroup EconomicGroup @relation(fields: [economicGroupId], references: [id])
 
   @@index([economicGroupId])
   @@map("entry_templates")
@@ -285,32 +320,32 @@ model EntryTemplate {
 // JOURNAL ENTRIES
 // ===================================
 model JournalEntry {
-  id                Int           @id @default(autoincrement())
-  economicGroupId   Int           @map("economic_group_id")
-  companyId         Int           @map("company_id")
-  number            Int
-  date              DateTime      @db.Date       // Accounting date
-  systemDate        DateTime      @default(now()) @map("system_date") // Creation date
-  description       String        @db.Text
-  type              EntryType     @default(JOURNAL)
-  status            EntryStatus   @default(DRAFT)
+  id              Int         @id @default(autoincrement())
+  economicGroupId Int         @map("economic_group_id")
+  companyId       Int         @map("company_id")
+  number          Int
+  date            DateTime    @db.Date // Accounting date
+  systemDate      DateTime    @default(now()) @map("system_date") // Creation date
+  description     String      @db.Text
+  type            EntryType   @default(JOURNAL)
+  status          EntryStatus @default(DRAFT)
 
   // Audit
-  createdBy         Int           @map("created_by")
-  createdAt         DateTime      @default(now()) @map("created_at")
-  updatedAt         DateTime?     @updatedAt @map("updated_at")
+  createdBy Int       @map("created_by")
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime? @updatedAt @map("updated_at")
 
   // Approval
-  approvedBy        Int?          @map("approved_by")
-  approvedAt        DateTime?     @map("approved_at")
-  rejectionReason   String?       @map("rejection_reason") @db.Text
+  approvedBy      Int?      @map("approved_by")
+  approvedAt      DateTime? @map("approved_at")
+  rejectionReason String?   @map("rejection_reason") @db.Text
 
   // Relationships
-  economicGroup     EconomicGroup @relation(fields: [economicGroupId], references: [id])
-  company           Company       @relation(fields: [companyId], references: [id])
-  lines             EntryLine[]
-  createdByUser     User          @relation("JournalEntryCreatedBy", fields: [createdBy], references: [id])
-  approvedByUser    User?         @relation("JournalEntryApprovedBy", fields: [approvedBy], references: [id])
+  economicGroup  EconomicGroup @relation(fields: [economicGroupId], references: [id])
+  company        Company       @relation(fields: [companyId], references: [id])
+  lines          EntryLine[]
+  createdByUser  User          @relation("JournalEntryCreatedBy", fields: [createdBy], references: [id])
+  approvedByUser User?         @relation("JournalEntryApprovedBy", fields: [approvedBy], references: [id])
 
   @@unique([companyId, number])
   @@index([date])
@@ -325,8 +360,8 @@ enum EntryType {
   OPENING
   ADJUSTMENT
   CLOSING
-  EXCHANGE_ADJUSTMENT  // Exchange differences
-  DEPRECIATION         // Depreciation
+  EXCHANGE_ADJUSTMENT // Exchange differences
+  DEPRECIATION // Depreciation
 }
 
 enum EntryStatus {
@@ -340,33 +375,33 @@ enum EntryStatus {
 // ENTRY LINES (Double Entry)
 // ===================================
 model EntryLine {
-  id              Int      @id @default(autoincrement())
-  entryId         Int      @map("entry_id")
-  accountId       Int      @map("account_id")
+  id        Int @id @default(autoincrement())
+  entryId   Int @map("entry_id")
+  accountId Int @map("account_id")
 
   // Amounts
-  debit           Decimal  @db.Decimal(18, 2)
-  credit          Decimal  @db.Decimal(18, 2)
-  currency        String   @db.VarChar(3)
-  exchangeRate    Decimal? @map("exchange_rate") @db.Decimal(10, 4)
+  debit        Decimal  @db.Decimal(18, 2)
+  credit       Decimal  @db.Decimal(18, 2)
+  currency     String   @db.VarChar(3)
+  exchangeRate Decimal? @map("exchange_rate") @db.Decimal(10, 4)
 
   // Auxiliaries
-  auxiliaryType   AuxiliaryType?  @map("auxiliary_type")
-  auxiliaryId     Int?            @map("auxiliary_id")
-  auxiliaryName   String?         @map("auxiliary_name") @db.VarChar(255) // Redundancy for audit
+  auxiliaryType AuxiliaryType? @map("auxiliary_type")
+  auxiliaryId   Int?           @map("auxiliary_id")
+  auxiliaryName String?        @map("auxiliary_name") @db.VarChar(255) // Redundancy for audit
 
   // Other
-  costCenter      String?  @map("cost_center") @db.VarChar(100)
-  note            String?  @db.Text
+  costCenter String? @map("cost_center") @db.VarChar(100)
+  note       String? @db.Text
 
   // Redundancy for audit (snapshot at entry time)
-  accountCode     String   @map("account_code") @db.VarChar(50)
-  accountName     String   @map("account_name") @db.VarChar(255)
-  accountType     AccountType @map("account_type")
+  accountCode String      @map("account_code") @db.VarChar(50)
+  accountName String      @map("account_name") @db.VarChar(255)
+  accountType AccountType @map("account_type")
 
   // Relationships
-  entry           JournalEntry  @relation(fields: [entryId], references: [id], onDelete: Cascade)
-  account         Account       @relation(fields: [accountId], references: [id])
+  entry   JournalEntry @relation(fields: [entryId], references: [id], onDelete: Cascade)
+  account Account      @relation(fields: [accountId], references: [id])
 
   @@index([entryId])
   @@index([accountId])
@@ -377,23 +412,23 @@ model EntryLine {
 // OBLIGATIONS (Purchases/Sales in installments)
 // ===================================
 model Obligation {
-  id                Int            @id @default(autoincrement())
-  economicGroupId   Int            @map("economic_group_id")
-  type              ObligationType
-  description       String         @db.Text
-  totalAmount       Decimal        @map("total_amount") @db.Decimal(18, 2)
-  currency          String         @db.VarChar(3)
-  issueDate         DateTime       @map("issue_date") @db.Date
-  auxiliaryType     AuxiliaryType  @map("auxiliary_type")
-  auxiliaryId       Int            @map("auxiliary_id")
-  status            ObligationStatus @default(ACTIVE)
-  sourceEntryId     Int?           @map("source_entry_id") // Entry that generated the obligation
-  createdAt         DateTime       @default(now()) @map("created_at")
+  id              Int              @id @default(autoincrement())
+  economicGroupId Int              @map("economic_group_id")
+  type            ObligationType
+  description     String           @db.Text
+  totalAmount     Decimal          @map("total_amount") @db.Decimal(18, 2)
+  currency        String           @db.VarChar(3)
+  issueDate       DateTime         @map("issue_date") @db.Date
+  auxiliaryType   AuxiliaryType    @map("auxiliary_type")
+  auxiliaryId     Int              @map("auxiliary_id")
+  status          ObligationStatus @default(ACTIVE)
+  sourceEntryId   Int?             @map("source_entry_id") // Entry that generated the obligation
+  createdAt       DateTime         @default(now()) @map("created_at")
 
   // Relationships
-  economicGroup     EconomicGroup @relation(fields: [economicGroupId], references: [id])
-  installments      ObligationInstallment[]
-  payments          ObligationPayment[]
+  economicGroup EconomicGroup           @relation(fields: [economicGroupId], references: [id])
+  installments  ObligationInstallment[]
+  payments      ObligationPayment[]
 
   @@index([economicGroupId])
   @@index([auxiliaryType, auxiliaryId])
@@ -401,8 +436,8 @@ model Obligation {
 }
 
 enum ObligationType {
-  PAYABLE      // Account payable
-  RECEIVABLE   // Account receivable
+  PAYABLE // Account payable
+  RECEIVABLE // Account receivable
 }
 
 enum ObligationStatus {
@@ -413,17 +448,17 @@ enum ObligationStatus {
 }
 
 model ObligationInstallment {
-  id              Int      @id @default(autoincrement())
-  obligationId    Int      @map("obligation_id")
-  installmentNumber Int    @map("installment_number")
-  dueDate         DateTime @map("due_date") @db.Date
-  amount          Decimal  @db.Decimal(18, 2)
-  paidAmount      Decimal  @default(0) @map("paid_amount") @db.Decimal(18, 2)
-  status          InstallmentStatus @default(PENDING)
+  id                Int               @id @default(autoincrement())
+  obligationId      Int               @map("obligation_id")
+  installmentNumber Int               @map("installment_number")
+  dueDate           DateTime          @map("due_date") @db.Date
+  amount            Decimal           @db.Decimal(18, 2)
+  paidAmount        Decimal           @default(0) @map("paid_amount") @db.Decimal(18, 2)
+  status            InstallmentStatus @default(PENDING)
 
   // Relationships
-  obligation      Obligation @relation(fields: [obligationId], references: [id], onDelete: Cascade)
-  payments        ObligationPayment[]
+  obligation Obligation          @relation(fields: [obligationId], references: [id], onDelete: Cascade)
+  payments   ObligationPayment[]
 
   @@index([obligationId])
   @@index([dueDate])
@@ -438,20 +473,20 @@ enum InstallmentStatus {
 }
 
 model ObligationPayment {
-  id              Int      @id @default(autoincrement())
-  obligationId    Int      @map("obligation_id")
-  installmentId   Int?     @map("installment_id") // Null if payment not assigned to specific installment
-  paymentDate     DateTime @map("payment_date") @db.Date
-  amount          Decimal  @db.Decimal(18, 2)
-  currency        String   @db.VarChar(3)
-  exchangeRate    Decimal? @map("exchange_rate") @db.Decimal(10, 4)
-  entryId         Int?     @map("entry_id") // Journal entry of payment
-  notes           String?  @db.Text
-  createdAt       DateTime @default(now()) @map("created_at")
+  id            Int      @id @default(autoincrement())
+  obligationId  Int      @map("obligation_id")
+  installmentId Int?     @map("installment_id") // Null if payment not assigned to specific installment
+  paymentDate   DateTime @map("payment_date") @db.Date
+  amount        Decimal  @db.Decimal(18, 2)
+  currency      String   @db.VarChar(3)
+  exchangeRate  Decimal? @map("exchange_rate") @db.Decimal(10, 4)
+  entryId       Int?     @map("entry_id") // Journal entry of payment
+  notes         String?  @db.Text
+  createdAt     DateTime @default(now()) @map("created_at")
 
   // Relationships
-  obligation      Obligation @relation(fields: [obligationId], references: [id])
-  installment     ObligationInstallment? @relation(fields: [installmentId], references: [id])
+  obligation  Obligation             @relation(fields: [obligationId], references: [id])
+  installment ObligationInstallment? @relation(fields: [installmentId], references: [id])
 
   @@index([obligationId])
   @@index([installmentId])
@@ -462,74 +497,74 @@ model ObligationPayment {
 // USERS
 // ===================================
 model User {
-  id              Int      @id @default(autoincrement())
-  email           String   @unique
-  name            String
-  authProviderId  String   @unique @map("auth_provider_id")
-  active          Boolean  @default(true)
-  createdAt       DateTime @default(now()) @map("created_at")
+  id             Int      @id @default(autoincrement())
+  email          String   @unique
+  name           String
+  authProviderId String   @unique @map("auth_provider_id")
+  active         Boolean  @default(true)
+  createdAt      DateTime @default(now()) @map("created_at")
 
   // Relationships
-  groups                UserGroup[]
-  companies             UserCompany[]
+  groups    UserGroup[]
+  companies UserCompany[]
 
   // Inverse relationships (required by Prisma - avoid using in queries)
-  entriesCreated        JournalEntry[] @relation("JournalEntryCreatedBy")
-  entriesApproved       JournalEntry[] @relation("JournalEntryApprovedBy")
-  periodsClosed         AccountingPeriod[]
+  entriesCreated  JournalEntry[]     @relation("JournalEntryCreatedBy")
+  entriesApproved JournalEntry[]     @relation("JournalEntryApprovedBy")
+  periodsClosed   AccountingPeriod[]
 
   @@map("users")
 }
 
 model UserGroup {
-  userId            Int    @map("user_id")
-  economicGroupId   Int    @map("economic_group_id")
-  role              Role
+  userId          Int  @map("user_id")
+  economicGroupId Int  @map("economic_group_id")
+  role            Role
 
   // Relationships
-  user              User           @relation(fields: [userId], references: [id])
-  economicGroup     EconomicGroup  @relation(fields: [economicGroupId], references: [id])
+  user          User          @relation(fields: [userId], references: [id])
+  economicGroup EconomicGroup @relation(fields: [economicGroupId], references: [id])
 
   @@id([userId, economicGroupId])
   @@map("user_groups")
 }
 
 model UserCompany {
-  userId         Int     @map("user_id")
-  companyId      Int     @map("company_id")
-  canWrite       Boolean @default(false) @map("can_write")
+  userId    Int     @map("user_id")
+  companyId Int     @map("company_id")
+  canWrite  Boolean @default(false) @map("can_write")
 
   // Relationships
-  user           User    @relation(fields: [userId], references: [id])
-  company        Company @relation(fields: [companyId], references: [id])
+  user    User    @relation(fields: [userId], references: [id])
+  company Company @relation(fields: [companyId], references: [id])
 
   @@id([userId, companyId])
   @@map("user_companies")
 }
 
 enum Role {
-  ADMIN      // Group administrator
+  ADMIN // Group administrator
   ACCOUNTANT // Can approve entries
-  OPERATOR   // Can create entries
-  READER     // Read-only
+  OPERATOR // Can create entries
+  READER // Read-only
 }
 
 // ===================================
 // CUSTOMERS
 // ===================================
 model Customer {
-  id                Int      @id @default(autoincrement())
-  economicGroupId   Int      @map("economic_group_id")
-  name              String
-  rut               String?
-  email             String?
-  phone             String?
-  address           String?  @db.Text
-  active            Boolean  @default(true)
-  createdAt         DateTime @default(now()) @map("created_at")
+  id              Int      @id @default(autoincrement())
+  economicGroupId Int      @map("economic_group_id")
+  name            String
+  rut             String?
+  email           String?
+  phone           String?
+  address         String?  @db.Text
+  active          Boolean  @default(true)
+  createdAt       DateTime @default(now()) @map("created_at")
 
   // Relationships
-  economicGroup     EconomicGroup @relation(fields: [economicGroupId], references: [id])
+  economicGroup EconomicGroup @relation(fields: [economicGroupId], references: [id])
 
   @@index([economicGroupId])
   @@map("customers")
@@ -539,18 +574,18 @@ model Customer {
 // SUPPLIERS
 // ===================================
 model Supplier {
-  id                Int      @id @default(autoincrement())
-  economicGroupId   Int      @map("economic_group_id")
-  name              String
-  rut               String?
-  email             String?
-  phone             String?
-  address           String?  @db.Text
-  active            Boolean  @default(true)
-  createdAt         DateTime @default(now()) @map("created_at")
+  id              Int      @id @default(autoincrement())
+  economicGroupId Int      @map("economic_group_id")
+  name            String
+  rut             String?
+  email           String?
+  phone           String?
+  address         String?  @db.Text
+  active          Boolean  @default(true)
+  createdAt       DateTime @default(now()) @map("created_at")
 
   // Relationships
-  economicGroup     EconomicGroup @relation(fields: [economicGroupId], references: [id])
+  economicGroup EconomicGroup @relation(fields: [economicGroupId], references: [id])
 
   @@index([economicGroupId])
   @@map("suppliers")

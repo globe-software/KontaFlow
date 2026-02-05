@@ -42,6 +42,7 @@
     "suppliers": "Proveedores",
     "accounts": "Cuentas",
     "periods": "Períodos Contables",
+    "currencies": "Monedas",
     "exchangeRates": "Tipos de Cambio",
     "userCompanies": "Empresas de Usuario",
     "comprobantes": "Comprobantes",
@@ -449,6 +450,54 @@
       "deleteError": "Error al eliminar proveedor"
     }
   },
+  "currencies": {
+    "title": "Monedas",
+    "subtitle": "Administra las monedas disponibles en el sistema",
+    "createButton": "Crear Moneda",
+    "createTitle": "Crear Nueva Moneda",
+    "createDescription": "Agrega una nueva moneda al sistema siguiendo el estándar ISO 4217",
+    "editTitle": "Editar Moneda",
+    "editDescription": "Modifica los datos de la moneda seleccionada",
+    "searchPlaceholder": "Buscar por código o nombre...",
+    "emptyState": "No hay monedas registradas",
+    "emptyStateDescription": "Comienza agregando monedas al sistema para usarlas en tipos de cambio y transacciones.",
+    "deleteConfirm": {
+      "title": "Eliminar Moneda",
+      "description": "¿Estás seguro de que deseas eliminar esta moneda? Esta acción no se puede deshacer y fallará si la moneda está en uso."
+    },
+    "form": {
+      "code": "Código ISO",
+      "codeHint": "3 letras (ej: USD, EUR, UYU)",
+      "name": "Nombre",
+      "symbol": "Símbolo",
+      "decimals": "Decimales",
+      "active": "Activa",
+      "activeHint": "Solo las monedas activas pueden usarse en nuevas transacciones",
+      "isDefaultFunctional": "Moneda Funcional por Defecto",
+      "isDefaultFunctionalHint": "Esta moneda será la sugerida al crear nuevos grupos económicos"
+    },
+    "table": {
+      "code": "Código",
+      "name": "Nombre",
+      "symbol": "Símbolo",
+      "decimals": "Decimales",
+      "decimalPlaces": "decimales",
+      "status": "Estado",
+      "default": "Por Defecto",
+      "defaultCurrency": "Defecto"
+    },
+    "status": {
+      "active": "Activa",
+      "inactive": "Inactiva"
+    },
+    "filters": {
+      "all": "Todas",
+      "status": "Estado"
+    },
+    "messages": {
+      "loadError": "Error al cargar monedas"
+    }
+  },
   "userCompanies": {
     "title": "Empresas de Usuario",
     "description": "Gestiona los permisos de usuarios en las empresas",
@@ -532,13 +581,22 @@
       "fiscalYearLabel": "Año Fiscal",
       "monthLabel": "Mes",
       "monthPlaceholder": "Selecciona un mes",
+      "quarterLabel": "Trimestre",
+      "quarterPlaceholder": "Selecciona un trimestre",
       "startDateLabel": "Fecha de Inicio",
       "endDateLabel": "Fecha de Fin",
       "selectDate": "Seleccionar fecha"
     },
     "types": {
       "FISCAL_YEAR": "Año Fiscal",
+      "QUARTER": "Trimestre",
       "MONTH": "Mes"
+    },
+    "quarters": {
+      "Q1": "T1 (Ene-Mar)",
+      "Q2": "T2 (Abr-Jun)",
+      "Q3": "T3 (Jul-Sep)",
+      "Q4": "T4 (Oct-Dic)"
     },
     "months": {
       "January": "Enero",
@@ -620,7 +678,9 @@
       "date": "Fecha",
       "sourceCurrency": "De",
       "targetCurrency": "A",
-      "rate": "Tasa",
+      "purchaseRate": "Tasa Compra",
+      "averageRate": "Tasa Promedio",
+      "saleRate": "Tasa Venta",
       "source": "Fuente",
       "createdAt": "Creado"
     },
@@ -633,8 +693,12 @@
       "sourceCurrencyPlaceholder": "Seleccionar moneda",
       "targetCurrencyLabel": "Moneda Destino",
       "targetCurrencyPlaceholder": "Seleccionar moneda",
-      "rateLabel": "Tipo de Cambio",
-      "ratePlaceholder": "Ej.: 38.5000",
+      "purchaseRateLabel": "Tasa de Compra",
+      "purchaseRatePlaceholder": "Ej.: 38.5000",
+      "averageRateLabel": "Tasa Promedio",
+      "averageRatePlaceholder": "Ej.: 38.7500",
+      "saleRateLabel": "Tasa de Venta",
+      "saleRatePlaceholder": "Ej.: 39.0000",
       "sourceLabel": "Fuente (Opcional)",
       "sourcePlaceholder": "Ej.: Banco Central",
       "errors": {

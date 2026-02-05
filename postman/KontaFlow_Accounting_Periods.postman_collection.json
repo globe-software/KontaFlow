@@ -1,0 +1,275 @@
+{
+  "info": {
+    "name": "KontaFlow - Accounting Periods",
+    "description": "API endpoints para gestión de Períodos Contables en KontaFlow",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "kontaflow"
+  },
+  "item": [
+    {
+      "name": "Listar Períodos (con paginación)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "x-user-id",
+            "value": "{{user_id}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/accounting-periods?page=1&limit=10",
+          "host": ["{{base_url}}"],
+          "path": ["api", "accounting-periods"],
+          "query": [
+            {
+              "key": "page",
+              "value": "1",
+              "description": "Número de página (default: 1)"
+            },
+            {
+              "key": "limit",
+              "value": "10",
+              "description": "Resultados por página (default: 10, max: 100)"
+            },
+            {
+              "key": "economicGroupId",
+              "value": "{{grupo_id}}",
+              "description": "Filtrar por grupo económico",
+              "disabled": true
+            },
+            {
+              "key": "fiscalYear",
+              "value": "2025",
+              "description": "Filtrar por ejercicio fiscal",
+              "disabled": true
+            },
+            {
+              "key": "type",
+              "value": "MONTH",
+              "description": "Filtrar por tipo (FISCAL_YEAR, MONTH)",
+              "disabled": true
+            },
+            {
+              "key": "closed",
+              "value": "false",
+              "description": "Filtrar por estado (true/false)",
+              "disabled": true
+            }
+          ]
+        },
+        "description": "Lista todos los períodos contables con paginación y filtros"
+      },
+      "response": []
+    },
+    {
+      "name": "Listar Períodos por Grupo",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "x-user-id",
+            "value": "{{user_id}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/accounting-periods/by-group/{{grupo_id}}",
+          "host": ["{{base_url}}"],
+          "path": ["api", "accounting-periods", "by-group", "{{grupo_id}}"]
+        },
+        "description": "Obtiene todos los períodos de un grupo económico"
+      },
+      "response": []
+    },
+    {
+      "name": "Obtener Período por ID",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "x-user-id",
+            "value": "{{user_id}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/accounting-periods/{{period_id}}",
+          "host": ["{{base_url}}"],
+          "path": ["api", "accounting-periods", "{{period_id}}"]
+        },
+        "description": "Obtiene un período contable específico por su ID"
+      },
+      "response": []
+    },
+    {
+      "name": "Crear Período - Ejercicio Fiscal",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "x-user-id",
+            "value": "{{user_id}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"economicGroupId\": 1,\n  \"type\": \"FISCAL_YEAR\",\n  \"fiscalYear\": 2025,\n  \"startDate\": \"2025-01-01\",\n  \"endDate\": \"2025-12-31\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/accounting-periods",
+          "host": ["{{base_url}}"],
+          "path": ["api", "accounting-periods"]
+        },
+        "description": "Crea un nuevo ejercicio fiscal"
+      },
+      "response": []
+    },
+    {
+      "name": "Crear Período - Mes",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "x-user-id",
+            "value": "{{user_id}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"economicGroupId\": 1,\n  \"type\": \"MONTH\",\n  \"fiscalYear\": 2025,\n  \"month\": 11,\n  \"startDate\": \"2025-11-01\",\n  \"endDate\": \"2025-11-30\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/accounting-periods",
+          "host": ["{{base_url}}"],
+          "path": ["api", "accounting-periods"]
+        },
+        "description": "Crea un nuevo período mensual"
+      },
+      "response": []
+    },
+    {
+      "name": "Actualizar Período",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "x-user-id",
+            "value": "{{user_id}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"endDate\": \"2025-11-30\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/accounting-periods/{{period_id}}",
+          "host": ["{{base_url}}"],
+          "path": ["api", "accounting-periods", "{{period_id}}"]
+        },
+        "description": "Actualiza un período contable. Solo admin."
+      },
+      "response": []
+    },
+    {
+      "name": "Cerrar Período",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "x-user-id",
+            "value": "{{user_id}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/accounting-periods/{{period_id}}/close",
+          "host": ["{{base_url}}"],
+          "path": ["api", "accounting-periods", "{{period_id}}", "close"]
+        },
+        "description": "Cierra un período contable. No se podrán crear más asientos en este período."
+      },
+      "response": []
+    },
+    {
+      "name": "Reabrir Período",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "x-user-id",
+            "value": "{{user_id}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/accounting-periods/{{period_id}}/reopen",
+          "host": ["{{base_url}}"],
+          "path": ["api", "accounting-periods", "{{period_id}}", "reopen"]
+        },
+        "description": "Reabre un período contable cerrado. Solo admin."
+      },
+      "response": []
+    },
+    {
+      "name": "Eliminar Período",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "x-user-id",
+            "value": "{{user_id}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/accounting-periods/{{period_id}}",
+          "host": ["{{base_url}}"],
+          "path": ["api", "accounting-periods", "{{period_id}}"]
+        },
+        "description": "Elimina un período contable. No se puede eliminar si tiene asientos."
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8000",
+      "type": "string"
+    },
+    {
+      "key": "user_id",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "grupo_id",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "period_id",
+      "value": "1",
+      "type": "string"
+    }
+  ]
+}

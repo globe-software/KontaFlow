@@ -59,6 +59,7 @@ export function PeriodForm({ period, open, onOpenChange, onSubmit }: PeriodFormP
     type: 'FISCAL_YEAR',
     fiscalYear: new Date().getFullYear(),
     month: null,
+    quarter: null,
     startDate: '',
     endDate: '',
   });
@@ -89,6 +90,7 @@ export function PeriodForm({ period, open, onOpenChange, onSubmit }: PeriodFormP
         type: period.type,
         fiscalYear: period.fiscalYear,
         month: period.month,
+        quarter: period.quarter,
         startDate: period.startDate,
         endDate: period.endDate,
       });
@@ -101,6 +103,7 @@ export function PeriodForm({ period, open, onOpenChange, onSubmit }: PeriodFormP
         type: 'FISCAL_YEAR',
         fiscalYear: currentYear,
         month: null,
+        quarter: null,
         startDate: `${currentYear}-01-01`,
         endDate: `${currentYear}-12-31`,
       });
@@ -110,14 +113,29 @@ export function PeriodForm({ period, open, onOpenChange, onSubmit }: PeriodFormP
     setErrors({});
   }, [period, open]);
 
-  // Auto-populate dates based on type, year, and month
+  // Auto-populate dates based on type, year, month, and quarter
   useEffect(() => {
     if (formData.type === 'FISCAL_YEAR') {
       const start = `${formData.fiscalYear}-01-01`;
       const end = `${formData.fiscalYear}-12-31`;
-      setFormData(prev => ({ ...prev, startDate: start, endDate: end, month: null }));
+      setFormData(prev => ({ ...prev, startDate: start, endDate: end, month: null, quarter: null }));
       setStartDate(new Date(start));
       setEndDate(new Date(end));
+    } else if (formData.type === 'QUARTER' && formData.quarter) {
+      const quarter = formData.quarter;
+      const year = formData.fiscalYear;
+
+      // Calculate quarter start and end dates
+      const quarterStartMonth = (quarter - 1) * 3; // Q1: 0, Q2: 3, Q3: 6, Q4: 9
+      const start = new Date(year, quarterStartMonth, 1);
+      const end = new Date(year, quarterStartMonth + 3, 0); // Last day of last month in quarter
+
+      const startStr = start.toISOString().split('T')[0];
+      const endStr = end.toISOString().split('T')[0];
+
+      setFormData(prev => ({ ...prev, startDate: startStr, endDate: endStr, month: null }));
+      setStartDate(start);
+      setEndDate(end);
     } else if (formData.type === 'MONTH' && formData.month) {
       const month = formData.month;
       const year = formData.fiscalYear;
@@ -127,11 +145,11 @@ export function PeriodForm({ period, open, onOpenChange, onSubmit }: PeriodFormP
       const startStr = start.toISOString().split('T')[0];
       const endStr = end.toISOString().split('T')[0];
 
-      setFormData(prev => ({ ...prev, startDate: startStr, endDate: endStr }));
+      setFormData(prev => ({ ...prev, startDate: startStr, endDate: endStr, quarter: null }));
       setStartDate(start);
       setEndDate(end);
     }
-  }, [formData.type, formData.fiscalYear, formData.month]);
+  }, [formData.type, formData.fiscalYear, formData.month, formData.quarter]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -231,6 +249,12 @@ export function PeriodForm({ period, open, onOpenChange, onSubmit }: PeriodFormP
                   </Label>
                 </div>
                 <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="QUARTER" id="quarter" />
+                  <Label htmlFor="quarter" className="font-normal cursor-pointer">
+                    {t('periods.types.QUARTER')}
+                  </Label>
+                </div>
+                <div className="flex items-center space-x-2">
                   <RadioGroupItem value="MONTH" id="month" />
                   <Label htmlFor="month" className="font-normal cursor-pointer">
                     {t('periods.types.MONTH')}
@@ -261,6 +285,34 @@ export function PeriodForm({ period, open, onOpenChange, onSubmit }: PeriodFormP
                 <p className="text-sm text-red-500">{errors.fiscalYear}</p>
               )}
             </div>
+
+            {/* Quarter (only if type is QUARTER) */}
+            {formData.type === 'QUARTER' && (
+              <div className="grid gap-2">
+                <Label htmlFor="quarter">
+                  {t('periods.form.quarterLabel')} <span className="text-red-500">*</span>
+                </Label>
+                <Select
+                  value={formData.quarter?.toString() || ''}
+                  onValueChange={(value) =>
+                    setFormData({ ...formData, quarter: parseInt(value) })
+                  }
+                >
+                  <SelectTrigger className={errors.quarter ? 'border-red-500' : ''}>
+                    <SelectValue placeholder={t('periods.form.quarterPlaceholder')} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="1">{t('periods.quarters.Q1')}</SelectItem>
+                    <SelectItem value="2">{t('periods.quarters.Q2')}</SelectItem>
+                    <SelectItem value="3">{t('periods.quarters.Q3')}</SelectItem>
+                    <SelectItem value="4">{t('periods.quarters.Q4')}</SelectItem>
+                  </SelectContent>
+                </Select>
+                {errors.quarter && (
+                  <p className="text-sm text-red-500">{errors.quarter}</p>
+                )}
+              </div>
+            )}
 
             {/* Month (only if type is MONTH) */}
             {formData.type === 'MONTH' && (

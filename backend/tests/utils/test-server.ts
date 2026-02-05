@@ -5,6 +5,14 @@ import rateLimit from '@fastify/rate-limit';
 import { corsOptions, rateLimitOptions } from '../../src/lib/config';
 import { errorHandler, notFoundHandler } from '../../src/middleware/error-handler';
 import { economicGroupsRoutes } from '../../src/routes/economic-groups.routes';
+import { companiesRoutes } from '../../src/routes/companies.routes';
+import { chartsOfAccountsRoutes } from '../../src/routes/charts-of-accounts.routes';
+import { accountsRoutes } from '../../src/routes/accounts.routes';
+import { accountingPeriodsRoutes } from '../../src/routes/accounting-periods.routes';
+import { customersRoutes } from '../../src/routes/customers.routes';
+import { suppliersRoutes } from '../../src/routes/suppliers.routes';
+import { exchangeRatesRoutes } from '../../src/routes/exchange-rates.routes';
+import { userCompaniesRoutes } from '../../src/routes/user-companies.routes';
 
 let testServerInstance: FastifyInstance | null = null;
 
@@ -45,6 +53,14 @@ export async function createTestServer(): Promise<FastifyInstance> {
   await fastify.register(
     async (instance) => {
       await instance.register(economicGroupsRoutes, { prefix: '/economic-groups' });
+      await instance.register(companiesRoutes, { prefix: '/companies' });
+      await instance.register(chartsOfAccountsRoutes, { prefix: '/charts-of-accounts' });
+      await instance.register(accountsRoutes, { prefix: '/accounts' });
+      await instance.register(accountingPeriodsRoutes, { prefix: '/accounting-periods' });
+      await instance.register(customersRoutes, { prefix: '/customers' });
+      await instance.register(suppliersRoutes, { prefix: '/suppliers' });
+      await instance.register(exchangeRatesRoutes, { prefix: '/exchange-rates' });
+      await instance.register(userCompaniesRoutes, { prefix: '/user-companies' });
     },
     { prefix: '/api' }
   );

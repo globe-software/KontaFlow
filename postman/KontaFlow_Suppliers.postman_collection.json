@@ -1,0 +1,238 @@
+{
+  "info": {
+    "name": "KontaFlow - Suppliers",
+    "description": "API endpoints para gestión de Proveedores en KontaFlow",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "kontaflow"
+  },
+  "item": [
+    {
+      "name": "Listar Proveedores (con paginación)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "x-user-id",
+            "value": "{{user_id}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/suppliers?page=1&limit=10",
+          "host": ["{{base_url}}"],
+          "path": ["api", "suppliers"],
+          "query": [
+            {
+              "key": "page",
+              "value": "1",
+              "description": "Número de página (default: 1)"
+            },
+            {
+              "key": "limit",
+              "value": "10",
+              "description": "Resultados por página (default: 10, max: 100)"
+            },
+            {
+              "key": "search",
+              "value": "",
+              "description": "Buscar por nombre o RUT",
+              "disabled": true
+            },
+            {
+              "key": "economicGroupId",
+              "value": "{{grupo_id}}",
+              "description": "Filtrar por grupo económico",
+              "disabled": true
+            },
+            {
+              "key": "active",
+              "value": "true",
+              "description": "Filtrar por activo/inactivo",
+              "disabled": true
+            }
+          ]
+        },
+        "description": "Lista todos los proveedores con paginación y filtros"
+      },
+      "response": []
+    },
+    {
+      "name": "Obtener Proveedor por ID",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "x-user-id",
+            "value": "{{user_id}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/suppliers/{{supplier_id}}",
+          "host": ["{{base_url}}"],
+          "path": ["api", "suppliers", "{{supplier_id}}"]
+        },
+        "description": "Obtiene un proveedor específico por su ID"
+      },
+      "response": []
+    },
+    {
+      "name": "Crear Proveedor - Completo",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "x-user-id",
+            "value": "{{user_id}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"economicGroupId\": 1,\n  \"name\": \"Antel Telecomunicaciones\",\n  \"rut\": \"210360090018\",\n  \"email\": \"empresas@antel.com.uy\",\n  \"phone\": \"+598 2000 0000\",\n  \"address\": \"Guatemala 1075, Montevideo\",\n  \"notes\": \"Proveedor de telecomunicaciones\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/suppliers",
+          "host": ["{{base_url}}"],
+          "path": ["api", "suppliers"]
+        },
+        "description": "Crea un nuevo proveedor con todos los datos opcionales"
+      },
+      "response": []
+    },
+    {
+      "name": "Crear Proveedor - Solo requeridos",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "x-user-id",
+            "value": "{{user_id}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"economicGroupId\": 1,\n  \"name\": \"Proveedor Prueba SRL\",\n  \"rut\": \"219876540020\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/suppliers",
+          "host": ["{{base_url}}"],
+          "path": ["api", "suppliers"]
+        },
+        "description": "Crea un proveedor con solo los campos requeridos"
+      },
+      "response": []
+    },
+    {
+      "name": "Crear Proveedor - Extranjero",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "x-user-id",
+            "value": "{{user_id}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"economicGroupId\": 1,\n  \"name\": \"Amazon Web Services (AWS)\",\n  \"rut\": \"US-AWS123456\",\n  \"email\": \"billing@aws.amazon.com\",\n  \"address\": \"410 Terry Avenue North, Seattle, WA 98109, USA\",\n  \"notes\": \"Proveedor de servicios cloud\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/suppliers",
+          "host": ["{{base_url}}"],
+          "path": ["api", "suppliers"]
+        },
+        "description": "Ejemplo de proveedor extranjero"
+      },
+      "response": []
+    },
+    {
+      "name": "Actualizar Proveedor",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "x-user-id",
+            "value": "{{user_id}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"nuevo-email@proveedor.com\",\n  \"phone\": \"+598 2000 0000\",\n  \"notes\": \"Información actualizada\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/suppliers/{{supplier_id}}",
+          "host": ["{{base_url}}"],
+          "path": ["api", "suppliers", "{{supplier_id}}"]
+        },
+        "description": "Actualiza un proveedor existente. Todos los campos son opcionales."
+      },
+      "response": []
+    },
+    {
+      "name": "Eliminar Proveedor",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "x-user-id",
+            "value": "{{user_id}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/suppliers/{{supplier_id}}",
+          "host": ["{{base_url}}"],
+          "path": ["api", "suppliers", "{{supplier_id}}"]
+        },
+        "description": "Elimina (soft delete) un proveedor. No se puede eliminar si tiene movimientos pendientes."
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8000",
+      "type": "string"
+    },
+    {
+      "key": "user_id",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "grupo_id",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "supplier_id",
+      "value": "1",
+      "type": "string"
+    }
+  ]
+}

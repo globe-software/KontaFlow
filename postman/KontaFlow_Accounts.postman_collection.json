@@ -1,0 +1,313 @@
+{
+  "info": {
+    "name": "KontaFlow - Accounts",
+    "description": "API endpoints para gestión de Cuentas Contables en KontaFlow",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "kontaflow"
+  },
+  "item": [
+    {
+      "name": "Listar Cuentas (con paginación)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "x-user-id",
+            "value": "{{user_id}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/accounts?page=1&limit=10",
+          "host": ["{{base_url}}"],
+          "path": ["api", "accounts"],
+          "query": [
+            {
+              "key": "page",
+              "value": "1",
+              "description": "Número de página (default: 1)"
+            },
+            {
+              "key": "limit",
+              "value": "10",
+              "description": "Resultados por página (default: 10, max: 100)"
+            },
+            {
+              "key": "search",
+              "value": "",
+              "description": "Buscar por código o nombre",
+              "disabled": true
+            },
+            {
+              "key": "chartId",
+              "value": "{{chart_id}}",
+              "description": "Filtrar por plan de cuentas",
+              "disabled": true
+            },
+            {
+              "key": "type",
+              "value": "ASSET",
+              "description": "Filtrar por tipo (ASSET, LIABILITY, EQUITY, INCOME, EXPENSE)",
+              "disabled": true
+            },
+            {
+              "key": "postable",
+              "value": "true",
+              "description": "Filtrar solo cuentas imputables",
+              "disabled": true
+            }
+          ]
+        },
+        "description": "Lista todas las cuentas con paginación y filtros"
+      },
+      "response": []
+    },
+    {
+      "name": "Obtener Árbol de Cuentas",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "x-user-id",
+            "value": "{{user_id}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/accounts/tree/{{chart_id}}",
+          "host": ["{{base_url}}"],
+          "path": ["api", "accounts", "tree", "{{chart_id}}"]
+        },
+        "description": "Obtiene el árbol jerárquico de cuentas para un plan de cuentas"
+      },
+      "response": []
+    },
+    {
+      "name": "Listar Cuentas por Plan",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "x-user-id",
+            "value": "{{user_id}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/accounts/by-chart/{{chart_id}}",
+          "host": ["{{base_url}}"],
+          "path": ["api", "accounts", "by-chart", "{{chart_id}}"]
+        },
+        "description": "Obtiene todas las cuentas de un plan de cuentas (lista plana)"
+      },
+      "response": []
+    },
+    {
+      "name": "Obtener Cuenta por ID",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "x-user-id",
+            "value": "{{user_id}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/accounts/{{account_id}}",
+          "host": ["{{base_url}}"],
+          "path": ["api", "accounts", "{{account_id}}"]
+        },
+        "description": "Obtiene una cuenta específica por su ID"
+      },
+      "response": []
+    },
+    {
+      "name": "Crear Cuenta - ACTIVO",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "x-user-id",
+            "value": "{{user_id}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"chartOfAccountsId\": 1,\n  \"code\": \"1\",\n  \"name\": \"ACTIVO\",\n  \"type\": \"ASSET\",\n  \"level\": 1,\n  \"postable\": false\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/accounts",
+          "host": ["{{base_url}}"],
+          "path": ["api", "accounts"]
+        },
+        "description": "Crea una cuenta de nivel superior (ACTIVO)"
+      },
+      "response": []
+    },
+    {
+      "name": "Crear Cuenta - Caja Chica (imputable)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "x-user-id",
+            "value": "{{user_id}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"chartOfAccountsId\": 1,\n  \"code\": \"111.001\",\n  \"name\": \"Caja Chica\",\n  \"type\": \"ASSET\",\n  \"level\": 4,\n  \"postable\": true,\n  \"parentAccountId\": 3,\n  \"nature\": \"CURRENT\",\n  \"ifrsCategory\": \"CASH_AND_EQUIVALENTS\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/accounts",
+          "host": ["{{base_url}}"],
+          "path": ["api", "accounts"]
+        },
+        "description": "Crea una cuenta imputable de nivel 4 con cuenta padre"
+      },
+      "response": []
+    },
+    {
+      "name": "Crear Cuenta - Con Auxiliar Cliente",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "x-user-id",
+            "value": "{{user_id}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"chartOfAccountsId\": 1,\n  \"code\": \"112.001\",\n  \"name\": \"Clientes Locales\",\n  \"type\": \"ASSET\",\n  \"level\": 4,\n  \"postable\": true,\n  \"requiresAuxiliary\": true,\n  \"auxiliaryType\": \"CUSTOMER\",\n  \"parentAccountId\": 5,\n  \"nature\": \"CURRENT\",\n  \"ifrsCategory\": \"ACCOUNTS_RECEIVABLE\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/accounts",
+          "host": ["{{base_url}}"],
+          "path": ["api", "accounts"]
+        },
+        "description": "Crea una cuenta que requiere auxiliar de cliente"
+      },
+      "response": []
+    },
+    {
+      "name": "Crear Cuenta - USD",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "x-user-id",
+            "value": "{{user_id}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"chartOfAccountsId\": 1,\n  \"code\": \"111.003\",\n  \"name\": \"Banco BROU - Cuenta Corriente USD\",\n  \"type\": \"ASSET\",\n  \"level\": 4,\n  \"postable\": true,\n  \"currency\": \"USD\",\n  \"parentAccountId\": 3,\n  \"nature\": \"CURRENT\",\n  \"ifrsCategory\": \"CASH_AND_EQUIVALENTS\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/accounts",
+          "host": ["{{base_url}}"],
+          "path": ["api", "accounts"]
+        },
+        "description": "Crea una cuenta con moneda específica (USD)"
+      },
+      "response": []
+    },
+    {
+      "name": "Actualizar Cuenta",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "x-user-id",
+            "value": "{{user_id}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Caja Chica - Actualizada\",\n  \"active\": true\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/accounts/{{account_id}}",
+          "host": ["{{base_url}}"],
+          "path": ["api", "accounts", "{{account_id}}"]
+        },
+        "description": "Actualiza una cuenta existente. Todos los campos son opcionales."
+      },
+      "response": []
+    },
+    {
+      "name": "Eliminar Cuenta",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "x-user-id",
+            "value": "{{user_id}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/accounts/{{account_id}}",
+          "host": ["{{base_url}}"],
+          "path": ["api", "accounts", "{{account_id}}"]
+        },
+        "description": "Elimina (soft delete) una cuenta. No se puede eliminar si tiene movimientos."
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8000",
+      "type": "string"
+    },
+    {
+      "key": "user_id",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "chart_id",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "account_id",
+      "value": "1",
+      "type": "string"
+    }
+  ]
+}

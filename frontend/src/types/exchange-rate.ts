@@ -6,7 +6,9 @@ export interface ExchangeRate {
   date: string;
   sourceCurrency: Currency;
   targetCurrency: Currency;
-  rate: number;
+  purchaseRate: number;  // Tasa de compra
+  saleRate: number;      // Tasa de venta
+  averageRate: number;   // Tasa promedio
   source?: string;
   createdAt: string;
   updatedAt?: string;
@@ -17,15 +19,16 @@ export interface CreateExchangeRateDto {
   date: string;
   sourceCurrency: Currency;
   targetCurrency: Currency;
-  rate: number;
+  purchaseRate: number;
+  saleRate: number;
+  averageRate: number;
   source?: string;
 }
 
 export interface UpdateExchangeRateDto {
-  date?: string;
-  sourceCurrency?: Currency;
-  targetCurrency?: Currency;
-  rate?: number;
+  purchaseRate?: number;
+  saleRate?: number;
+  averageRate?: number;
   source?: string;
 }
 

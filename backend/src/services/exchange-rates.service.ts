@@ -149,10 +149,26 @@ export class ExchangeRatesService {
     }
 
     // Business validations
-    if (data.rate !== undefined) {
-      if (data.rate <= 0) {
-        throw new BusinessRuleError('Exchange rate must be greater than 0', 'INVALID_RATE');
-      }
+    if (data.purchaseRate !== undefined && data.purchaseRate <= 0) {
+      throw new BusinessRuleError('Purchase rate must be greater than 0', 'INVALID_RATE');
+    }
+    if (data.saleRate !== undefined && data.saleRate <= 0) {
+      throw new BusinessRuleError('Sale rate must be greater than 0', 'INVALID_RATE');
+    }
+    if (data.averageRate !== undefined && data.averageRate <= 0) {
+      throw new BusinessRuleError('Average rate must be greater than 0', 'INVALID_RATE');
+    }
+
+    // Validate rate relationships if updating multiple rates
+    const rateAfterUpdate = { ...rate, ...data };
+    if (
+      rateAfterUpdate.purchaseRate > rateAfterUpdate.averageRate ||
+      rateAfterUpdate.averageRate > rateAfterUpdate.saleRate
+    ) {
+      throw new BusinessRuleError(
+        'Invalid rate relationship. Typically: Purchase Rate ≤ Average Rate ≤ Sale Rate',
+        'INVALID_RATE_RELATIONSHIP'
+      );
     }
 
     // Update
@@ -208,9 +224,17 @@ export class ExchangeRatesService {
    * Additional business validations
    */
   private async validateExchangeRateData(data: CreateExchangeRateDto, baseCurrency: string) {
-    // Validate that rate is positive
-    if (data.rate <= 0) {
-      throw new BusinessRuleError('Exchange rate must be greater than 0', 'INVALID_RATE');
+    // Validate that all rates are positive
+    if (data.purchaseRate <= 0 || data.saleRate <= 0 || data.averageRate <= 0) {
+      throw new BusinessRuleError('All exchange rates must be greater than 0', 'INVALID_RATE');
+    }
+
+    // Validate rate relationships (purchase rate typically <= average rate <= sale rate)
+    if (data.purchaseRate > data.averageRate || data.averageRate > data.saleRate) {
+      throw new BusinessRuleError(
+        'Invalid rate relationship. Typically: Purchase Rate ≤ Average Rate ≤ Sale Rate',
+        'INVALID_RATE_RELATIONSHIP'
+      );
     }
 
     // Validate that source and target currencies are different

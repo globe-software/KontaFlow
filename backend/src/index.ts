@@ -15,6 +15,7 @@ import { suppliersRoutes } from './routes/suppliers.routes';
 import { exchangeRatesRoutes } from './routes/exchange-rates.routes';
 import { userCompaniesRoutes } from './routes/user-companies.routes';
 import { chartsOfAccountsRoutes } from './routes/charts-of-accounts.routes';
+import { currenciesRoutes } from './routes/currencies.routes';
 
 /**
  * KontaFlow API Server
@@ -123,6 +124,9 @@ async function registerRoutes() {
 
       // Suppliers
       await instance.register(suppliersRoutes, { prefix: '/suppliers' });
+
+      // Currencies
+      await instance.register(currenciesRoutes, { prefix: '/currencies' });
 
       // Exchange Rates
       await instance.register(exchangeRatesRoutes, { prefix: '/exchange-rates' });

@@ -15,6 +15,7 @@ import {
   UserCircle,
   TrendingUp,
   DollarSign,
+  Coins,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useTranslation } from '@/contexts/I18nContext';
@@ -85,6 +86,11 @@ export function Sidebar({ className }: SidebarProps) {
           label: t('navigation.periods'),
           icon: Calendar,
           href: '/accounting-periods',
+        },
+        {
+          label: t('navigation.currencies'),
+          icon: Coins,
+          href: '/currencies',
         },
         {
           label: t('navigation.exchangeRates'),
